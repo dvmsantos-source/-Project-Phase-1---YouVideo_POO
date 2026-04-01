@@ -1,21 +1,16 @@
 package YouVideo;
 
-abstract public class VideoClass implements VideoAll {
+public class VideoClass implements VideoAll{
     private String ID;
     private int duration;
     private String URL;
     private String publisher;
-    private String title;
-    private String lang;
 
-    public VideoClass(String ID, int duration, String URL, String publisher,
-                      String title, String lang) {
+    public VideoClass(String ID,int duration, String URL,String publisher){
         this.ID = ID;
         this.duration = duration;
         this.URL = URL;
         this.publisher = publisher;
-        this.title = title;
-        this.lang = lang;
     }
 
     @Override
@@ -39,17 +34,7 @@ abstract public class VideoClass implements VideoAll {
     }
 
     @Override
-    public  String getTitle() {
-        return title;
-    }
-
-    @Override
-    public String getLang() {
-        return lang;
-    }
-
-    @Override
-    public boolean equals(Object other) {
+    public boolean equals(Object other){
         if (this == other)
             return true;
         if (other == null)
@@ -58,6 +43,6 @@ abstract public class VideoClass implements VideoAll {
             return false;
         if (ID == null)
             return false;
-        return this.ID.equals(((Video)other).getId());
+        return this.ID.equals( ((Video) other).getId());
     }
 }

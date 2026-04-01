@@ -3,20 +3,31 @@ package YouVideo;
 import dataStructures.*;
 
 class PremiumVideoClass extends VideoClass{
-    private Array<Subtitle> subtitles;
+    private Array<Subtitle> subtitle;
+    private String title;
+    private String lang;
 
-    public PremiumVideoClass(String ID, int duration, String URL, String publisher,
-                             String title, String lang, String subtitleUrl, String subtitleLang) {
-        super(ID, duration, URL, publisher, title, lang);
-        this.subtitles = new ArrayClass<>();
-        addSubtitle(subtitleUrl, subtitleLang);
+
+    public PremiumVideoClass(String ID,int duration, String URL,String publisher,
+                             String title,String lang,String subtitleUrl,String subtitleLang){
+        super(ID, duration, URL, publisher);
+        this.subtitle = new ArrayClass<>();
+        this.title = title;
+        this.lang = lang;
+        addSubtitle( subtitleUrl, subtitleLang);
+
     }
 
-    public void addSubtitle(String subtitleUrl,String subtitleLang) {
-        subtitles.insertLast(new SubtitleClass(subtitleUrl,subtitleLang));
+    public void addSubtitle(String subtitleUrl,String subtitleLang){
+        subtitle.insertLast(new SubtitleClass(subtitleUrl,subtitleLang));
+
     }
 
-    public Iterator<Subtitle> subtitleIterator() {
-        return subtitles.iterator();
+    public String getTitle() {
+        return title;
+    }
+
+    public String getLang() {
+        return lang;
     }
 }
