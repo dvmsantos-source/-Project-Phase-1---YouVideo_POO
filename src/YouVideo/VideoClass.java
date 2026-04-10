@@ -1,16 +1,21 @@
 package YouVideo;
 
-public class VideoClass implements VideoAll{
+abstract class VideoClass implements VideoAll {
     private String ID;
     private int duration;
     private String URL;
-    private String publisher;
 
-    public VideoClass(String ID,int duration, String URL,String publisher){
+
+    public VideoClass(String ID,int duration, String URL){
         this.ID = ID;
         this.duration = duration;
         this.URL = URL;
-        this.publisher = publisher;
+
+    }
+
+    public VideoClass(String ID){
+        this.ID = ID;
+
     }
 
     @Override
@@ -28,10 +33,7 @@ public class VideoClass implements VideoAll{
         return URL;
     }
 
-    @Override
-    public String getPublisher() {
-        return publisher;
-    }
+
 
     @Override
     public boolean equals(Object other){

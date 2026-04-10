@@ -1,7 +1,6 @@
 package YouVideo;
 
-public interface Subtitle {
-    String getLang();
-    String getUrl();
-    boolean equals();
+public record Subtitle(String lang, String URL) {
+
+
 }
