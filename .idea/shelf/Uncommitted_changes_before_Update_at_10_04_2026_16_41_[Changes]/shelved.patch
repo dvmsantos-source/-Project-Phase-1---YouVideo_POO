@@ -1,0 +1,1110 @@
+Index: -Project-Phase-1---YouVideo_POO/src/YouVideo/Episodio.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/-Project-Phase-1---YouVideo_POO/src/YouVideo/Episodio.java b/-Project-Phase-1---YouVideo_POO/src/YouVideo/EpisodeClass.java
+rename from -Project-Phase-1---YouVideo_POO/src/YouVideo/Episodio.java
+rename to -Project-Phase-1---YouVideo_POO/src/YouVideo/EpisodeClass.java
+--- a/-Project-Phase-1---YouVideo_POO/src/YouVideo/Episodio.java	(revision 9d9789a7ca74829c9e3fdef73910fa62aba3267e)
++++ b/-Project-Phase-1---YouVideo_POO/src/YouVideo/EpisodeClass.java	(date 1775824381046)
+@@ -1,15 +1,21 @@
+ package YouVideo;
+ 
+- class Episodio extends VideoClass {
+-     private int date;
++ class EpisodeClass extends VideoClass implements Episode {
++     private String date;
+ 
+-     public Episodio (String ID,int duration, String URL,String publisher,int date){
+-         super( ID, duration, URL, publisher);
++     public EpisodeClass(String ID, int duration, String URL, String date){
++         super( ID, duration, URL);
+          this.date = date;
+ 
+      }
+ 
+-     public int getDate() {
++     public EpisodeClass(String ID){
++         super(ID);
++     }
++
++
++     @Override
++     public String getDate() {
+          return date;
+      }
+  }
+Index: -Project-Phase-1---YouVideo_POO/src/YouVideo/PlatformSystem.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package YouVideo;\r\n\r\npublic interface PlatformSystem {\r\n    void addPublishe(String id, int duration, String url, String publisher, String title, String lang);\r\n    boolean hasPublishe(String id, int duration, String url, String publisher);\r\n\r\n    void addPremiumPublishe(String id, int duration, String url, String publisher, String title, String lang, String subtitleUrl, String subtitleLang);\r\n\r\n    void addSubtitle(String id, String subtitleUrl, String subtitleLang);\r\n\r\n    boolean hasVideo(String id, String subtitleUrl, String subtitleLang);\r\n\r\n    boolean IsPremiumVideo(String id, String subtitleUrl, String subtitleLang);\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/-Project-Phase-1---YouVideo_POO/src/YouVideo/PlatformSystem.java b/-Project-Phase-1---YouVideo_POO/src/YouVideo/PlatformSystem.java
+--- a/-Project-Phase-1---YouVideo_POO/src/YouVideo/PlatformSystem.java	(revision 9d9789a7ca74829c9e3fdef73910fa62aba3267e)
++++ b/-Project-Phase-1---YouVideo_POO/src/YouVideo/PlatformSystem.java	(date 1775824381155)
+@@ -1,14 +1,79 @@
+ package YouVideo;
+ 
++import dataStructures.Iterator;
++
+ public interface PlatformSystem {
+-    void addPublishe(String id, int duration, String url, String publisher, String title, String lang);
+-    boolean hasPublishe(String id, int duration, String url, String publisher);
++    /**
++     * Adds a publishable into the system.
++     * @param id
++     * @param duration
++     * @param url
++     * @param publisher
++     * @param title
++     * @param lang
++     */
++    void addPublishable(String id, int duration, String url, String publisher,
++                        String title, String lang);
++
++    /**
++     * Verifies if the system has a publishable given its ID.
++     * @param id
++     * @return TRUE if the system has it or FALSE if the system does not have it.
++     */
++    boolean hasPublishable(String id);
+ 
+-    void addPremiumPublishe(String id, int duration, String url, String publisher, String title, String lang, String subtitleUrl, String subtitleLang);
++    /**
++     * Adds a premium publishable into the system.
++     * @param id
++     * @param duration
++     * @param url
++     * @param publisher
++     * @param title
++     * @param lang
++     * @param subtitleUrl
++     * @param subtitleLang
++     */
++    void addPremiumPublishable(String id, int duration, String url, String publisher, String title,
++                               String lang, String subtitleUrl, String subtitleLang);
+ 
++    /**
++     * Verifies if a video is premium by its ID.
++     * @param id
++     * @return TRUE if it is premium or FALSE if it is basic.
++     */
++    boolean IsPremiumVideo(String id);
++
++    /**
++     * Returns a Video given its ID.
++     * @param id
++     * @return a premium or basic video,
++     */
++    Video getVideo(String id);
++
++    /**
++     * Adds a subtitle to a premium video.
++     * @param id
++     * @param subtitleUrl
++     * @param subtitleLang
++     */
+     void addSubtitle(String id, String subtitleUrl, String subtitleLang);
+ 
+-    boolean hasVideo(String id, String subtitleUrl, String subtitleLang);
++    /**
++     * Returns a subtitle iterator given an ID of a premium video.
++     * @param id
++     * @return a subtitle iterator.
++     */
++    Iterator<Subtitle> subtitleIterator(String id);
++
++    boolean hasPodcast(String title);
+ 
+-    boolean IsPremiumVideo(String id, String subtitleUrl, String subtitleLang);
++    void addPodcast(String title, String author, String lang);
++
++    void addEpisode(String title, String id, int duration, String url, String date);
++
++    Podcast getPodCast(String title);
++
++    boolean hasEpisode(String id);
++
++    boolean isValidEpisodeDate(String id, String date);
+ }
+Index: -Project-Phase-1---YouVideo_POO/src/YouVideo/BasicVideoClass.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package YouVideo;\r\n\r\n  class BasicVideoClass extends VideoClass{\r\n      private String title;\r\n      private String lang;\r\n\r\n      public BasicVideoClass(String ID,int duration, String URL,String publisher,String title,String lang){\r\n          super( ID, duration, URL, publisher);\r\n          this.title = title;\r\n          this.lang = lang;\r\n      }\r\n\r\n      public String getTitle() {\r\n          return title;\r\n      }\r\n\r\n      public String getLang() {\r\n          return lang;\r\n      }\r\n  }\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/-Project-Phase-1---YouVideo_POO/src/YouVideo/BasicVideoClass.java b/-Project-Phase-1---YouVideo_POO/src/YouVideo/BasicVideoClass.java
+--- a/-Project-Phase-1---YouVideo_POO/src/YouVideo/BasicVideoClass.java	(revision 9d9789a7ca74829c9e3fdef73910fa62aba3267e)
++++ b/-Project-Phase-1---YouVideo_POO/src/YouVideo/BasicVideoClass.java	(date 1775756908214)
+@@ -1,13 +1,20 @@
+ package YouVideo;
+ 
+-  class BasicVideoClass extends VideoClass{
++  class BasicVideoClass extends VideoClass implements PublishableVideo{
+       private String title;
+       private String lang;
++      private String publisher;
+ 
+-      public BasicVideoClass(String ID,int duration, String URL,String publisher,String title,String lang){
+-          super( ID, duration, URL, publisher);
++      public BasicVideoClass(String ID,int duration, String URL,String publisher,
++              String title,String lang){
++          super( ID, duration, URL);
+           this.title = title;
+           this.lang = lang;
++          this.publisher = publisher;
++      }
++
++      public BasicVideoClass(String id) {
++          super(id);
+       }
+ 
+       public String getTitle() {
+@@ -17,4 +24,8 @@
+       public String getLang() {
+           return lang;
+       }
++
++      public String getPublisher() {
++          return publisher;
++      }
+   }
+Index: -Project-Phase-1---YouVideo_POO/src/YouVideo/PodcastClass.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package YouVideo;\r\n\r\nimport dataStructures.Array;\r\n\r\npublic class PodcastClass implements Podcast{\r\n    private Array<Episodio> episodio;\r\n    private String title;\r\n    private String author;\r\n    private String lang;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/-Project-Phase-1---YouVideo_POO/src/YouVideo/PodcastClass.java b/-Project-Phase-1---YouVideo_POO/src/YouVideo/PodcastClass.java
+--- a/-Project-Phase-1---YouVideo_POO/src/YouVideo/PodcastClass.java	(revision 9d9789a7ca74829c9e3fdef73910fa62aba3267e)
++++ b/-Project-Phase-1---YouVideo_POO/src/YouVideo/PodcastClass.java	(date 1775825172843)
+@@ -1,10 +1,65 @@
+ package YouVideo;
+ 
+ import dataStructures.Array;
++import dataStructures.ArrayClass;
++import dataStructures.Iterator;
+ 
+ public class PodcastClass implements Podcast{
+-    private Array<Episodio> episodio;
++    private Array<EpisodeClass> episode;
+     private String title;
+     private String author;
+     private String lang;
++
++
++    public PodcastClass(String title,String author,String lang ){
++        this.title = title;
++        this.author = author;
++        this.lang = lang;
++        episode = new ArrayClass<>();
++    }
++
++
++
++    public PodcastClass(String title){
++        this.title = title;
++    }
++    @Override
++    public boolean equals(Object other){
++        if (other== null)
++            return false;
++        if (this == other)
++            return true;
++        if (title == null)
++            return false;
++        if (!(other instanceof Podcast))
++            return false;
++        return this.title.equals( ((Podcast) other).getTitle());
++
++
++    }
++
++    @Override
++    public void addEpisode(String ID, int duration, String URL, String date ) {
++        this.episode.insertLast(new EpisodeClass(ID,duration,URL,date));
++    }
++
++    public Iterator<EpisodeClass> getEpisode() {
++        return episode.iterator();
++    }
++
++    @Override
++    public String getLang() {
++        return lang;
++    }
++
++    @Override
++    public String getTitle() {
++        return title;
++    }
++
++    @Override
++    public String getAuthor() {
++        return author;
++    }
++
+ }
+Index: -Project-Phase-1---YouVideo_POO/src/YouVideo/PremiumVideoClass.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package YouVideo;\r\n\r\nimport dataStructures.*;\r\n\r\nclass PremiumVideoClass extends VideoClass{\r\n    private Array<Subtitle> subtitle;\r\n    private String title;\r\n    private String lang;\r\n\r\n\r\n    public PremiumVideoClass(String ID,int duration, String URL,String publisher,\r\n                             String title,String lang,String subtitleUrl,String subtitleLang){\r\n        super(ID, duration, URL, publisher);\r\n        this.subtitle = new ArrayClass<>();\r\n        this.title = title;\r\n        this.lang = lang;\r\n        addSubtitle( subtitleUrl, subtitleLang);\r\n\r\n    }\r\n\r\n    public void addSubtitle(String subtitleUrl,String subtitleLang){\r\n        subtitle.insertLast(new SubtitleClass(subtitleUrl,subtitleLang));\r\n\r\n    }\r\n\r\n    public String getTitle() {\r\n        return title;\r\n    }\r\n\r\n    public String getLang() {\r\n        return lang;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/-Project-Phase-1---YouVideo_POO/src/YouVideo/PremiumVideoClass.java b/-Project-Phase-1---YouVideo_POO/src/YouVideo/PremiumVideoClass.java
+--- a/-Project-Phase-1---YouVideo_POO/src/YouVideo/PremiumVideoClass.java	(revision 9d9789a7ca74829c9e3fdef73910fa62aba3267e)
++++ b/-Project-Phase-1---YouVideo_POO/src/YouVideo/PremiumVideoClass.java	(date 1775739252914)
+@@ -2,32 +2,25 @@
+ 
+ import dataStructures.*;
+ 
+-class PremiumVideoClass extends VideoClass{
++class PremiumVideoClass extends BasicVideoClass{
+     private Array<Subtitle> subtitle;
+-    private String title;
+-    private String lang;
+ 
+ 
+     public PremiumVideoClass(String ID,int duration, String URL,String publisher,
+                              String title,String lang,String subtitleUrl,String subtitleLang){
+-        super(ID, duration, URL, publisher);
++        super(ID, duration, URL, publisher,title,lang);
+         this.subtitle = new ArrayClass<>();
+-        this.title = title;
+-        this.lang = lang;
+         addSubtitle( subtitleUrl, subtitleLang);
+ 
+     }
+ 
+     public void addSubtitle(String subtitleUrl,String subtitleLang){
+-        subtitle.insertLast(new SubtitleClass(subtitleUrl,subtitleLang));
++        subtitle.insertLast(new Subtitle(subtitleUrl,subtitleLang));
+ 
+     }
+ 
+-    public String getTitle() {
+-        return title;
+-    }
++     public Iterator<Subtitle> subtitleIterator() {
++    return subtitle.iterator();
++}
+ 
+-    public String getLang() {
+-        return lang;
+-    }
+ }
+Index: -Project-Phase-1---YouVideo_POO/src/YouVideo/PlatformSystemClass.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package YouVideo;\r\n\r\nimport dataStructures.Array;\r\nimport dataStructures.ArrayClass;\r\n\r\npublic class PlatformSystemClass implements PlatformSystem {\r\n    private final Array<Video> video;\r\n\r\n    public PlatformSystemClass() {\r\n        video = new ArrayClass<>();\r\n\r\n    }\r\n\r\n    @Override\r\n    public void addPublishe(String id, int duration, String url, String publisher, String title, String lang) {\r\n        video.insertLast(new BasicVideoClass(id, duration, url, publisher, title, lang));\r\n\r\n    }\r\n\r\n\r\n    @Override\r\n    public boolean hasPublishe(String id, int duration, String url, String publisher) {\r\n        return video.searchForward(new VideoClass(id, duration, url, publisher));\r\n    }\r\n\r\n    @Override\r\n    public void addPremiumPublishe(String id, int duration, String url, String publisher, String title,\r\n                                   String lang, String subtitleUrl, String subtitleLang) {\r\n        video.insertLast(new PremiumVideoClass(id, duration, url, publisher, title, lang, subtitleUrl,subtitleLang));\r\n    }\r\n\r\n    @Override\r\n    public void addSubtitle(String id, String subtitleUrl, String subtitleLang) {\r\n        int op = video.searchIndexOf(new VideoClass(id,0,subtitleUrl,subtitleLang));\r\n        Video video1 = video.get(op);\r\n        PremiumVideoClass premiumVideo = (PremiumVideoClass) video1;\r\n        premiumVideo.addSubtitle(subtitleUrl,subtitleLang);\r\n\r\n}\r\n\r\n    @Override\r\n    public boolean hasVideo(String id, String subtitleUrl, String subtitleLang) {\r\n        return video.searchForward(new VideoClass(id, 0,subtitleUrl , subtitleLang));\r\n    }\r\n\r\n    @Override\r\n    public boolean IsPremiumVideo(String id, String subtitleUrl, String subtitleLang) {\r\n        int op = video.searchIndexOf(new VideoClass(id,0,subtitleUrl,subtitleLang));\r\n        Video video1 = video.get(op);\r\n        return video1 instanceof PremiumVideoClass;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/-Project-Phase-1---YouVideo_POO/src/YouVideo/PlatformSystemClass.java b/-Project-Phase-1---YouVideo_POO/src/YouVideo/PlatformSystemClass.java
+--- a/-Project-Phase-1---YouVideo_POO/src/YouVideo/PlatformSystemClass.java	(revision 9d9789a7ca74829c9e3fdef73910fa62aba3267e)
++++ b/-Project-Phase-1---YouVideo_POO/src/YouVideo/PlatformSystemClass.java	(date 1775825668927)
+@@ -2,51 +2,95 @@
+ 
+ import dataStructures.Array;
+ import dataStructures.ArrayClass;
++import dataStructures.Iterator;
+ 
+ public class PlatformSystemClass implements PlatformSystem {
++
+     private final Array<Video> video;
++    private final Array<Podcast> podcast;
+ 
+     public PlatformSystemClass() {
+         video = new ArrayClass<>();
++        podcast = new ArrayClass<>();
++    }
+ 
++    @Override
++    public void addPublishable(String id, int duration, String url, String publisher,
++                               String title, String lang) {
++        video.insertLast(new BasicVideoClass(id, duration, url, publisher,
++                title, lang));
+     }
+ 
+     @Override
+-    public void addPublishe(String id, int duration, String url, String publisher, String title, String lang) {
+-        video.insertLast(new BasicVideoClass(id, duration, url, publisher, title, lang));
+-
++    public boolean hasPublishable(String id) {
++        return video.searchForward(new BasicVideoClass(id));
+     }
+-
+ 
+     @Override
+-    public boolean hasPublishe(String id, int duration, String url, String publisher) {
+-        return video.searchForward(new VideoClass(id, duration, url, publisher));
++    public void addPremiumPublishable(String id, int duration, String url,
++                                      String publisher, String title, String lang,
++                                      String subtitleUrl, String subtitleLang) {
++        video.insertLast(new PremiumVideoClass(id, duration, url,
++                publisher, title, lang, subtitleUrl, subtitleLang));
+     }
+ 
+     @Override
+-    public void addPremiumPublishe(String id, int duration, String url, String publisher, String title,
+-                                   String lang, String subtitleUrl, String subtitleLang) {
+-        video.insertLast(new PremiumVideoClass(id, duration, url, publisher, title, lang, subtitleUrl,subtitleLang));
++    public boolean IsPremiumVideo(String id) {
++        return getVideo(id) instanceof PremiumVideoClass;
++    }
++
++    public Video getVideo(String id) {
++        int idx = video.searchIndexOf(new BasicVideoClass(id));
++        return video.get(idx);
+     }
+ 
+     @Override
+     public void addSubtitle(String id, String subtitleUrl, String subtitleLang) {
+-        int op = video.searchIndexOf(new VideoClass(id,0,subtitleUrl,subtitleLang));
+-        Video video1 = video.get(op);
+-        PremiumVideoClass premiumVideo = (PremiumVideoClass) video1;
+-        premiumVideo.addSubtitle(subtitleUrl,subtitleLang);
++        PremiumVideoClass premiumVideo = (PremiumVideoClass) getVideo(id);
++        premiumVideo.addSubtitle(subtitleUrl, subtitleLang);
++    }
+ 
+-}
++    public Iterator<Subtitle> subtitleIterator(String id) {
++        PremiumVideoClass premiumVideo = (PremiumVideoClass) getVideo(id);
++        return premiumVideo.subtitleIterator();
++    }
+ 
+     @Override
+-    public boolean hasVideo(String id, String subtitleUrl, String subtitleLang) {
+-        return video.searchForward(new VideoClass(id, 0,subtitleUrl , subtitleLang));
++    public boolean hasPodcast(String title) {
++        return podcast.searchForward(new PodcastClass(title));
+     }
+ 
+     @Override
+-    public boolean IsPremiumVideo(String id, String subtitleUrl, String subtitleLang) {
+-        int op = video.searchIndexOf(new VideoClass(id,0,subtitleUrl,subtitleLang));
+-        Video video1 = video.get(op);
+-        return video1 instanceof PremiumVideoClass;
++    public void addPodcast(String title, String author, String lang) {
++        podcast.insertLast(new PodcastClass(title,author,lang));
++    }
++
++    @Override
++    public void addEpisode(String title, String id, int duration, String url, String date) {
++        getPodCast(title).addEpisode(id,duration,url,date);
++
++    }
++
++    @Override
++    public Podcast getPodCast(String title) {
++        int idx = podcast.searchIndexOf(new PodcastClass(title));
++        return podcast.get(idx);
++    }
++
++    @Override
++    public boolean hasEpisode(String id) {
++        return video.searchForward(new EpisodeClass(id));
++    }
++
++    @Override
++    public boolean isValidEpisodeDate(String title, String date) {
++        Podcast podcast = getPodCast(title);
++        Iterator it = podcast.getEpisode();
++        if (it.hasNext()){
++            Episode ep = (EpisodeClass) it.next();
++            return (ep.getDate().compareTo(date) > 0);
++
++    }
++        return false;
+     }
+ }
+Index: -Project-Phase-1---YouVideo_POO/src/YouVideo/Podcast.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package YouVideo;\r\n\r\npublic interface Podcast {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/-Project-Phase-1---YouVideo_POO/src/YouVideo/Podcast.java b/-Project-Phase-1---YouVideo_POO/src/YouVideo/Podcast.java
+--- a/-Project-Phase-1---YouVideo_POO/src/YouVideo/Podcast.java	(revision 9d9789a7ca74829c9e3fdef73910fa62aba3267e)
++++ b/-Project-Phase-1---YouVideo_POO/src/YouVideo/Podcast.java	(date 1775831170397)
+@@ -1,4 +1,13 @@
+ package YouVideo;
+ 
++import dataStructures.Array;
++import dataStructures.Iterator;
++
+ public interface Podcast {
++    String getLang();
++    String getTitle();
++    String getAuthor();
++    boolean equals(Object other);
++    void addEpisode(String ID, int duration, String URL, String date );
++     Iterator<EpisodeClass> getEpisode();
+ }
+Index: -Project-Phase-1---YouVideo_POO/src/YouVideo/Subtitle.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package YouVideo;\r\n\r\npublic interface Subtitle {\r\n    String getLang();\r\n    String getUrl();\r\n    boolean equals();\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/-Project-Phase-1---YouVideo_POO/src/YouVideo/Subtitle.java b/-Project-Phase-1---YouVideo_POO/src/YouVideo/Subtitle.java
+--- a/-Project-Phase-1---YouVideo_POO/src/YouVideo/Subtitle.java	(revision 9d9789a7ca74829c9e3fdef73910fa62aba3267e)
++++ b/-Project-Phase-1---YouVideo_POO/src/YouVideo/Subtitle.java	(date 1775737859613)
+@@ -1,7 +1,6 @@
+ package YouVideo;
+ 
+-public interface Subtitle {
+-    String getLang();
+-    String getUrl();
+-    boolean equals();
++public record Subtitle(String lang, String URL) {
++
++
+ }
+Index: -Project-Phase-1---YouVideo_POO/src/YouVideo/VideoClass.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package YouVideo;\r\n\r\npublic class VideoClass implements VideoAll{\r\n    private String ID;\r\n    private int duration;\r\n    private String URL;\r\n    private String publisher;\r\n\r\n    public VideoClass(String ID,int duration, String URL,String publisher){\r\n        this.ID = ID;\r\n        this.duration = duration;\r\n        this.URL = URL;\r\n        this.publisher = publisher;\r\n    }\r\n\r\n    @Override\r\n    public String getId() {\r\n        return ID;\r\n    }\r\n\r\n    @Override\r\n    public int getDuration() {\r\n        return duration;\r\n    }\r\n\r\n    @Override\r\n    public String getUrl() {\r\n        return URL;\r\n    }\r\n\r\n    @Override\r\n    public String getPublisher() {\r\n        return publisher;\r\n    }\r\n\r\n    @Override\r\n    public boolean equals(Object other){\r\n        if (this == other)\r\n            return true;\r\n        if (other == null)\r\n            return false;\r\n        if (!(other instanceof Video))\r\n            return false;\r\n        if (ID == null)\r\n            return false;\r\n        return this.ID.equals( ((Video) other).getId());\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/-Project-Phase-1---YouVideo_POO/src/YouVideo/VideoClass.java b/-Project-Phase-1---YouVideo_POO/src/YouVideo/VideoClass.java
+--- a/-Project-Phase-1---YouVideo_POO/src/YouVideo/VideoClass.java	(revision 9d9789a7ca74829c9e3fdef73910fa62aba3267e)
++++ b/-Project-Phase-1---YouVideo_POO/src/YouVideo/VideoClass.java	(date 1775820164115)
+@@ -1,16 +1,21 @@
+ package YouVideo;
+ 
+-public class VideoClass implements VideoAll{
++abstract class VideoClass implements VideoAll {
+     private String ID;
+     private int duration;
+     private String URL;
+-    private String publisher;
+ 
+-    public VideoClass(String ID,int duration, String URL,String publisher){
++
++    public VideoClass(String ID,int duration, String URL){
+         this.ID = ID;
+         this.duration = duration;
+         this.URL = URL;
+-        this.publisher = publisher;
++
++    }
++
++    public VideoClass(String ID){
++        this.ID = ID;
++
+     }
+ 
+     @Override
+@@ -28,10 +33,7 @@
+         return URL;
+     }
+ 
+-    @Override
+-    public String getPublisher() {
+-        return publisher;
+-    }
++
+ 
+     @Override
+     public boolean equals(Object other){
+Index: -Project-Phase-1---YouVideo_POO/src/YouVideo/Video.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package YouVideo;\r\n\r\npublic interface Video {\r\n    String getId();\r\n    int getDuration();\r\n    String getUrl();\r\n    String getPublisher();\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/-Project-Phase-1---YouVideo_POO/src/YouVideo/Video.java b/-Project-Phase-1---YouVideo_POO/src/YouVideo/Video.java
+--- a/-Project-Phase-1---YouVideo_POO/src/YouVideo/Video.java	(revision 9d9789a7ca74829c9e3fdef73910fa62aba3267e)
++++ b/-Project-Phase-1---YouVideo_POO/src/YouVideo/Video.java	(date 1775756908350)
+@@ -4,6 +4,7 @@
+     String getId();
+     int getDuration();
+     String getUrl();
+-    String getPublisher();
++
++
+ 
+ }
+Index: -Project-Phase-1---YouVideo_POO/src/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import YouVideo.PlatformSystem;\r\nimport YouVideo.PlatformSystemClass;\r\n\r\nimport java.util.Locale;\r\nimport java.util.Scanner;\r\n\r\npublic class Main {\r\n\r\n    private static final String EXIT = \"EXIT\";\r\n    private static final String HELP = \"HELP\";\r\n    private static final String MSG_EXIT = \"Bye!\";\r\n    private static final String CREATEPUBLISHABLE = \"CREATEPUBLISHABLE\";\r\n    private static final String CREATEPREMIUM = \"CREATEPREMIUM\";\r\n    private static final String ADDSUBTITLE = \"ADDSUBTITLE\";\r\n    private static final String GETVIDEO = \"GETVIDEO\";\r\n    private static final String SUBTITLES = \"SUBTITLES\";\r\n    private static final String CREATEPODCAST = \"CREATEPODCAST\";\r\n    private static final String ADDEPISODE = \"ADDEPISODE\";\r\n    private static final String GETPODCAST = \"GETPODCAST\";\r\n    private static final String EPISODES = \"EPISODES\";\r\n    private static final String AUTHORPODCASTS = \"AUTHORPODCASTS\";\r\n    private static final String REMOVEPODCAST = \"REMOVEPODCAST\";\r\n    private static final String CREATESHOW = \"CREATESHOW\";\r\n    private static final String GETSHOW = \"GETSHOW\";\r\n    private static final String REMOVESHOW = \"REMOVESHOW\";\r\n    private static final String REMOVEVIDEO = \"REMOVEVIDEO\";\r\n\r\n\r\n    private static final String MSG_DEFAULT = \"Unknown command.\" +\r\n            \"Type help to see available commands\";\r\n    private static final String MSG_INVALID_VALUE = \"Invalid value.\";\r\n    private static final String MSG_INVALIG_LANGUAGE = \"Invalid language type.\";\r\n    private static final String MSG_VIDEO_ALREADY_EXIST = \"Video with this ID already exists\";\r\n    private static final String MSG_VIDEO_CREATED = \"Video %s created successfully.\\n\";\r\n    private static final String MSG_VIDEO_CREATED_PREMIUM = \"PREMIUM Video %s created successfully.\\n\";\r\n    private static final String MSG_INVALIG_LANGUAGE_SUBTITLE = \"Invalid language type in subtitle\";\r\n    private static final String VIDEO_NOT_EXIST = \"Video does not exist.\";\r\n    private static final String SUBTITLE_ADDED = \"Subtitle added successfully\";\r\n    private static final String REQUIRES_PREMIUM_VIDEO = \"This operation requires a Premium video\";\r\n\r\n\r\n    static void main(String[] args) {\r\n        Scanner input = new Scanner(System.in);\r\n        PlatformSystem platformSystem = new PlatformSystemClass();\r\n        command(input, platformSystem);\r\n\r\n\r\n    }\r\n\r\n    private static void command(Scanner input, PlatformSystem platformSystem) {\r\n        String cmd = null;\r\n        do {\r\n            cmd = input.next().trim().toUpperCase();\r\n            switch (cmd) {\r\n                case CREATEPUBLISHABLE -> createPublishable(input, platformSystem);\r\n                case CREATEPREMIUM -> createPremium(input, platformSystem);\r\n                case ADDSUBTITLE -> addSubtitle(input, platformSystem);\r\n                case GETVIDEO -> getVideo();\r\n                case SUBTITLES -> subtitles();\r\n                case CREATEPODCAST -> createPodcast();\r\n                case ADDEPISODE -> addEpisode();\r\n                case GETPODCAST -> getPodcast();\r\n                case EPISODES -> episodes();\r\n                case AUTHORPODCASTS -> authorPodcasts();\r\n                case REMOVEPODCAST -> removePodcast();\r\n                case CREATESHOW -> createShow();\r\n                case GETSHOW -> getShow();\r\n                case REMOVESHOW -> removeShow();\r\n                case REMOVEVIDEO -> removeVideo();\r\n                case HELP -> help();\r\n                case EXIT -> System.out.println(MSG_EXIT);\r\n                default -> {\r\n                    System.out.println(MSG_DEFAULT);\r\n                    input.nextLine();\r\n                }\r\n            }\r\n\r\n        }\r\n        while (!cmd.equals(EXIT));\r\n\r\n    }\r\n\r\n\r\n    private static void help() {\r\n    }\r\n\r\n\r\n    private static boolean validLanguage(String lang) {\r\n        String[] isoLanguages = Locale.getISOLanguages();\r\n        for (int i = 0; i < isoLanguages.length; i++) {\r\n            if (isoLanguages[i].toUpperCase().equals(lang)) {\r\n                return true;\r\n            }\r\n        }\r\n        return false;\r\n\r\n    }\r\n\r\n\r\n    private static void createPublishable(Scanner input, PlatformSystem platformSystem) {\r\n        String id = input.next();\r\n        int duration = input.nextInt();\r\n        String URL = input.next().trim();\r\n        input.nextLine();\r\n\r\n        String publisher = input.nextLine();\r\n        String title = input.nextLine().trim();\r\n        String lang = input.next().toUpperCase();\r\n\r\n        if (duration <= 0) {\r\n            System.out.println(MSG_INVALID_VALUE);\r\n        } else if (!validLanguage(lang)) {\r\n            System.out.println(MSG_INVALIG_LANGUAGE);\r\n        } else if (platformSystem.hasPublishe(id, duration, URL, publisher)) {\r\n            System.out.println(MSG_VIDEO_ALREADY_EXIST);\r\n        } else {\r\n            platformSystem.addPublishe(id, duration, URL, publisher, title, lang);\r\n            System.out.printf(MSG_VIDEO_CREATED, id);\r\n\r\n        }\r\n    }\r\n\r\n    private static void createPremium(Scanner input, PlatformSystem platformSystem) {\r\n        String id = input.next().trim();\r\n        int duration = input.nextInt();\r\n        String URL = input.next().trim();\r\n        input.nextLine();\r\n        String publisher = input.nextLine();\r\n        String title = input.nextLine().trim();\r\n\r\n        String lang = input.nextLine().trim();\r\n        String subtitleUrl = input.nextLine();\r\n        String subtitleLang = input.nextLine();\r\n\r\n        if (duration <= 0) {\r\n            System.out.println(MSG_INVALID_VALUE);\r\n\r\n        } else if (!validLanguage(lang) || !validLanguage(subtitleLang)) {\r\n            System.out.println(MSG_INVALIG_LANGUAGE);\r\n\r\n        } else if (platformSystem.hasPublishe(id, duration, URL, publisher)) {\r\n            System.out.println(MSG_VIDEO_ALREADY_EXIST);\r\n        } else {\r\n\r\n            platformSystem.addPremiumPublishe(id, duration, URL, publisher, title,\r\n                    lang, subtitleUrl, subtitleLang);\r\n            System.out.printf(MSG_VIDEO_CREATED_PREMIUM, id);\r\n\r\n        }\r\n\r\n\r\n    }\r\n\r\n    private static void addSubtitle(Scanner input, PlatformSystem platformSystem) {\r\n        String id = input.next().trim();\r\n        String subtitleUrl = input.next();\r\n        String subtitleLang = input.nextLine().toUpperCase();\r\n        if (!platformSystem.hasVideo(id, subtitleUrl, subtitleLang)) {\r\n            System.out.println(VIDEO_NOT_EXIST);\r\n        } else if (!platformSystem.IsPremiumVideo(id, subtitleUrl, subtitleLang)) {\r\n            System.out.println(REQUIRES_PREMIUM_VIDEO);\r\n        } else if (!validLanguage(subtitleLang)) {\r\n            System.out.println(MSG_INVALIG_LANGUAGE_SUBTITLE);\r\n        } else {\r\n            platformSystem.addSubtitle(id, subtitleUrl, subtitleLang);\r\n        }\r\n\r\n    }\r\n\r\n    private static void getVideo() {\r\n\r\n    }\r\n\r\n    private static void subtitles() {\r\n\r\n    }\r\n\r\n    private static void createPodcast() {\r\n\r\n    }\r\n\r\n    private static void addEpisode() {\r\n\r\n    }\r\n\r\n    private static void getPodcast() {\r\n\r\n    }\r\n\r\n    private static void episodes() {\r\n\r\n    }\r\n\r\n    private static void authorPodcasts() {\r\n\r\n    }\r\n\r\n    private static void removePodcast() {\r\n\r\n    }\r\n\r\n    private static void createShow() {\r\n\r\n    }\r\n\r\n    private static void getShow() {\r\n\r\n    }\r\n\r\n    private static void removeShow() {\r\n\r\n    }\r\n\r\n    private static void removeVideo() {\r\n\r\n    }\r\n\r\n}\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/-Project-Phase-1---YouVideo_POO/src/Main.java b/-Project-Phase-1---YouVideo_POO/src/Main.java
+--- a/-Project-Phase-1---YouVideo_POO/src/Main.java	(revision 9d9789a7ca74829c9e3fdef73910fa62aba3267e)
++++ b/-Project-Phase-1---YouVideo_POO/src/Main.java	(date 1775826021377)
+@@ -1,14 +1,12 @@
+-import YouVideo.PlatformSystem;
+-import YouVideo.PlatformSystemClass;
++import YouVideo.*;
++import dataStructures.Iterator;
+ 
+ import java.util.Locale;
+ import java.util.Scanner;
+ 
+ public class Main {
+-
+     private static final String EXIT = "EXIT";
+     private static final String HELP = "HELP";
+-    private static final String MSG_EXIT = "Bye!";
+     private static final String CREATEPUBLISHABLE = "CREATEPUBLISHABLE";
+     private static final String CREATEPREMIUM = "CREATEPREMIUM";
+     private static final String ADDSUBTITLE = "ADDSUBTITLE";
+@@ -25,40 +23,90 @@
+     private static final String REMOVESHOW = "REMOVESHOW";
+     private static final String REMOVEVIDEO = "REMOVEVIDEO";
+ 
++    private static final String CMD_CREATE_PUBLISHABLE =
++            "createpublishable - creates a new publishable video";
++    private static final String CMD_CREATE_PREMIUM =
++            "createpremium - creates a new publishable Premium video";
++    private static final String CMD_ADD_SUBTITLE =
++            "addsubtitle - adds subtitle to Premium video";
++    private static final String CMD_GET_VIDEO =
++            "getvideo - presents publishable video data from its id";
++    private static final String CMD_SUBTITLES =
++            "subtitles - Lists Premium video subtitles";
++    private static final String CMD_CREATE_PODCAST =
++            "createpodcast - creates a new podcast with no episodes";
++    private static final String CMD_ADD_EPISODE =
++            "addepisode - adds an episode to a podcast";
++    private static final String CMD_GET_PODCAST =
++            "getpodcast - presents podcast data from its title";
++    private static final String CMD_EPISODES =
++            "episodes - List podcast episodes";
++    private static final String CMD_AUTHOR_PODCASTS =
++            "authorpodcasts - List all podcasts of an author";
++    private static final String CMD_REMOVE_PODCAST =
++            "removepodcast - removes a podcast";
++    private static final String CMD_CREATE_SHOW =
++            "createshow - creates show using an existing publishable video";
++    private static final String CMD_GET_SHOW =
++            "getshow - presents show data from its title";
++    private static final String CMD_REMOVE_SHOW =
++            "removeshow - removes a show";
++    private static final String CMD_REMOVE_VIDEO =
++            "removevideo - removes a publishable video";
++    private static final String CMD_HELP =
++            "help - shows the available commands";
++    private static final String CMD_EXIT =
++            "exit - terminates the execution of the program";
+ 
+-    private static final String MSG_DEFAULT = "Unknown command." +
+-            "Type help to see available commands";
++    private static final String MSG_EXIT = "Bye!";
++    private static final String MSG_DEFAULT = "Unknown command. Type help to see available commands";
+     private static final String MSG_INVALID_VALUE = "Invalid value.";
+     private static final String MSG_INVALIG_LANGUAGE = "Invalid language type.";
+-    private static final String MSG_VIDEO_ALREADY_EXIST = "Video with this ID already exists";
++    private static final String MSG_VIDEO_ALREADY_EXIST = "Video with this ID already exists.";
+     private static final String MSG_VIDEO_CREATED = "Video %s created successfully.\n";
+-    private static final String MSG_VIDEO_CREATED_PREMIUM = "PREMIUM Video %s created successfully.\n";
+-    private static final String MSG_INVALIG_LANGUAGE_SUBTITLE = "Invalid language type in subtitle";
++    private static final String MSG_VIDEO_CREATED_PREMIUM =
++            "PREMIUM Video %s created successfully.\n";
++    private static final String MSG_INVALIG_LANGUAGE_SUBTITLE =
++            "Invalid language type in subtitle.";
+     private static final String VIDEO_NOT_EXIST = "Video does not exist.";
+-    private static final String SUBTITLE_ADDED = "Subtitle added successfully";
+-    private static final String REQUIRES_PREMIUM_VIDEO = "This operation requires a Premium video";
++    private static final String SUBTITLE_ADDED = "Subtitle added successfully.";
++    private static final String REQUIRES_PREMIUM_VIDEO =
++            "This operation requires a Premium video.";
++    private static final String PUBLISHABLE_VIDEO_NOT_EXIST =
++            "Publishable Video %s does not exist.\n";
++    private static final String GET_PREMIUM_VIDEO = "PREMIUM Video %s %d Title: %s\n";
++    private static final String GET_BASIC_VIDEO = "Video %s %d Title: %s\n";
++    private static final String GET_VIDEO = "File: %s Publisher: %s Language: %s\n";
++    private static final String VIDEO_SUBTITLES = "Subtitles for video %s:\n";
++    private static final String MSG_VIDEO_NOT_PREMIUM = "No Premium Video with ID.";
++    private static final String MSG_PODCAST_ALREADY_EXIST = "Podcast with this title already exists.";
++    private static final String MSG_PODCAST_CREATED = "Podcast created successfully.";
++    private static final String MSG_PODCAST_NOT_EXIST = "Podcast does not exist.";
++    private static final String MSG_EPISODE_ADDED = "Episode added successfully.";
++    private static final String MSG_EPISODE_ALREADY_EXIST = "Episode ID already exists in the system.";
++    private static final String MSG_DATA_EPISODE_INVALIDA ="Episode date must be >= than latest episode date";
+ 
+ 
+-    static void main(String[] args) {
+-        Scanner input = new Scanner(System.in);
++
++   public static void main(String[] args) {
++        Scanner in = new Scanner(System.in);
+         PlatformSystem platformSystem = new PlatformSystemClass();
+-        command(input, platformSystem);
+-
+-
++        command(in, platformSystem);
++        in.close();
+     }
+ 
+-    private static void command(Scanner input, PlatformSystem platformSystem) {
+-        String cmd = null;
++    private static void command(Scanner in, PlatformSystem platformSystem) {
++        String cmd;
+         do {
+-            cmd = input.next().trim().toUpperCase();
++            cmd = in.next().trim().toUpperCase();
+             switch (cmd) {
+-                case CREATEPUBLISHABLE -> createPublishable(input, platformSystem);
+-                case CREATEPREMIUM -> createPremium(input, platformSystem);
+-                case ADDSUBTITLE -> addSubtitle(input, platformSystem);
+-                case GETVIDEO -> getVideo();
+-                case SUBTITLES -> subtitles();
+-                case CREATEPODCAST -> createPodcast();
+-                case ADDEPISODE -> addEpisode();
++                case CREATEPUBLISHABLE -> createPublishable(in, platformSystem);
++                case CREATEPREMIUM -> createPremium(in, platformSystem);
++                case ADDSUBTITLE -> addSubtitle(in, platformSystem);
++                case GETVIDEO -> getVideo(in, platformSystem);
++                case SUBTITLES -> subtitles(in, platformSystem);
++                case CREATEPODCAST -> createPodcast(in, platformSystem);
++                case ADDEPISODE -> addEpisode(in, platformSystem);
+                 case GETPODCAST -> getPodcast();
+                 case EPISODES -> episodes();
+                 case AUTHORPODCASTS -> authorPodcasts();
+@@ -71,10 +119,9 @@
+                 case EXIT -> System.out.println(MSG_EXIT);
+                 default -> {
+                     System.out.println(MSG_DEFAULT);
+-                    input.nextLine();
++                    in.nextLine();
+                 }
+             }
+-
+         }
+         while (!cmd.equals(EXIT));
+ 
+@@ -82,104 +129,171 @@
+ 
+ 
+     private static void help() {
++        System.out.println(CMD_CREATE_PUBLISHABLE);
++        System.out.println(CMD_CREATE_PREMIUM);
++        System.out.println(CMD_ADD_SUBTITLE);
++        System.out.println(CMD_GET_VIDEO);
++        System.out.println(CMD_SUBTITLES);
++        System.out.println(CMD_CREATE_PODCAST);
++        System.out.println(CMD_ADD_EPISODE);
++        System.out.println(CMD_GET_PODCAST);
++        System.out.println(CMD_EPISODES);
++        System.out.println(CMD_AUTHOR_PODCASTS);
++        System.out.println(CMD_REMOVE_PODCAST);
++        System.out.println(CMD_CREATE_SHOW);
++        System.out.println(CMD_GET_SHOW);
++        System.out.println(CMD_REMOVE_SHOW);
++        System.out.println(CMD_REMOVE_VIDEO);
++        System.out.println(CMD_HELP);
++        System.out.println(CMD_EXIT);
+     }
+ 
+ 
+     private static boolean validLanguage(String lang) {
+         String[] isoLanguages = Locale.getISOLanguages();
+         for (int i = 0; i < isoLanguages.length; i++) {
+-            if (isoLanguages[i].toUpperCase().equals(lang)) {
++            String isoLanguage = isoLanguages[i].toUpperCase();
++            if (isoLanguage.equals(lang)) {
+                 return true;
+             }
+         }
+         return false;
+-
+     }
+ 
+-
+-    private static void createPublishable(Scanner input, PlatformSystem platformSystem) {
+-        String id = input.next();
+-        int duration = input.nextInt();
+-        String URL = input.next().trim();
+-        input.nextLine();
+-
+-        String publisher = input.nextLine();
+-        String title = input.nextLine().trim();
+-        String lang = input.next().toUpperCase();
++    private static void createPublishable(Scanner in, PlatformSystem platformSystem) {
++        String id = in.next();
++        int duration = in.nextInt();
++        String URL = in.next().trim();
++        in.nextLine();
++        String publisher = in.nextLine();
++        String title = in.nextLine().trim();
++        String lang = in.next().toUpperCase();
+ 
+         if (duration <= 0) {
+             System.out.println(MSG_INVALID_VALUE);
+         } else if (!validLanguage(lang)) {
+             System.out.println(MSG_INVALIG_LANGUAGE);
+-        } else if (platformSystem.hasPublishe(id, duration, URL, publisher)) {
++        } else if (platformSystem.hasPublishable(id)) {
+             System.out.println(MSG_VIDEO_ALREADY_EXIST);
+         } else {
+-            platformSystem.addPublishe(id, duration, URL, publisher, title, lang);
++            platformSystem.addPublishable(id, duration, URL, publisher, title, lang);
+             System.out.printf(MSG_VIDEO_CREATED, id);
+-
+         }
+     }
+ 
+-    private static void createPremium(Scanner input, PlatformSystem platformSystem) {
+-        String id = input.next().trim();
+-        int duration = input.nextInt();
+-        String URL = input.next().trim();
+-        input.nextLine();
+-        String publisher = input.nextLine();
+-        String title = input.nextLine().trim();
+-
+-        String lang = input.nextLine().trim();
+-        String subtitleUrl = input.nextLine();
+-        String subtitleLang = input.nextLine();
++    private static void createPremium(Scanner in, PlatformSystem platformSystem) {
++        String id = in.next().trim();
++        int duration = in.nextInt();
++        String URL = in.next().trim();
++        in.nextLine();
++        String publisher = in.nextLine();
++        String title = in.nextLine().trim();
++        String lang = in.nextLine().trim();
++        String subtitleUrl = in.nextLine();
++        String subtitleLang = in.nextLine();
+ 
+         if (duration <= 0) {
+             System.out.println(MSG_INVALID_VALUE);
+-
+         } else if (!validLanguage(lang) || !validLanguage(subtitleLang)) {
+             System.out.println(MSG_INVALIG_LANGUAGE);
+-
+-        } else if (platformSystem.hasPublishe(id, duration, URL, publisher)) {
++        } else if (platformSystem.hasPublishable(id)) {
+             System.out.println(MSG_VIDEO_ALREADY_EXIST);
+         } else {
+-
+-            platformSystem.addPremiumPublishe(id, duration, URL, publisher, title,
++            platformSystem.addPremiumPublishable(id, duration, URL, publisher, title,
+                     lang, subtitleUrl, subtitleLang);
+             System.out.printf(MSG_VIDEO_CREATED_PREMIUM, id);
+-
+         }
+-
+-
+     }
+ 
+-    private static void addSubtitle(Scanner input, PlatformSystem platformSystem) {
+-        String id = input.next().trim();
+-        String subtitleUrl = input.next();
+-        String subtitleLang = input.nextLine().toUpperCase();
+-        if (!platformSystem.hasVideo(id, subtitleUrl, subtitleLang)) {
++    private static void addSubtitle(Scanner in, PlatformSystem platformSystem) {
++        String id = in.next().trim();
++        String subtitleUrl = in.next().trim();
++        String subtitleLang = in.nextLine().trim().toUpperCase();
++        if (!platformSystem.hasPublishable(id)) {
+             System.out.println(VIDEO_NOT_EXIST);
+-        } else if (!platformSystem.IsPremiumVideo(id, subtitleUrl, subtitleLang)) {
++        } else if (!platformSystem.IsPremiumVideo(id)) {
+             System.out.println(REQUIRES_PREMIUM_VIDEO);
+         } else if (!validLanguage(subtitleLang)) {
+             System.out.println(MSG_INVALIG_LANGUAGE_SUBTITLE);
+         } else {
+             platformSystem.addSubtitle(id, subtitleUrl, subtitleLang);
++            System.out.println(SUBTITLE_ADDED);
+         }
++    }
+ 
++    private static void getVideo(Scanner in, PlatformSystem platformSystem) {
++        String id = in.next(); in.nextLine();
++        if (!platformSystem.hasPublishable(id)) {
++            System.out.printf(PUBLISHABLE_VIDEO_NOT_EXIST, id);
++        } else {
++            PublishableVideo video =(PublishableVideo) platformSystem.getVideo(id);
++            if (platformSystem.IsPremiumVideo(video.getId())) {
++                System.out.printf(GET_PREMIUM_VIDEO,
++                        video.getId(), video.getDuration(), video.getTitle());
++            } else {
++                System.out.printf(GET_BASIC_VIDEO,
++                        video.getId(), video.getDuration(), video.getTitle() );
++            }
++            System.out.printf(GET_VIDEO, video.getUrl(), video.getPublisher(), video.getLang());
++        }
+     }
+-
+-    private static void getVideo() {
+ 
++    private static void subtitles(Scanner in, PlatformSystem platformSystem) {
++        String id = in.next(); in.nextLine();
++        PublishableVideo video =(PublishableVideo) platformSystem.getVideo(id);
++        if(!platformSystem.IsPremiumVideo(id)){
++            System.out.println(MSG_VIDEO_NOT_PREMIUM);
++        }
++        else {
++            System.out.printf(VIDEO_SUBTITLES, video.getTitle());
++            Iterator<Subtitle> it = platformSystem.subtitleIterator(id);
++            while (it.hasNext()) {
++                Subtitle subtitle = it.next();
++                System.out.printf("- %s (%s)\n", subtitle.lang(), subtitle.URL());
++            }
++        }
+     }
+ 
+-    private static void subtitles() {
++    private static void createPodcast(Scanner in, PlatformSystem platformSystem) {
++       String title = in.nextLine().trim();
++       String author = in.nextLine().trim();
++       String lang= in.nextLine();
+ 
+-    }
++       if (!validLanguage(lang)){
++            System.out.println(MSG_INVALIG_LANGUAGE);
++        }
++       else if(platformSystem.hasPodcast(title)){
++           System.out.println(MSG_PODCAST_ALREADY_EXIST);
++       }
++       else {
++           platformSystem.addPodcast(title,author,lang);
++           System.out.println(MSG_PODCAST_CREATED);
++       }
+ 
+-    private static void createPodcast() {
++
+ 
+     }
+ 
+-    private static void addEpisode() {
++    private static void addEpisode(Scanner in, PlatformSystem platformSystem) {
++        String title = in.nextLine().trim();
++        String id = in.next().trim();
++        int duration = in.nextInt();
++        String URL = in.next().trim();
++        in.nextLine();
++        String  date= in.nextLine();
++        if (duration <= 0) {
++            System.out.println(MSG_INVALID_VALUE);
++       } else if (!platformSystem.hasPodcast(title)) {
++            System.out.println(MSG_PODCAST_NOT_EXIST);
++        }else if(platformSystem.hasEpisode(id)){
++            System.out.println(MSG_EPISODE_ALREADY_EXIST);
++        }else if (platformSystem.isValidEpisodeDate(title,date)){
++            System.out.println(MSG_DATA_EPISODE_INVALIDA);
++
++        }else {
++            platformSystem.addEpisode(title,id,duration,URL,date);
++            System.out.printf(MSG_EPISODE_ADDED);
++        }
+ 
+     }
+ 
+Index: -Project-Phase-1---YouVideo_POO/src/YouVideo/SubtitleClass.java
+===================================================================
+diff --git a/-Project-Phase-1---YouVideo_POO/src/YouVideo/SubtitleClass.java b/-Project-Phase-1---YouVideo_POO/src/YouVideo/SubtitleClass.java
+deleted file mode 100644
+--- a/-Project-Phase-1---YouVideo_POO/src/YouVideo/SubtitleClass.java	(revision 9d9789a7ca74829c9e3fdef73910fa62aba3267e)
++++ /dev/null	(revision 9d9789a7ca74829c9e3fdef73910fa62aba3267e)
+@@ -1,26 +0,0 @@
+-package YouVideo;
+-
+-public class SubtitleClass implements Subtitle{
+-    private String lang;
+-    private String URL;
+-
+-    public SubtitleClass (String lang, String URL){
+-        this.lang = lang;
+-        this.URL = URL;
+-    }
+-
+-    @Override
+-    public String getLang() {
+-        return lang;
+-    }
+-
+-    @Override
+-    public String getUrl() {
+-        return URL;
+-    }
+-
+-    @Override
+-    public boolean equals() {
+-        return false;
+-    }
+-}
+Index: -Project-Phase-1---YouVideo_POO/src/YouVideo/DiagramaClasses.puml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/-Project-Phase-1---YouVideo_POO/src/YouVideo/DiagramaClasses.puml b/-Project-Phase-1---YouVideo_POO/src/YouVideo/DiagramaClasses.puml
+new file mode 100644
+--- /dev/null	(date 1775839186288)
++++ b/-Project-Phase-1---YouVideo_POO/src/YouVideo/DiagramaClasses.puml	(date 1775839186288)
+@@ -0,0 +1,124 @@
++@startuml
++
++abstract class VideoClass
++interface Episode
++interface PlatformSystem
++interface Podcast
++interface PublishableVideo
++interface Show
++interface Video
++interface VideoAll
++
++class ShowClass
++class PremiumVideoClass
++class PodcastClass
++class PlatformSystemClass
++class EpisodeClass
++class BasicVideoClass
++record Subtitle
++
++
++
++
++
++
++
++PublishableVideo <|.. BasicVideoClass
++Video <|-- VideoAll
++Video <|-- PublishableVideo
++Video <|-- Episode
++VideoAll <|.. VideoClass
++Episode <|.. EpisodeClass
++BasicVideoClass<|-- PremiumVideoClass
++VideoClass <|-- EpisodeClass
++VideoClass <|--BasicVideoClass
++
++Show <|.. ShowClass
++Podcast <|.. PodcastClass
++PlatformSystem <|.. PlatformSystemClass
++
++interface Podcast {
++  + getLang(): String
++  + getTitle(): String
++  + getAuthor(): String
++  + equals(other: Object): boolean
++  + addEpisode(String,int,String, String): void
++  + getEpisode(): Iterator<EpisodeClass>
++}
++
++
++interface VideoAll{
++  + equals(): boolean
++}
++
++interface Video {
++  + getId(): String
++  + getDuration(): int
++  + getUrl(): String
++}
++
++interface PublishableVideo   {
++  + getTitle(): String
++  + getPublisher(): String
++  + getLanguage(): String
++}
++
++
++interface Episode {
++  + getDate(): String
++}
++
++interface Show {
++  + getTitle(): String
++  + getAuthor(): String
++  + getDate(): String
++  + getVideo(): PublishableVideo
++}
++
++abstract class VideoClass{
++  - ID: String
++    - duration: int
++    - URL: String
++    + VideoClass(String,int,String)
++    + VideoClass(ID: String)
++    + getId(): String
++    + getDuration(): int
++    + getUrl(): String
++    + equals(other: Object): boolean
++
++}
++
++class PremiumVideoClass{
++ - subtitle: Array<Subtitle>
++   + PremiumVideoClass(String,int,String, String, String,String, String, String)
++   + addSubtitle(String,String): void
++   + subtitleIterator(): Iterator<Subtitle>
++
++}
++
++interface PublishableVideo {
++  + getTitle(): String
++  + getPublisher(): String
++  + getLang(): String
++}
++
++class BasicVideoClass{
++   - title: String
++   - lang: String
++   - publisher: String
++   + BasicVideoClass(String,int,String,String,String,String)
++   + BasicVideoClass(String)
++   + getTitle(): String
++   + getLang(): String
++   + getPublisher(): String
++}
++
++class EpisodeClass{
++   - date: String
++   + EpisodeClass(String,int,String,String,String)
++   + EpisodeClass(String)
++
++
++}
++
++@enduml
+Index: -Project-Phase-1---YouVideo_POO/src/YouVideo/PublishableVideo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/-Project-Phase-1---YouVideo_POO/src/YouVideo/PublishableVideo.java b/-Project-Phase-1---YouVideo_POO/src/YouVideo/PublishableVideo.java
+new file mode 100644
+--- /dev/null	(date 1775756907978)
++++ b/-Project-Phase-1---YouVideo_POO/src/YouVideo/PublishableVideo.java	(date 1775756907978)
+@@ -0,0 +1,7 @@
++package YouVideo;
++
++public interface PublishableVideo extends Video{
++    String getTitle();
++    String getPublisher();
++    String getLang();
++}
+Index: -Project-Phase-1---YouVideo_POO/src/YouVideo/Episode.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/-Project-Phase-1---YouVideo_POO/src/YouVideo/Episode.java b/-Project-Phase-1---YouVideo_POO/src/YouVideo/Episode.java
+new file mode 100644
+--- /dev/null	(date 1775824381030)
++++ b/-Project-Phase-1---YouVideo_POO/src/YouVideo/Episode.java	(date 1775824381030)
+@@ -0,0 +1,7 @@
++package YouVideo;
++
++public interface Episode extends Video{
++    String getDate();
++
++
++}
