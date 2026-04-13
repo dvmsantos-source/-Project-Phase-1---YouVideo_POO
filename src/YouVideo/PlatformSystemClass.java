@@ -1,0 +1,99 @@
+package YouVideo;
+
+import dataStructures.Array;
+import dataStructures.ArrayClass;
+import dataStructures.Iterator;
+
+public class PlatformSystemClass implements PlatformSystem {
+
+    private final Array<Video> videos;
+    private final Array<Podcast> podcasts;
+
+    public PlatformSystemClass() {
+        videos = new ArrayClass<>();
+        podcasts = new ArrayClass<>();
+    }
+
+    @Override
+    public void addPublishable(String id, int duration, String url, String publisher,
+                               String title, String lang) {
+        videos.insertLast(new BasicVideoClass(id, duration, url, publisher,
+                title, lang));
+    }
+
+    @Override
+    public boolean hasPublishable(String id) {
+        return videos.searchForward(new BasicVideoClass(id));
+    }
+
+    @Override
+    public void addPremiumPublishable(String id, int duration, String url,
+                                      String publisher, String title, String lang,
+                                      String subtitleUrl, String subtitleLang) {
+        videos.insertLast(new PremiumVideoClass(id, duration, url,
+                publisher, title, lang, subtitleUrl, subtitleLang));
+    }
+
+    @Override
+    public boolean IsPremiumVideo(String id) {
+        return getVideo(id) instanceof PremiumVideoClass;
+    }
+
+    public Video getVideo(String id) {
+        int idx = videos.searchIndexOf(new BasicVideoClass(id));
+        return videos.get(idx);
+    }
+
+    @Override
+    public void addSubtitle(String id, String subtitleUrl, String subtitleLang) {
+        PremiumVideoClass premiumVideo = (PremiumVideoClass) getVideo(id);
+        premiumVideo.addSubtitle(subtitleUrl, subtitleLang);
+    }
+
+    public Iterator<Subtitle> subtitleIterator(String id) {
+        PremiumVideoClass premiumVideo = (PremiumVideoClass) getVideo(id);
+        return premiumVideo.subtitleIterator();
+    }
+
+    @Override
+    public boolean hasPodcast(String title) {
+        return podcasts.searchForward(new PodcastClass(title));
+    }
+
+    @Override
+    public void addPodcast(String title, String author, String lang) {
+        podcasts.insertLast(new PodcastClass(title,author,lang));
+    }
+
+    @Override
+    public void addEpisode(String title, String id, int duration, String url, String date) {
+        getPodcast(title).addEpisode(id,duration,url,date);
+    }
+
+    @Override
+    public PodcastAll getPodcast(String title) {
+        int idx = podcasts.searchIndexOf(new PodcastClass(title));
+        return (PodcastAll) podcasts.get(idx);
+    }
+
+    @Override
+    public boolean hasEpisode(String id) {
+        return videos.searchForward(new EpisodeClass(id));
+    }
+
+    @Override
+    public boolean isValidEpisodeDate(String title, String date) {
+        PodcastAll podcast = getPodcast(title);
+        Iterator it = podcast.episodeIterator();
+        if (it.hasNext()) {
+            Episode ep = (EpisodeClass) it.next();
+            return (ep.getDate().compareTo(date) > 0);
+        }
+        return false;
+    }
+
+    public Iterator<EpisodeClass> episodeIterator(String title) {
+        PodcastAll podcast = getPodcast(title);
+        return podcast.episodeIterator();
+    }
+}

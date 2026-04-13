@@ -1,0 +1,115 @@
+someRandomCommand
+someRandom Command
+help
+createpublishable vid440 250 http://teste.pt/PHPCourse.wav
+CourseMaster
+PHP Course
+EN
+createpublishable vid440 250 http://teste.pt/PHPCourse.wav
+CourseMaster
+PHP Course
+XX
+createpublishable vid440 0 http://teste.pt/PHPCourse.wav
+CourseMaster
+PHP Course
+EN
+createpublishable vid440 250 http://teste.pt/PHPCourse.wav
+CourseMaster
+PHP Course
+EN
+createpremium vid456 180 http://example.com/vid456.mp4
+EduChannel
+Advanced Java
+EN
+http://example.com/subtitles-en.vtt
+EN
+createpremium vid456 180 http://example.com/vid456.mp4
+EduChannel
+Advanced Java
+XX
+http://example.com/subtitles-en.vtt
+EN
+createpremium vid456 180 http://example.com/vid456.mp4
+EduChannel
+Advanced Java
+EN
+http://example.com/subtitles-en.vtt XX
+createpremium vid456 0 http://example.com/vid456.mp4
+EduChannel
+Advanced Java
+EN
+http://example.com/subtitles-en.vtt
+EN
+createpremium vid456 180 http://example.com/vid456.mp4
+EduChannel
+Advanced Java
+EN
+http://example.com/subtitles-en.vtt
+EN
+addsubtitle vid456 http://example.com/subtitles-es.vtt
+ES
+addsubtitle vid456 http://example.com/subtitles-es.vtt
+XX
+addsubtitle vid999 http://example.com/subtitles-es.vtt
+ES
+createpublishable vid123 120 http://example.com/vid123.mp4
+TechChannel
+Introduction to Java
+EN
+addsubtitle vid123 http://example.com/subtitles-es.vtt
+ES
+getvideo vid123
+getvideo vid456
+getvideo vid999
+subtitles vid456
+subtitles vid999
+subtitles vid123
+subtitles ep001
+createpodcast Tech Talk Daily
+John Smith
+EN
+createpodcast Tech Talk Daily
+John Smith
+XX
+createpodcast Tech Talk Daily
+John Smith
+EN
+addepisode Tech Talk Daily
+ep001 45 http://example.com/ep001.mp3
+2025-03-15
+addepisode Tech Talk Daily
+ep001 0 http://example.com/ep001.mp3
+2025-03-15
+addepisode Unknown Podcast
+ep001 45 http://example.com/ep001.mp3
+2025-03-15
+addepisode Tech Talk Daily
+vid123 45 http://example.com/ep001.mp3
+2025-03-15
+addepisode Tech Talk Daily
+ep001 45 http://example.com/ep001.mp3
+2025-03-01
+getpodcast Tech Talk Daily
+getpodcast Unknown Podcast
+episodes Tech Talk Daily
+episodes Unknown Podcast
+episodes Empty Podcast
+authorpodcasts John Smith
+authorpodcasts Unknown Author
+removepodcast Tech Talk Daily
+removepodcast Unknown Podcast
+createshow Jane Doe
+vid123 2025-04-01
+createshow Jane Doe
+vid999 2025-04-01
+createshow Jane Doe
+vid123 2025-04-01
+getshow Introduction to Java
+getshow Unknown Show
+removeshow Introduction to Java
+removeshow Unknown Show
+removevideo vid123
+removevideo vid999
+removevideo ep001
+removevideo vid123
+exit
