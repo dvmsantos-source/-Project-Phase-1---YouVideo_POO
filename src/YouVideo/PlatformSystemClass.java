@@ -8,12 +8,20 @@ import java.util.Locale;
 
 public class PlatformSystemClass implements PlatformSystem {
 
-    private final Array<Video> videos;
-    private final Array<Podcast> podcasts;
+    private Array<Video> videos;
+    private Array<Podcast> podcasts;
+    private Array<Show> shows;
 
     public PlatformSystemClass() {
         videos = new ArrayClass<>();
         podcasts = new ArrayClass<>();
+        shows = new ArrayClass<>();
+    }
+
+    //------------------------------------------VIDEOS------------------------------------------
+    @Override
+    public boolean hasPublishable(String id) {
+        return videos.searchForward(new BasicVideoClass(id));
     }
 
     @Override
@@ -21,11 +29,6 @@ public class PlatformSystemClass implements PlatformSystem {
                                String title, Locale lang) {
         videos.insertLast(new BasicVideoClass(id, duration, url, publisher,
                 title, lang));
-    }
-
-    @Override
-    public boolean hasPublishable(String id) {
-        return videos.searchForward(new BasicVideoClass(id));
     }
 
     @Override
@@ -57,6 +60,7 @@ public class PlatformSystemClass implements PlatformSystem {
         return premiumVideo.subtitleIterator();
     }
 
+    //------------------------------------------PODCAST------------------------------------------
     @Override
     public boolean hasPodcast(String title) {
         return podcasts.searchForward(new PodcastClass(title));
@@ -98,4 +102,6 @@ public class PlatformSystemClass implements PlatformSystem {
         PodcastAll podcast = getPodcast(title);
         return podcast.episodeIterator();
     }
+
+    //------------------------------------------SHOW------------------------------------------
 }

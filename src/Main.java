@@ -62,12 +62,12 @@ public class Main {
     private static final String MSG_DEFAULT =
             "Unknown command. Type help to see available commands.";
     private static final String MSG_INVALID_VALUE = "Invalid value.";
-    private static final String MSG_INVALIG_LANGUAGE = "Invalid language type.";
+    private static final String MSG_INVALID_LANGUAGE = "Invalid language type.";
     private static final String MSG_VIDEO_ALREADY_EXIST = "Video with this ID already exists.";
     private static final String MSG_VIDEO_CREATED = "Video %s created successfully.\n";
-    private static final String MSG_VIDEO_CREATED_PREMIUM =
+    private static final String MSG_VIDEO_PREMIUM_CREATED =
             "PREMIUM Video %s created successfully.\n";
-    private static final String MSG_INVALIG_LANGUAGE_SUBTITLE =
+    private static final String MSG_INVALID_LANGUAGE_SUBTITLE =
             "Invalid language type in subtitle.";
     private static final String MSG_VIDEO_NOT_EXIST = "Video does not exist.";
     private static final String MSG_SUBTITLE_ADDED = "Subtitle added successfully.";
@@ -99,7 +99,7 @@ public class Main {
 
 
    public static void main(String[] args) {
-       Locale.setDefault(Locale.of("EN","GB" ));
+        Locale.setDefault(Locale.of("EN","GB" ));
         Scanner in = new Scanner(System.in);
         PlatformSystem platformSystem = new PlatformSystemClass();
         command(in, platformSystem);
@@ -185,7 +185,7 @@ public class Main {
         if (duration <= 0) {
             System.out.println(MSG_INVALID_VALUE);
         } else if (!validLanguage(convert(lang))) {
-            System.out.println(MSG_INVALIG_LANGUAGE);
+            System.out.println(MSG_INVALID_LANGUAGE);
         } else if (platformSystem.hasPublishable(id)) {
             System.out.println(MSG_VIDEO_ALREADY_EXIST);
         } else {
@@ -208,13 +208,13 @@ public class Main {
         if (duration <= 0) {
             System.out.println(MSG_INVALID_VALUE);
         } else if (!validLanguage(convert(lang)) || !validLanguage(convert(subtitleLang))) {
-            System.out.println(MSG_INVALIG_LANGUAGE);
+            System.out.println(MSG_INVALID_LANGUAGE);
         } else if (platformSystem.hasPublishable(id)) {
             System.out.println(MSG_VIDEO_ALREADY_EXIST);
         } else {
             platformSystem.addPremiumPublishable(id, duration, URL, publisher, title,
                     convert(lang), subtitleUrl, convert(subtitleLang));
-            System.out.printf(MSG_VIDEO_CREATED_PREMIUM, id);
+            System.out.printf(MSG_VIDEO_PREMIUM_CREATED, id);
         }
     }
 
@@ -227,7 +227,7 @@ public class Main {
         } else if (!platformSystem.IsPremiumVideo(id)) {
             System.out.println(MSG_REQUIRES_PREMIUM_VIDEO);
         } else if (!validLanguage(convert(subtitleLang))) {
-            System.out.println(MSG_INVALIG_LANGUAGE_SUBTITLE);
+            System.out.println(MSG_INVALID_LANGUAGE_SUBTITLE);
         } else {
             platformSystem.addSubtitle(id, subtitleUrl, convert(subtitleLang));
             System.out.println(MSG_SUBTITLE_ADDED);
@@ -277,7 +277,7 @@ public class Main {
        String lang= in.nextLine();
 
        if (!validLanguage(convert(lang))){
-            System.out.println(MSG_INVALIG_LANGUAGE);
+            System.out.println(MSG_INVALID_LANGUAGE);
         }
        else if (platformSystem.hasPodcast(title)){
            System.out.println(MSG_PODCAST_ALREADY_EXIST);

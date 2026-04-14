@@ -6,6 +6,13 @@ import java.util.Locale;
 
 public interface PlatformSystem {
     /**
+     * Verifies if the system has a publishable given its ID.
+     * @param id
+     * @return TRUE if the system has it or FALSE if the system does not have it.
+     */
+    boolean hasPublishable(String id);
+
+    /**
      * Adds a publishable into the system.
      * @param id
      * @param duration
@@ -16,13 +23,6 @@ public interface PlatformSystem {
      */
     void addPublishable(String id, int duration, String url, String publisher,
                         String title, Locale lang);
-
-    /**
-     * Verifies if the system has a publishable given its ID.
-     * @param id
-     * @return TRUE if the system has it or FALSE if the system does not have it.
-     */
-    boolean hasPublishable(String id);
 
     /**
      * Adds a premium publishable into the system.
