@@ -1,12 +1,14 @@
 package YouVideo;
 
-  class BasicVideoClass extends VideoClass implements PublishableVideo{
+import java.util.Locale;
+
+class BasicVideoClass extends VideoClass implements PublishableVideo{
       private String title;
-      private String lang;
+      private Locale lang;
       private String publisher;
 
-      public BasicVideoClass(String ID,int duration, String URL,String publisher,
-              String title,String lang){
+      public BasicVideoClass(String ID, int duration, String URL, String publisher,
+                             String title, Locale lang){
           super( ID, duration, URL);
           this.title = title;
           this.lang = lang;
@@ -21,7 +23,7 @@ package YouVideo;
           return title;
       }
 
-      public String getLang() {
+      public Locale getLang() {
           return lang;
       }
 

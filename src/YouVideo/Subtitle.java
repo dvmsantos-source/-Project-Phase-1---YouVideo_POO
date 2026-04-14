@@ -1,4 +1,6 @@
 package YouVideo;
 
-public record Subtitle(String lang, String URL) {
+import java.util.Locale;
+
+public record Subtitle(Locale lang, String URL) {
 }

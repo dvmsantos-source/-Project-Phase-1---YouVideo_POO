@@ -2,6 +2,8 @@ package YouVideo;
 
 import dataStructures.Iterator;
 
+import java.util.Locale;
+
 public interface PlatformSystem {
     /**
      * Adds a publishable into the system.
@@ -13,7 +15,7 @@ public interface PlatformSystem {
      * @param lang
      */
     void addPublishable(String id, int duration, String url, String publisher,
-                        String title, String lang);
+                        String title, Locale lang);
 
     /**
      * Verifies if the system has a publishable given its ID.
@@ -34,7 +36,7 @@ public interface PlatformSystem {
      * @param subtitleLang
      */
     void addPremiumPublishable(String id, int duration, String url, String publisher, String title,
-                               String lang, String subtitleUrl, String subtitleLang);
+                               Locale lang, String subtitleUrl, Locale subtitleLang);
 
     /**
      * Verifies if a video is premium by its ID.
@@ -56,7 +58,7 @@ public interface PlatformSystem {
      * @param subtitleUrl
      * @param subtitleLang
      */
-    void addSubtitle(String id, String subtitleUrl, String subtitleLang);
+    void addSubtitle(String id, String subtitleUrl, Locale subtitleLang);
 
     /**
      * Returns a subtitle iterator given an ID of a premium video.
@@ -67,7 +69,7 @@ public interface PlatformSystem {
 
     boolean hasPodcast(String title);
 
-    void addPodcast(String title, String author, String lang);
+    void addPodcast(String title, String author, Locale lang);
 
     void addEpisode(String title, String id, int duration, String url, String date);
 

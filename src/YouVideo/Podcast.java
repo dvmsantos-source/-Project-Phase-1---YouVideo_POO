@@ -1,7 +1,9 @@
 package YouVideo;
 
+import java.util.Locale;
+
 public interface Podcast {
-    String getLang();
+    Locale getLang();
 
     String getTitle();
 

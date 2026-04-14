@@ -99,6 +99,7 @@ public class Main {
 
 
    public static void main(String[] args) {
+       Locale.setDefault(Locale.of("EN","GB" ));
         Scanner in = new Scanner(System.in);
         PlatformSystem platformSystem = new PlatformSystemClass();
         command(in, platformSystem);
@@ -156,10 +157,14 @@ public class Main {
         System.out.println(CMD_EXIT);
     }
 
-    private static boolean validLanguage(String lang) {
+    private static Locale convert(String lang){
+       return new Locale(lang);
+    }
+
+    private static boolean validLanguage(Locale lang) {
         String[] isoLanguages = Locale.getISOLanguages();
         for (int i = 0; i < isoLanguages.length; i++) {
-            String isoLanguage = isoLanguages[i].toUpperCase();
+            Locale isoLanguage = Locale.of(isoLanguages[i].toUpperCase());
             if (isoLanguage.equals(lang)) {
                 return true;
             }
@@ -176,14 +181,15 @@ public class Main {
         String title = in.nextLine().trim();
         String lang = in.next().toUpperCase();
 
+
         if (duration <= 0) {
             System.out.println(MSG_INVALID_VALUE);
-        } else if (!validLanguage(lang)) {
+        } else if (!validLanguage(convert(lang))) {
             System.out.println(MSG_INVALIG_LANGUAGE);
         } else if (platformSystem.hasPublishable(id)) {
             System.out.println(MSG_VIDEO_ALREADY_EXIST);
         } else {
-            platformSystem.addPublishable(id, duration, URL, publisher, title, lang);
+            platformSystem.addPublishable(id, duration, URL, publisher, title, convert(lang));
             System.out.printf(MSG_VIDEO_CREATED, id);
         }
     }
@@ -201,13 +207,13 @@ public class Main {
 
         if (duration <= 0) {
             System.out.println(MSG_INVALID_VALUE);
-        } else if (!validLanguage(lang) || !validLanguage(subtitleLang)) {
+        } else if (!validLanguage(convert(lang)) || !validLanguage(convert(subtitleLang))) {
             System.out.println(MSG_INVALIG_LANGUAGE);
         } else if (platformSystem.hasPublishable(id)) {
             System.out.println(MSG_VIDEO_ALREADY_EXIST);
         } else {
             platformSystem.addPremiumPublishable(id, duration, URL, publisher, title,
-                    lang, subtitleUrl, subtitleLang);
+                    convert(lang), subtitleUrl, convert(subtitleLang));
             System.out.printf(MSG_VIDEO_CREATED_PREMIUM, id);
         }
     }
@@ -220,10 +226,10 @@ public class Main {
             System.out.println(MSG_VIDEO_NOT_EXIST);
         } else if (!platformSystem.IsPremiumVideo(id)) {
             System.out.println(MSG_REQUIRES_PREMIUM_VIDEO);
-        } else if (!validLanguage(subtitleLang)) {
+        } else if (!validLanguage(convert(subtitleLang))) {
             System.out.println(MSG_INVALIG_LANGUAGE_SUBTITLE);
         } else {
-            platformSystem.addSubtitle(id, subtitleUrl, subtitleLang);
+            platformSystem.addSubtitle(id, subtitleUrl, convert(subtitleLang));
             System.out.println(MSG_SUBTITLE_ADDED);
         }
     }
@@ -241,7 +247,8 @@ public class Main {
                 System.out.printf(MSG_GET_BASIC_VIDEO,
                         video.getId(), video.getDuration(), video.getTitle());
             }
-            System.out.printf(MSG_GET_VIDEO, video.getUrl(), video.getPublisher(), video.getLang());
+            System.out.printf(MSG_GET_VIDEO, video.getUrl(), video.getPublisher(),
+                    video.getLang().getDisplayLanguage().toUpperCase());
         }
     }
 
@@ -256,7 +263,7 @@ public class Main {
                 Iterator<Subtitle> it = platformSystem.subtitleIterator(id);
                 while (it.hasNext()) {
                     Subtitle subtitle = it.next();
-                    System.out.printf("- %s (%s)\n", subtitle.lang(), subtitle.URL());
+                    System.out.printf("- %s (%s)\n", subtitle.URL(),subtitle.lang().getDisplayLanguage().toUpperCase());
                 }
             }
         } else {
@@ -264,19 +271,18 @@ public class Main {
         }
     }
 
-
     private static void createPodcast(Scanner in, PlatformSystem platformSystem) {
        String title = in.nextLine().trim();
        String author = in.nextLine().trim();
        String lang= in.nextLine();
 
-       if (!validLanguage(lang)){
+       if (!validLanguage(convert(lang))){
             System.out.println(MSG_INVALIG_LANGUAGE);
         }
        else if (platformSystem.hasPodcast(title)){
            System.out.println(MSG_PODCAST_ALREADY_EXIST);
        } else {
-           platformSystem.addPodcast(title,author,lang);
+           platformSystem.addPodcast(title,author,convert(lang));
            System.out.println(MSG_PODCAST_CREATED);
        }
     }

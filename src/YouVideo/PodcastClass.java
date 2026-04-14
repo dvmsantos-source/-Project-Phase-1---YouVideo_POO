@@ -4,14 +4,16 @@ import dataStructures.Array;
 import dataStructures.ArrayClass;
 import dataStructures.Iterator;
 
+import java.util.Locale;
+
 class PodcastClass implements PodcastAll{
     private Array<EpisodeClass> episodes;
     private String title;
     private String author;
-    private String lang;
+    private Locale lang;
 
 
-    public PodcastClass(String title,String author,String lang ){
+    public PodcastClass(String title,String author,Locale lang ){
         this.title = title;
         this.author = author;
         this.lang = lang;
@@ -36,7 +38,7 @@ class PodcastClass implements PodcastAll{
     }
 
     @Override
-    public String getLang() {
+    public Locale getLang() {
         return lang;
     }
 

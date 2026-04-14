@@ -4,6 +4,8 @@ import dataStructures.Array;
 import dataStructures.ArrayClass;
 import dataStructures.Iterator;
 
+import java.util.Locale;
+
 public class PlatformSystemClass implements PlatformSystem {
 
     private final Array<Video> videos;
@@ -16,7 +18,7 @@ public class PlatformSystemClass implements PlatformSystem {
 
     @Override
     public void addPublishable(String id, int duration, String url, String publisher,
-                               String title, String lang) {
+                               String title, Locale lang) {
         videos.insertLast(new BasicVideoClass(id, duration, url, publisher,
                 title, lang));
     }
@@ -28,8 +30,8 @@ public class PlatformSystemClass implements PlatformSystem {
 
     @Override
     public void addPremiumPublishable(String id, int duration, String url,
-                                      String publisher, String title, String lang,
-                                      String subtitleUrl, String subtitleLang) {
+                                      String publisher, String title, Locale lang,
+                                      String subtitleUrl, Locale subtitleLang) {
         videos.insertLast(new PremiumVideoClass(id, duration, url,
                 publisher, title, lang, subtitleUrl, subtitleLang));
     }
@@ -45,7 +47,7 @@ public class PlatformSystemClass implements PlatformSystem {
     }
 
     @Override
-    public void addSubtitle(String id, String subtitleUrl, String subtitleLang) {
+    public void addSubtitle(String id, String subtitleUrl, Locale subtitleLang) {
         PremiumVideoClass premiumVideo = (PremiumVideoClass) getVideo(id);
         premiumVideo.addSubtitle(subtitleUrl, subtitleLang);
     }
@@ -61,7 +63,7 @@ public class PlatformSystemClass implements PlatformSystem {
     }
 
     @Override
-    public void addPodcast(String title, String author, String lang) {
+    public void addPodcast(String title, String author, Locale lang) {
         podcasts.insertLast(new PodcastClass(title,author,lang));
     }
 
