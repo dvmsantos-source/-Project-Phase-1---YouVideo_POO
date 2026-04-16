@@ -79,5 +79,5 @@ public interface PlatformSystem {
 
     boolean isValidEpisodeDate(String id, String date);
 
-    Iterator<EpisodeClass> episodeIterator(String title);
+    Iterator<Episode> episodeIterator(String title);
 }

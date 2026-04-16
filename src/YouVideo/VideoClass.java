@@ -44,6 +44,6 @@ abstract class VideoClass implements VideoAll {
             return false;
         if (ID == null)
             return false;
-        return this.ID.equals( ((Video) other).getId());
+        return this.ID.equalsIgnoreCase(((Video) other).getId());
     }
 }

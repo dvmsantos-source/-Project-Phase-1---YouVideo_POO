@@ -121,11 +121,11 @@ public class Main {
                 case GETPODCAST -> getPodcast(in, platformSystem);
                 case EPISODES -> episodes(in, platformSystem);
                 case AUTHORPODCASTS -> authorPodcasts();
-                case REMOVEPODCAST -> removePodcast();
+                case REMOVEPODCAST -> removePodcast(in);
                 case CREATESHOW -> createShow();
                 case GETSHOW -> getShow();
                 case REMOVESHOW -> removeShow();
-                case REMOVEVIDEO -> removeVideo();
+                case REMOVEVIDEO -> removeVideo(in);
                 case HELP -> help();
                 case EXIT -> System.out.println(MSG_EXIT);
                 default -> {
@@ -349,8 +349,8 @@ public class Main {
 
     }
 
-    private static void removePodcast() {
-
+    private static void removePodcast(Scanner in) {
+        in.nextLine();
     }
 
     private static void createShow() {
@@ -365,8 +365,9 @@ public class Main {
 
     }
 
-    private static void removeVideo() {
-
+    private static void removeVideo(Scanner in) {
+        in.nextLine();
+        System.out.println("REMOVE");
     }
 
 }

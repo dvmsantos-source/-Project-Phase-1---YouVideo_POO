@@ -1,5 +1,7 @@
 package YouVideo;
 
+import dataStructures.Iterator;
+
 import java.util.Locale;
 
 public interface Podcast {
@@ -12,4 +14,6 @@ public interface Podcast {
     String getLastEpDate();
 
     boolean isEmpty();
+
+    Iterator<Episode> episodeIterator();
 }

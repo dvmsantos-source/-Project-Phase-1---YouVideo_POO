@@ -7,7 +7,7 @@ import dataStructures.Iterator;
 import java.util.Locale;
 
 class PodcastClass implements PodcastAll{
-    private Array<EpisodeClass> episodes;
+    private Array<Episode> episodes;
     private String title;
     private String author;
     private Locale lang;
@@ -34,7 +34,7 @@ class PodcastClass implements PodcastAll{
             return false;
         if (!(other instanceof Podcast))
             return false;
-        return this.title.equals(((Podcast) other).getTitle());
+        return this.title.equalsIgnoreCase(((Podcast) other).getTitle());
     }
 
     @Override
@@ -66,7 +66,7 @@ class PodcastClass implements PodcastAll{
         this.episodes.insertLast(new EpisodeClass(ID,duration,URL,date));
     }
 
-    public Iterator<EpisodeClass> episodeIterator() {
+    public Iterator<Episode> episodeIterator() {
         return episodes.iterator();
     }
 }
