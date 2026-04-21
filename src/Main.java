@@ -95,6 +95,7 @@ public class Main {
     private static final String MSG_EPISODES = "Episode %s: %d min Date: %s\n" +
             "URL: %s\n";
     private static final String MSG_EMPTY_PODCAST = "No episodes available for this podcast.";
+    private static final String MSG_PODCAST_REMOVED = "Podcast removed successfully.";
 
 
 
@@ -120,8 +121,8 @@ public class Main {
                 case ADDEPISODE -> addEpisode(in, platformSystem);
                 case GETPODCAST -> getPodcast(in, platformSystem);
                 case EPISODES -> episodes(in, platformSystem);
-                case AUTHORPODCASTS -> authorPodcasts();
-                case REMOVEPODCAST -> removePodcast(in);
+                case AUTHORPODCASTS -> authorPodcasts(in, platformSystem);
+                case REMOVEPODCAST -> removePodcast(in,platformSystem);
                 case CREATESHOW -> createShow();
                 case GETSHOW -> getShow();
                 case REMOVESHOW -> removeShow();
@@ -300,7 +301,7 @@ public class Main {
             System.out.println(MSG_PODCAST_NOT_EXIST);
         } else if (platformSystem.hasEpisode(id)) {
             System.out.println(MSG_EPISODE_ALREADY_EXIST);
-        } else if (platformSystem.isValidEpisodeDate(title, date)) {
+        } else if (!platformSystem.isValidEpisodeDate(title, date)) {
             System.out.println(MSG_DATA_EPISODE_INVALIDA);
         } else {
             platformSystem.addEpisode(title, id, duration, URL, date);
@@ -309,7 +310,7 @@ public class Main {
     }
 
     private static void getPodcast(Scanner in, PlatformSystem platformSystem) {
-       String title = in.nextLine();
+       String title = in.nextLine().trim();
        if (platformSystem.hasPodcast(title)) {
            Podcast podcast = platformSystem.getPodcast(title);
            if (podcast.isEmpty()) {
@@ -326,7 +327,7 @@ public class Main {
     }
 
     private static void episodes(Scanner in, PlatformSystem platformSystem) {
-       String podcastTitle = in.nextLine();
+        String podcastTitle = in.nextLine().trim();
         if (platformSystem.hasPodcast(podcastTitle)) {
             Podcast podcast = platformSystem.getPodcast(podcastTitle);
             if (!podcast.isEmpty()) {
@@ -345,12 +346,20 @@ public class Main {
         }
     }
 
-    private static void authorPodcasts() {
+    private static void authorPodcasts(Scanner in,PlatformSystem platformSystem) {
 
     }
 
-    private static void removePodcast(Scanner in) {
-        in.nextLine();
+    private static void removePodcast(Scanner in,PlatformSystem platformSystem) {
+        String title = in.nextLine().trim();
+        if (!platformSystem.hasPodcast(title)){
+            System.out.println(MSG_PODCAST_NOT_EXIST);
+        }
+        else {
+            platformSystem.removePodcast(title);
+            System.out.println(MSG_PODCAST_REMOVED);
+        }
+
     }
 
     private static void createShow() {

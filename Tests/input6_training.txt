@@ -64,7 +64,7 @@ REMOVESHOW Jane Smith
 REMOVESHOW Bob Johnson
 REMOVESHOW Alice Brown
 REMOVESHOW Charlie Wilson
-aDdEpIsOdE TECH TALK DAILY PODCAST
+aDdEpIsOdE SCRIPNOTES THE SCREENWRITING PODCAST
 vid001 45 http://example.com/tech-ep1.mp3
 2025-03-15
 aDdEpIsOdE tech talk daily podcast

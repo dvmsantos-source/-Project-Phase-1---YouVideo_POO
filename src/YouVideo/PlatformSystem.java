@@ -80,4 +80,6 @@ public interface PlatformSystem {
     boolean isValidEpisodeDate(String id, String date);
 
     Iterator<Episode> episodeIterator(String title);
+
+    void removePodcast(String title);
 }

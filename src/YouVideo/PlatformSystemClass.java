@@ -68,12 +68,12 @@ public class PlatformSystemClass implements PlatformSystem {
 
     @Override
     public void addPodcast(String title, String author, Locale lang) {
-        podcasts.insertLast(new PodcastClass(title,author,lang));
+        podcasts.insertLast(new PodcastClass(title, author, lang));
     }
 
     @Override
     public void addEpisode(String title, String id, int duration, String url, String date) {
-        getPodcastAll(title).addEpisode(id,duration,url,date);
+        getPodcastAll(title).addEpisode(id, duration, url, date);
     }
 
 
@@ -96,18 +96,20 @@ public class PlatformSystemClass implements PlatformSystem {
 
     @Override
     public boolean isValidEpisodeDate(String title, String date) {
-        PodcastAll podcast = getPodcastAll(title);
-        Iterator it = podcast.episodeIterator();
-        if (it.hasNext()) {
-            Episode ep = (EpisodeClass) it.next();
-            return (ep.getDate().compareTo(date) > 0);
-        }
-        return false;
+       Podcast podcast = getPodcast(title);
+       return podcast.isValidEpisodeDate(date);
     }
 
     public Iterator<Episode> episodeIterator(String title) {
         PodcastAll podcast = getPodcastAll(title);
         return podcast.episodeIterator();
+    }
+
+    @Override
+    public void removePodcast(String title) {
+        int idx = podcasts.searchIndexOf(new PodcastClass(title));
+        podcasts.removeAt(idx);
+
     }
 
     //------------------------------------------SHOW------------------------------------------
