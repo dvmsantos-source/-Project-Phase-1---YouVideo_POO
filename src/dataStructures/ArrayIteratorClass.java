@@ -4,7 +4,7 @@ package dataStructures;
  * This class implements an iterator an over an array
  * @param <E> the type of elements in the array
  */
-public class ArrayIteratorClass<E> implements Iterator<E> {
+public class    ArrayIteratorClass<E> implements Iterator<E> {
 
     /**
      * Array of elements to iterate over

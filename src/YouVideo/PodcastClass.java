@@ -62,7 +62,7 @@ class PodcastClass implements PodcastAll {
         }
         else {
             String lastDate = getLastEpDate();
-            return date.compareTo(lastDate) > 0;
+            return date.compareTo(lastDate) >= 0;
         }
     }
 
@@ -72,6 +72,7 @@ class PodcastClass implements PodcastAll {
 
     public void addEpisode(String ID, int duration, String URL, String date ) {
         this.episodes.insertAt(new EpisodeClass(ID, duration, URL, date),0);
+
     }
 
     public Iterator<Episode> episodeIterator() {
