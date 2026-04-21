@@ -133,7 +133,7 @@ public class PlatformSystemClass implements PlatformSystem {
         Array <Podcast> authorPodcast = new ArrayClass<>();
         while (it.hasNext()) {
             Podcast podcast = it.next();
-            if (podcast.getAuthor().equals(author)){
+            if (podcast.getAuthor().equalsIgnoreCase(author)){
                 authorPodcast.insertLast(podcast);
             }
         }

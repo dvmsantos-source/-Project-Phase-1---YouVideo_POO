@@ -29,14 +29,19 @@ Podcast created successfully.
 Podcast created successfully.
 Podcast created successfully.
 Podcasts by author john smith:
-Podcast: python advanced podcast Author: john smith Language: en
+Podcast: JAVA PROGRAMMING PODCAST Author: JOHN SMITH Language: EN
+Podcast: python advanced podcast Author: john smith Language: EN
 Podcasts by author MARY JOHNSON:
-Podcast: DATA SCIENCE PODCAST Author: MARY JOHNSON Language: en
-No podcasts found for this author.
+Podcast: Web Development Podcast Author: mary johnson Language: EN
+Podcast: DATA SCIENCE PODCAST Author: MARY JOHNSON Language: EN
+Podcasts by author david wilson:
+Podcast: ai and ml podcast Author: David WILSON Language: EN
+Podcast: DEVOPS ENGINEERING PODCAST Author: DAVID wilson Language: EN
 Podcasts by author SARAH MILLER:
-Podcast: CINEMA HISTORY PODCAST Author: SARAH MILLER Language: en
+Podcast: CINEMA HISTORY PODCAST Author: SARAH MILLER Language: EN
 Podcasts by author empty author:
-Podcast: empty podcast two Author: empty author Language: en
+Podcast: EMPTY PODCAST ONE Author: EMPTY AUTHOR Language: EN
+Podcast: empty podcast two Author: empty author Language: EN
 Video PuB001 created successfully.
 No podcasts found for this author.
 No podcasts found for this author.
@@ -88,34 +93,51 @@ URL: http://example.com/ai-ep1.mp3
 No podcasts found for this author.
 No podcasts found for this author.
 Podcasts by author john smith:
-Podcast: python advanced podcast Author: john smith Language: en
+Podcast: JAVA PROGRAMMING PODCAST Author: JOHN SMITH Language: EN
+Podcast: python advanced podcast Author: john smith Language: EN
 Podcast created successfully.
-No podcasts found for this author.
+Podcasts by author jOhN sMiTh:
+Podcast: JAVA PROGRAMMING PODCAST Author: JOHN SMITH Language: EN
+Podcast: python advanced podcast Author: john smith Language: EN
+Podcast: Mixed Case Podcast Author: JoHn SmItH Language: EN
 Podcasts by author JOHN SMITH:
-Podcast: JAVA PROGRAMMING PODCAST Author: JOHN SMITH Language: en
+Podcast: JAVA PROGRAMMING PODCAST Author: JOHN SMITH Language: EN
+Podcast: python advanced podcast Author: john smith Language: EN
+Podcast: Mixed Case Podcast Author: JoHn SmItH Language: EN
 Podcasts by author john smith:
-Podcast: python advanced podcast Author: john smith Language: en
+Podcast: JAVA PROGRAMMING PODCAST Author: JOHN SMITH Language: EN
+Podcast: python advanced podcast Author: john smith Language: EN
+Podcast: Mixed Case Podcast Author: JoHn SmItH Language: EN
 Podcast removed successfully.
 Podcasts by author MARY JOHNSON:
-Podcast: DATA SCIENCE PODCAST Author: MARY JOHNSON Language: en
-No podcasts found for this author.
+Podcast: Web Development Podcast Author: mary johnson Language: EN
+Podcast: DATA SCIENCE PODCAST Author: MARY JOHNSON Language: EN
+Podcasts by author david wilson:
+Podcast: ai and ml podcast Author: David WILSON Language: EN
+Podcast: DEVOPS ENGINEERING PODCAST Author: DAVID wilson Language: EN
 Podcasts by author SARAH MILLER:
-Podcast: CINEMA HISTORY PODCAST Author: SARAH MILLER Language: en
+Podcast: CINEMA HISTORY PODCAST Author: SARAH MILLER Language: EN
 Podcasts by author empty author:
-Podcast: empty podcast two Author: empty author Language: en
+Podcast: EMPTY PODCAST ONE Author: EMPTY AUTHOR Language: EN
+Podcast: empty podcast two Author: empty author Language: EN
 Podcast removed successfully.
 Podcast removed successfully.
 Podcasts by author JOHN SMITH:
-Podcast: JAVA PROGRAMMING PODCAST Author: JOHN SMITH Language: en
+Podcast: JAVA PROGRAMMING PODCAST Author: JOHN SMITH Language: EN
 Podcasts by author mary johnson:
-Podcast: Web Development Podcast Author: mary johnson Language: en
-No podcasts found for this author.
-No podcasts found for this author.
+Podcast: Web Development Podcast Author: mary johnson Language: EN
+Podcasts by author DAVID WILSON:
+Podcast: ai and ml podcast Author: David WILSON Language: EN
+Podcast: DEVOPS ENGINEERING PODCAST Author: DAVID wilson Language: EN
+Podcasts by author sarah miller:
+Podcast: CINEMA HISTORY PODCAST Author: SARAH MILLER Language: EN
 Podcast removed successfully.
 Podcast removed successfully.
 No podcasts found for this author.
-No podcasts found for this author.
-No podcasts found for this author.
+Podcasts by author DAVID WILSON:
+Podcast: DEVOPS ENGINEERING PODCAST Author: DAVID wilson Language: EN
+Podcasts by author sarah miller:
+Podcast: CINEMA HISTORY PODCAST Author: SARAH MILLER Language: EN
 Podcast removed successfully.
 Podcast removed successfully.
 No podcasts found for this author.
@@ -129,7 +151,7 @@ No podcasts found for this author.
 Video vid_pub created successfully.
 Podcast created successfully.
 Podcasts by author Publisher Name:
-Podcast: Publisher Name Podcast Author: Publisher Name Language: en
+Podcast: Publisher Name Podcast Author: Publisher Name Language: EN
 Video vid_pub 360 Title: Publisher Test Video
 File: https://example.com/publisher-test.mp4 Publisher: Publisher Name Language: ENGLISH
 Podcast removed successfully.
@@ -138,7 +160,7 @@ Video vid_show created successfully.
 Show created successfully.
 Podcast created successfully.
 Podcasts by author John Smith Show Author:
-Podcast: John Smith Show Author Podcast Author: John Smith Show Author Language: en
+Podcast: John Smith Show Author Podcast Author: John Smith Show Author Language: EN
 Show Date: 2025-04-25 Author: John Smith Show Author
 Video: Show Test Video
 Podcast removed successfully.
@@ -147,16 +169,16 @@ Video removed successfully.
 Podcast created successfully.
 Podcast created successfully.
 Podcasts by author Recreate Author:
-Podcast: Recreate Podcast One Author: Recreate Author Language: en
-Podcast: Recreate Podcast Two Author: Recreate Author Language: en
+Podcast: Recreate Podcast One Author: Recreate Author Language: EN
+Podcast: Recreate Podcast Two Author: Recreate Author Language: EN
 Podcast removed successfully.
 Podcast removed successfully.
 No podcasts found for this author.
 Podcast created successfully.
 Podcast created successfully.
 Podcasts by author Recreate Author:
-Podcast: Recreate Podcast Three Author: Recreate Author Language: en
-Podcast: Recreate Podcast Four Author: Recreate Author Language: en
+Podcast: Recreate Podcast Three Author: Recreate Author Language: EN
+Podcast: Recreate Podcast Four Author: Recreate Author Language: EN
 Podcast removed successfully.
 Podcast removed successfully.
 No podcasts found for this author.

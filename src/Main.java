@@ -183,7 +183,7 @@ public class Main {
     private static boolean validLanguage(Locale lang) {
         String[] isoLanguages = Locale.getISOLanguages();
         for (int i = 0; i < isoLanguages.length; i++) {
-            Locale isoLanguage = Locale.of(isoLanguages[i].toUpperCase());
+            Locale isoLanguage = Locale.of(isoLanguages[i]);
             if (isoLanguage.equals(lang)) {
                 return true;
             }
@@ -220,9 +220,9 @@ public class Main {
         in.nextLine();
         String publisher = in.nextLine();
         String title = in.nextLine().trim();
-        String lang = in.nextLine().trim();
+        String lang = in.nextLine().trim().toUpperCase();
         String subtitleUrl = in.nextLine();
-        String subtitleLang = in.nextLine();
+        String subtitleLang = in.nextLine().toUpperCase();
 
         if (duration <= 0) {
             System.out.println(MSG_INVALID_VALUE);
@@ -295,7 +295,7 @@ public class Main {
     private static void createPodcast(Scanner in, PlatformSystem platformSystem) {
         String title = in.nextLine().trim();
         String author = in.nextLine().trim();
-        String lang = in.nextLine();
+        String lang = in.nextLine().toUpperCase();
 
         if (!validLanguage(convert(lang))){
             System.out.println(MSG_INVALID_LANGUAGE);
@@ -335,10 +335,10 @@ public class Main {
             Podcast podcast = platformSystem.getPodcast(title);
             if (podcast.isEmpty()) {
                 System.out.printf(MSG_GET_PODCAST,
-                         podcast.getTitle(), podcast.getAuthor(), podcast.getLang());
+                         podcast.getTitle(), podcast.getAuthor(), podcast.getLang().getLanguage().toUpperCase());
             } else {
                 System.out.printf(MSG_GET_PODCAST,
-                        podcast.getTitle(), podcast.getAuthor(), podcast.getLang());
+                        podcast.getTitle(), podcast.getAuthor(), podcast.getLang().getLanguage().toUpperCase());
                 System.out.printf(MSG_LAST_EPISODE_DATE, podcast.getLastEpDate());
             }
         } else {
@@ -368,7 +368,7 @@ public class Main {
 
     private static void authorPodcasts(Scanner in, PlatformSystem platformSystem) {
         String authorName = in.nextLine().trim();
-        Iterator<Podcast> it = platformSystem.authorPodcast(authorName);
+            Iterator<Podcast> it = platformSystem.authorPodcast(authorName);
         if (!it.hasNext()){
             System.out.println(MSG_PODCAST_NOT_FOUND);
         }
@@ -376,7 +376,7 @@ public class Main {
             System.out.printf(MSG_PODCAST_AUTHOR, authorName);
             while (it.hasNext()){
                 Podcast pd = it.next();
-                System.out.printf(MSG_PODCAST, pd.getTitle(), pd.getAuthor(), pd.getLang());
+                System.out.printf(MSG_PODCAST, pd.getTitle(), pd.getAuthor(), pd.getLang().getLanguage().toUpperCase());
             }
         }
     }
