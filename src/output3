@@ -17,13 +17,13 @@ help - shows the available commands
 exit - terminates the execution of the program
 Unknown command. Type help to see available commands.
 Unknown command. Type help to see available commands.
-REMOVE
+Video does not exist.
 Publishable Video pub999 does not exist.
-REMOVE
+Video does not exist.
 Publishable Video PRE999 does not exist.
-REMOVE
+Video does not exist.
 Publishable Video Pub001 does not exist.
-REMOVE
+Video does not exist.
 Publishable Video Pre001 does not exist.
 Video Pub001 created successfully.
 PREMIUM Video Pre001 created successfully.
@@ -84,7 +84,7 @@ Subtitles for video Data Science AVEc Python:
 - https://subtitles.datasciencehub.com/python/de-2.vtt (GERMAN)
 This operation requires a Premium video.
 This operation requires a Premium video.
-Video does not exist.
+Invalid language type in subtitle.
 Invalid language type in subtitle.
 No Premium Video with ID.
 PREMIUM Video Pre003 created successfully.
@@ -118,21 +118,18 @@ Invalid language type.
 Invalid value.
 Invalid value.
 Invalid language type.
-Invalid language type.
+Invalid language type in subtitle.
 PREMIUM Video Pre012 created successfully.
 PREMIUM Video Pre013 created successfully.
 PREMIUM Video Pre014 created successfully.
-REMOVE
-PREMIUM Video Pre001 540 Title: Desenvolvimento WEB Full Stack
-File: https://vod.webmasters.com/courses/fullstack/web-dev-full-2025.mp4 Publisher: TUGA Masters LLC Language: PORTUGUESE
+Video removed successfully.
+Publishable Video pre001 does not exist.
 PREMIUM Video pRe002 420 Title: Data Science AVEc Python
 File: https://vod.datasciencehub.com/courses/data-science-with-python/main.mp4 Publisher: Paris Data Science Hub Language: FRENCH
-REMOVE
-Video Pub001 360 Title: Java Programming Fundamentals
-File: https://cdn.education.com/java/basics/2024/java-fundamentals.mp4 Publisher: Code Academy Inc. Language: ENGLISH
-REMOVE
-Video pUb002 480 Title: Python AVANZANDO
-File: https://stream.techschool.pt/python/advanced/curso-python-avancado.mp4 Publisher: Tech School Madrid Solutions Language: SPANISH
+Video removed successfully.
+Publishable Video pub001 does not exist.
+Video removed successfully.
+Publishable Video pub002 does not exist.
 PREMIUM Video Pre003 600 Title: AI and Machine Learning Foundations
 File: https://vod.ailab.com/courses/ai-ml/foundations-2025.mp4 Publisher: AI Research Lab Language: KOREAN
 Subtitles for video AI and Machine Learning Foundations:
@@ -173,22 +170,12 @@ Subtitles for video Learn Hindi Language:
 - https://subtitles.hindiacademy.com/hindi/hi.vtt (HINDI)
 Subtitles for video Korean for Beginners:
 - https://subtitles.koreanplus.com/korean/ko.vtt (KOREAN)
-REMOVE
-PREMIUM Video Pre003 600 Title: AI and Machine Learning Foundations
-File: https://vod.ailab.com/courses/ai-ml/foundations-2025.mp4 Publisher: AI Research Lab Language: KOREAN
-REMOVE
-PREMIUM Video Pre004 720 Title: Cybersecurity Fundamentals
-File: https://vod.securityacademy.com/courses/cybersecurity/fundamentals.mp4 Publisher: Security Academy Language: ENGLISH
-Video with this ID already exists.
-Subtitles for video Cybersecurity Fundamentals:
-- https://subtitles.securityacademy.com/cybersecurity/en.vtt (ENGLISH)
-- https://subtitles.securityacademy.com/cybersecurity/en-2.vtt (ENGLISH)
-- https://subtitles.securityacademy.com/cybersecurity/es.vtt (SPANISH)
-- https://subtitles.securityacademy.com/cybersecurity/es-2.vtt (SPANISH)
-- https://subtitles.securityacademy.com/cybersecurity/fr.vtt (FRENCH)
-- https://subtitles.securityacademy.com/cybersecurity/fr-2.vtt (FRENCH)
-- https://subtitles.securityacademy.com/cybersecurity/de.vtt (GERMAN)
-- https://subtitles.securityacademy.com/cybersecurity/de-2.vtt (GERMAN)
+Video removed successfully.
+Publishable Video PRE003 does not exist.
+Video removed successfully.
+Publishable Video Pre004 does not exist.
+Video Pre004 created successfully.
+No Premium Video with ID.
 Subtitles for video Data Science AVEc Python:
 - https://subtitles.datasciencehub.com/python/pt.vtt (PORTUGUESE)
 - https://subtitles.datasciencehub.com/python/en.vtt (ENGLISH)
@@ -199,19 +186,10 @@ Subtitles for video Data Science AVEc Python:
 - https://subtitles.datasciencehub.com/python/fr-3.vtt (FRENCH)
 - https://subtitles.datasciencehub.com/python/de.vtt (GERMAN)
 - https://subtitles.datasciencehub.com/python/de-2.vtt (GERMAN)
-Subtitle added successfully.
-Subtitles for video Cybersecurity Fundamentals:
-- https://subtitles.securityacademy.com/cybersecurity/en.vtt (ENGLISH)
-- https://subtitles.securityacademy.com/cybersecurity/en-2.vtt (ENGLISH)
-- https://subtitles.securityacademy.com/cybersecurity/es.vtt (SPANISH)
-- https://subtitles.securityacademy.com/cybersecurity/es-2.vtt (SPANISH)
-- https://subtitles.securityacademy.com/cybersecurity/fr.vtt (FRENCH)
-- https://subtitles.securityacademy.com/cybersecurity/fr-2.vtt (FRENCH)
-- https://subtitles.securityacademy.com/cybersecurity/de.vtt (GERMAN)
-- https://subtitles.securityacademy.com/cybersecurity/de-2.vtt (GERMAN)
-- https://subtitles.securityacademy.com/cybersecurity/de-2.vtt (GERMAN)
-REMOVE
-REMOVE
+This operation requires a Premium video.
+No Premium Video with ID.
+Video removed successfully.
+Video removed successfully.
 No Premium Video with ID.
 createpublishable - creates a new publishable video
 createpremium - creates a new publishable Premium video

@@ -18,7 +18,7 @@ public class PlatformSystemClass implements PlatformSystem {
         shows = new ArrayClass<>();
     }
 
-    //------------------------------------------VIDEOS------------------------------------------
+    //------------------------------------------VIDEO------------------------------------------
     @Override
     public boolean hasPublishable(String id) {
         return videos.searchForward(new BasicVideoClass(id));
@@ -44,6 +44,10 @@ public class PlatformSystemClass implements PlatformSystem {
         return getVideo(id) instanceof PremiumVideoClass;
     }
 
+    public boolean isEpisode(String id) {
+        return getVideo(id) instanceof Episode;
+    }
+
     public Video getVideo(String id) {
         int idx = videos.searchIndexOf(new BasicVideoClass(id));
         return videos.get(idx);
@@ -60,6 +64,11 @@ public class PlatformSystemClass implements PlatformSystem {
         return premiumVideo.subtitleIterator();
     }
 
+    @Override
+    public void removeVideo(String id) {
+        int idx = videos.searchIndexOf(getVideo(id));
+        videos.removeAt(idx);
+    }
     //------------------------------------------PODCAST------------------------------------------
     @Override
     public boolean hasPodcast(String title) {
@@ -100,9 +109,35 @@ public class PlatformSystemClass implements PlatformSystem {
     }
 
     @Override
-    public void removePodcast(String title) {
-        int idx = podcasts.searchIndexOf(new PodcastClass(title));
+    public void removePodcast(String podcastTitle) {
+        Iterator<Video> it = videos.iterator();
+        while (it.hasNext()) {
+            Video video = it.next();
+            if (video instanceof Episode && isFromPodcast(video.getId(), podcastTitle)) {
+                int idx = videos.searchIndexOf(it.next());
+                videos.removeAt(idx);
+            }
+        }
+        int idx = podcasts.searchIndexOf(new PodcastClass(podcastTitle));
         podcasts.removeAt(idx);
+    }
+
+    private boolean isFromPodcast(String episodeID, String podcastTitle) {
+        Podcast podcast = getPodcast(podcastTitle);
+        return podcast.hasEpisode(episodeID);
+    }
+
+    @Override
+    public Iterator<Podcast> authorPodcast(String author) {
+        Iterator<Podcast> it = podcasts.iterator();
+        Array <Podcast> authorPodcast = new ArrayClass<>();
+        while (it.hasNext()) {
+            Podcast podcast = it.next();
+            if (podcast.getAuthor().equals(author)){
+                authorPodcast.insertLast(podcast);
+            }
+        }
+        return authorPodcast.iterator();
     }
 
     public Iterator<Episode> episodeIterator(String title) {
@@ -114,6 +149,11 @@ public class PlatformSystemClass implements PlatformSystem {
     @Override
     public boolean hasShow(String title) {
         return shows.searchForward(new ShowClass(title));
+    }
+
+    public boolean isInShow(String videoID) {
+        PublishableVideo video = (PublishableVideo) getVideo(videoID);
+        return shows.searchForward(new ShowClass(video.getTitle()));
     }
 
     @Override
@@ -128,36 +168,8 @@ public class PlatformSystemClass implements PlatformSystem {
     }
 
     @Override
-    public Iterator<Podcast> authorPodcast(String author){
-        Iterator it = podcasts.iterator();
-        Array <Podcast> authorPodcast = new ArrayClass<>();
-        while (it.hasNext()){
-            Podcast podcast = (Podcast) it.next();
-            if (podcast.getAuthor().equals(author)){
-                authorPodcast.insertLast(podcast);
-            }
-        }
-        return authorPodcast.iterator();
-    }
-
-    @Override
-    public boolean isEpisodeOfPodcast(String title) {
-        return getVideo(title) instanceof Episode;
-    }
-
-    @Override
-    public boolean isInShow(String title) {
-        Iterator<Show> it = shows.iterator();
-        while (it.hasNext()){
-            Show sw = (Show) it.next();
-            return  sw.getTitle().equals(title);
-        }
-        return false;
-    }
-
-    @Override
-    public void removeVideo(String title) {
-        int idx = videos.searchIndexOf(getVideo(title));
-        videos.removeAt(idx);
+    public void removeShow(String showTitle) {
+        int idx = shows.searchIndexOf(new ShowClass(showTitle));
+        shows.removeAt(idx);
     }
 }

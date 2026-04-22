@@ -1,7 +1,5 @@
 package YouVideo;
 
-import dataStructures.Iterator;
-
 interface PodcastAll extends Podcast{
     boolean equals(Object other);
 

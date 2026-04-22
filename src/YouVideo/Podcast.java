@@ -16,5 +16,8 @@ public interface Podcast {
     boolean isEmpty();
 
     Iterator<Episode> episodeIterator();
+
     boolean isValidEpisodeDate(String date);
+
+    boolean hasEpisode(String ID);
 }

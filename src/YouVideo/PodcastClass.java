@@ -66,13 +66,17 @@ class PodcastClass implements PodcastAll {
         }
     }
 
+    @Override
+    public boolean hasEpisode(String episodeID) {
+        return episodes.searchForward(new EpisodeClass(episodeID));
+    }
+
     public boolean isEmpty() {
         return episodes.size() == 0;
     }
 
     public void addEpisode(String ID, int duration, String URL, String date ) {
         this.episodes.insertAt(new EpisodeClass(ID, duration, URL, date),0);
-
     }
 
     public Iterator<Episode> episodeIterator() {

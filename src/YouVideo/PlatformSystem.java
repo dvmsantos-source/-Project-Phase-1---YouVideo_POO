@@ -46,6 +46,13 @@ public interface PlatformSystem {
     boolean IsPremiumVideo(String id);
 
     /**
+     *
+     * @param id
+     * @return
+     */
+    boolean isEpisode(String id);
+
+    /**
      * Returns a Video given its ID.
      * @param id
      * @return a premium or basic video,
@@ -81,9 +88,11 @@ public interface PlatformSystem {
 
     Iterator<Episode> episodeIterator(String title);
 
-    void removePodcast(String title);
+    void removePodcast(String podcastTitle);
 
     boolean hasShow(String title);
+
+    boolean isInShow(String videoID);
 
     void addShow(String showAuthor, String videoID, String date);
 
@@ -91,9 +100,7 @@ public interface PlatformSystem {
 
     Iterator<Podcast> authorPodcast(String author);
 
-    boolean isEpisodeOfPodcast(String video);
+    void removeShow(String showTitle);
 
-    boolean isInShow(String video);
-
-    void removeVideo(String video);
+    void removeVideo(String id);
 }
