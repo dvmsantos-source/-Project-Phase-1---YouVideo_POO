@@ -9,7 +9,7 @@ class BasicVideoClass extends VideoClass implements PublishableVideo{
 
       public BasicVideoClass(String ID, int duration, String URL, String publisher,
                              String title, Locale lang){
-          super( ID, duration, URL);
+          super(ID, duration, URL);
           this.title = title;
           this.lang = lang;
           this.publisher = publisher;

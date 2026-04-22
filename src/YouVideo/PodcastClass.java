@@ -1,31 +1,29 @@
 package YouVideo;
 
-import dataStructures.Array;
-import dataStructures.ArrayClass;
-import dataStructures.Iterator;
+import dataStructures.*;
 
 import java.util.Locale;
 
-class PodcastClass implements PodcastAll{
+class PodcastClass implements PodcastAll {
     private Array<Episode> episodes;
     private String title;
     private String author;
     private Locale lang;
 
 
-    public PodcastClass(String title,String author,Locale lang ){
+    public PodcastClass(String title, String author, Locale lang ) {
         this.title = title;
         this.author = author;
         this.lang = lang;
         episodes = new ArrayClass<>();
     }
 
-    public PodcastClass(String title){
+    public PodcastClass(String title) {
         this.title = title;
     }
 
     @Override
-    public boolean equals(Object other){
+    public boolean equals(Object other) {
         if (other== null)
             return false;
         if (this == other)
@@ -34,7 +32,7 @@ class PodcastClass implements PodcastAll{
             return false;
         if (!(other instanceof Podcast))
             return false;
-        return this.title.equals(((Podcast) other).getTitle());
+        return this.title.equalsIgnoreCase(((Podcast)other).getTitle());
     }
 
     @Override
@@ -53,14 +51,13 @@ class PodcastClass implements PodcastAll{
     }
 
     public String getLastEpDate() {
-            Episode ep = episodes.get(episodes.size() - 1);
-            return ep.getDate();
-
+        Episode ep = episodes.get(episodes.size() - 1);
+        return ep.getDate();
     }
 
     @Override
     public boolean isValidEpisodeDate(String date) {
-        if (episodes.size()==0){
+        if (episodes.size() == 0){
             return true;
         }
         else {
@@ -69,14 +66,12 @@ class PodcastClass implements PodcastAll{
         }
     }
 
-
     public boolean isEmpty() {
         return episodes.size() == 0;
     }
 
-
     public void addEpisode(String ID, int duration, String URL, String date ) {
-        this.episodes.insertAt(new EpisodeClass(ID,duration,URL,date),0);
+        this.episodes.insertAt(new EpisodeClass(ID, duration, URL, date),0);
     }
 
     public Iterator<Episode> episodeIterator() {

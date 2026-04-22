@@ -82,4 +82,10 @@ public interface PlatformSystem {
     Iterator<Episode> episodeIterator(String title);
 
     void removePodcast(String title);
+
+    boolean hasShow(String title);
+
+    void addShow(String showAuthor, String videoID, String date);
+
+    Show getShow(String title);
 }

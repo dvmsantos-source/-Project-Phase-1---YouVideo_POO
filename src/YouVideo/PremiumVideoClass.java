@@ -10,7 +10,7 @@ class PremiumVideoClass extends BasicVideoClass{
 
     public PremiumVideoClass(String ID, int duration, String URL, String publisher,
                              String title, Locale lang, String subtitleUrl, Locale subtitleLang){
-        super(ID, duration, URL, publisher,title,lang);
+        super(ID, duration, URL, publisher, title, lang);
         this.subtitle = new ArrayClass<>();
         addSubtitle( subtitleUrl, subtitleLang);
 

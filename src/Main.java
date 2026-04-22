@@ -97,6 +97,13 @@ public class Main {
     private static final String MSG_EMPTY_PODCAST = "No episodes available for this podcast.";
     private static final String MSG_PODCAST_REMOVED = "Podcast removed successfully.";
 
+    private static final String MSG_VIDEO_FOR_SHOW_NOT_EXIST = "Video for show does not exist.";
+    private static final String MSG_SHOW_ALREADY_EXIST = "Show with this title already exists.";
+    private static final String MSG_SHOW_CREATED = "Show created successfully.";
+    private static final String MSG_SHOW_NOT_EXIST = "Show does not exist.";
+    private static final String MSG_GET_SHOW = "Show date: %s Author: %s\n" +
+            "Video: %s\n";
+
 
 
    public static void main(String[] args) {
@@ -123,18 +130,20 @@ public class Main {
                 case EPISODES -> episodes(in, platformSystem);
                 case AUTHORPODCASTS -> authorPodcasts(in, platformSystem);
                 case REMOVEPODCAST -> removePodcast(in,platformSystem);
-                case CREATESHOW -> createShow();
-                case GETSHOW -> getShow();
+                case CREATESHOW -> createShow(in, platformSystem);
+                case GETSHOW -> getShow(in, platformSystem);
                 case REMOVESHOW -> removeShow();
                 case REMOVEVIDEO -> removeVideo(in);
                 case HELP -> help();
                 case EXIT -> System.out.println(MSG_EXIT);
-                default -> {
-                    System.out.println(MSG_DEFAULT);
-                    in.nextLine();
-                }
+                default -> executeDefault(in);
             }
         } while (!cmd.equals(EXIT));
+    }
+
+    private static void executeDefault(Scanner in) {
+        System.out.println(MSG_DEFAULT);
+        in.nextLine();
     }
 
 
@@ -275,7 +284,7 @@ public class Main {
     private static void createPodcast(Scanner in, PlatformSystem platformSystem) {
        String title = in.nextLine().trim();
        String author = in.nextLine().trim();
-       String lang= in.nextLine();
+       String lang = in.nextLine();
 
        if (!validLanguage(convert(lang))){
             System.out.println(MSG_INVALID_LANGUAGE);
@@ -283,7 +292,7 @@ public class Main {
        else if (platformSystem.hasPodcast(title)){
            System.out.println(MSG_PODCAST_ALREADY_EXIST);
        } else {
-           platformSystem.addPodcast(title,author,convert(lang));
+           platformSystem.addPodcast(title, author, convert(lang));
            System.out.println(MSG_PODCAST_CREATED);
        }
     }
@@ -346,7 +355,8 @@ public class Main {
         }
     }
 
-    private static void authorPodcasts(Scanner in,PlatformSystem platformSystem) {
+    private static void authorPodcasts(Scanner in, PlatformSystem platformSystem) {
+       String authorName = in.nextLine().trim();
 
     }
 
@@ -359,15 +369,34 @@ public class Main {
             platformSystem.removePodcast(title);
             System.out.println(MSG_PODCAST_REMOVED);
         }
-
     }
 
-    private static void createShow() {
-
+    private static void createShow(Scanner in, PlatformSystem platformSystem) {
+       String showAuthor = in.next().trim(); in.nextLine();
+       String videoID = in.next().trim();
+       String date = in.next().trim(); in.nextLine();
+       if (!platformSystem.hasPublishable(videoID)) {
+           System.out.println(MSG_VIDEO_FOR_SHOW_NOT_EXIST);
+       } else {
+           PublishableVideo video = (PublishableVideo) platformSystem.getVideo(videoID);
+           if (platformSystem.hasShow(video.getTitle())) {
+               System.out.println(MSG_SHOW_ALREADY_EXIST);
+           } else {
+               platformSystem.addShow(showAuthor, videoID, date);
+               System.out.println(MSG_SHOW_CREATED);
+           }
+       }
     }
 
-    private static void getShow() {
-
+    private static void getShow(Scanner in, PlatformSystem platformSystem) {
+       String title = in.next().trim(); in.nextLine();
+       if (!platformSystem.hasShow(title)) {
+           System.out.println(MSG_SHOW_NOT_EXIST);
+       } else {
+           Show show = platformSystem.getShow(title);
+           System.out.printf(MSG_GET_SHOW, show.getDate(), show.getAuthor(),
+                   show.getTitle() );
+       }
     }
 
     private static void removeShow() {

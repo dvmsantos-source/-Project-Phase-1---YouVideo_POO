@@ -6,11 +6,10 @@ abstract class VideoClass implements VideoAll {
     private String URL;
 
 
-    public VideoClass(String ID,int duration, String URL){
+    public VideoClass(String ID, int duration, String URL){
         this.ID = ID;
         this.duration = duration;
         this.URL = URL;
-
     }
 
     public VideoClass(String ID){
@@ -44,6 +43,6 @@ abstract class VideoClass implements VideoAll {
             return false;
         if (ID == null)
             return false;
-        return this.ID.equalsIgnoreCase(((Video) other).getId());
+        return this.ID.equalsIgnoreCase(((Video)other).getId());
     }
 }
