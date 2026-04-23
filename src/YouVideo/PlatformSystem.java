@@ -90,7 +90,9 @@ public interface PlatformSystem {
 
     void removePodcast(String podcastTitle);
 
-    boolean hasShow(String title);
+    boolean hasShow(String videoID);
+
+    boolean hasShowTitle(String title);
 
     boolean isInShow(String videoID);
 

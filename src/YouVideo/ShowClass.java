@@ -2,23 +2,17 @@ package YouVideo;
 
 class ShowClass implements Show {
     private String author;
-    private PublishableVideo video;
     private String date;
     private String title;
 
-    public ShowClass(String author, PublishableVideo video, String date) {
+    public ShowClass(String author, String date, String title) {
         this.author = author;
-        this.video = video;
         this.date = date;
-        this.title = getVideoTitle();
+        this.title = title;
     }
 
     public ShowClass(String title) {
         this.title = title;
-    }
-
-    private String getVideoTitle() {
-        return video.getTitle();
     }
 
     public String getTitle() {
@@ -39,7 +33,7 @@ class ShowClass implements Show {
             return false;
         if (this == other)
             return true;
-        if (video.getTitle() == null)
+        if (title == null)
             return false;
         if (!(other instanceof Show))
             return false;

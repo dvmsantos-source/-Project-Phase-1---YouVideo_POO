@@ -10,12 +10,15 @@ public class PlatformSystemClass implements PlatformSystem {
 
     private Array<Video> videos;
     private Array<Podcast> podcasts;
+    private Array<Author> authors;
     private Array<Show> shows;
 
     public PlatformSystemClass() {
         videos = new ArrayClass<>();
         podcasts = new ArrayClass<>();
+        authors = new ArrayClass<>();
         shows = new ArrayClass<>();
+
     }
 
     //------------------------------------------VIDEO------------------------------------------
@@ -74,10 +77,25 @@ public class PlatformSystemClass implements PlatformSystem {
     public boolean hasPodcast(String title) {
         return podcasts.searchForward(new PodcastClass(title));
     }
+    private boolean hasAuthor(String author){
+        return authors.searchForward(new AuthorClass(author));
+    }
+
+    private Author getAuthor (String author ){
+        int idx = authors.searchIndexOf(new AuthorClass(author));
+        return authors.get(idx);
+    }
+
 
     @Override
     public void addPodcast(String title, String author, Locale lang) {
-        podcasts.insertLast(new PodcastClass(title, author, lang));
+        if (hasAuthor(author)) {
+            Author au = getAuthor(author);
+            podcasts.insertLast(new PodcastClass(title, au.getAuthor(), lang));
+        } else {
+            authors.insertLast(new AuthorClass(author));
+            podcasts.insertLast(new PodcastClass(title, author, lang));
+        }
     }
 
     @Override
@@ -147,7 +165,12 @@ public class PlatformSystemClass implements PlatformSystem {
 
     //------------------------------------------SHOW------------------------------------------
     @Override
-    public boolean hasShow(String title) {
+    public boolean hasShow(String videoID) {
+        PublishableVideo video = (PublishableVideo) getVideo(videoID);
+        return shows.searchForward(new ShowClass(video.getTitle()));
+    }
+
+    public boolean hasShowTitle(String title) {
         return shows.searchForward(new ShowClass(title));
     }
 
@@ -159,7 +182,13 @@ public class PlatformSystemClass implements PlatformSystem {
     @Override
     public void addShow(String showAuthor, String videoID, String date) {
         PublishableVideo video = (PublishableVideo) getVideo(videoID);
-        shows.insertLast(new ShowClass(showAuthor, video, date));
+        if (hasAuthor(showAuthor)) {
+            Author au = getAuthor(showAuthor);
+            shows.insertLast(new ShowClass(au.getAuthor(), video.getTitle(), date));
+        } else {
+            authors.insertLast(new AuthorClass(showAuthor));
+            shows.insertLast(new ShowClass(showAuthor, video.getTitle(), date));
+        }
     }
 
     public Show getShow(String title) {
