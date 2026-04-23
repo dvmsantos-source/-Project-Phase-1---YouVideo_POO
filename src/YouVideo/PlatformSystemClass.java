@@ -174,20 +174,15 @@ public class PlatformSystemClass implements PlatformSystem {
         return shows.searchForward(new ShowClass(title));
     }
 
-    public boolean isInShow(String videoID) {
-        PublishableVideo video = (PublishableVideo) getVideo(videoID);
-        return shows.searchForward(new ShowClass(video.getTitle()));
-    }
-
     @Override
     public void addShow(String showAuthor, String videoID, String date) {
         PublishableVideo video = (PublishableVideo) getVideo(videoID);
         if (hasAuthor(showAuthor)) {
             Author au = getAuthor(showAuthor);
-            shows.insertLast(new ShowClass(au.getAuthor(), video.getTitle(), date));
+            shows.insertLast(new ShowClass(au.getAuthor(), date, video.getTitle()));
         } else {
             authors.insertLast(new AuthorClass(showAuthor));
-            shows.insertLast(new ShowClass(showAuthor, video.getTitle(), date));
+            shows.insertLast(new ShowClass(showAuthor, date, video.getTitle()));
         }
     }
 

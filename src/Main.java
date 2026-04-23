@@ -396,7 +396,9 @@ public class Main {
         String showAuthor = in.nextLine().trim();
         String videoID = in.next().trim();
         String date = in.nextLine().trim();
-        if (!platformSystem.hasPublishable(videoID) && !platformSystem.isEpisode(videoID)) {
+        if (!platformSystem.hasPublishable(videoID)) {
+            System.out.println(MSG_VIDEO_FOR_SHOW_NOT_EXIST);
+        } else if (platformSystem.isEpisode(videoID)) {
             System.out.println(MSG_VIDEO_FOR_SHOW_NOT_EXIST);
         } else if (platformSystem.hasShow(videoID)) {
                 System.out.println(MSG_SHOW_ALREADY_EXIST);
@@ -405,7 +407,6 @@ public class Main {
             System.out.println(MSG_SHOW_CREATED);
         }
     }
-
 
     private static void getShow(Scanner in, PlatformSystem platformSystem) {
         String title = in.nextLine().trim();
@@ -436,7 +437,7 @@ public class Main {
         else if (platformSystem.isEpisode(videoID)) {
             System.out.println(MSG_ERROR_VIDEO_IS_EPISODE);
         }
-        else if (platformSystem.isInShow(videoID)) {
+        else if (platformSystem.hasShow(videoID)) {
             System.out.println(MSG_ERROR_VIDEO_IN_SHOW);
         }
         else {

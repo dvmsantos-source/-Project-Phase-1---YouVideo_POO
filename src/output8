@@ -54,12 +54,15 @@ Video with this ID already exists.
 Video PuB003 created successfully.
 PREMIUM Video PrE003 created successfully.
 Show created successfully.
-Show created successful
 Show created successfully.
 Show created successfully.
-Show does not exist.
-Show does not exist.
-Show does not exist.
+Show with this title already exists.
+Show Date: 2025-04-15 Author: JOHN SMITH
+Video: JAVA PROGRAMMING FUNDAMENTALS
+Show Date: 2025-04-16 Author: mary johnson
+Video: FULL STACK WEB DEVELOPMENT
+Show Date: 2025-04-17 Author: David WILSON
+Video: PYTHON ADVANCED CONCEPTS
 Show does not exist.
 Episode added successfully.
 Episode added successfully.
@@ -158,9 +161,10 @@ Show created successfully.
 Podcast created successfully.
 Podcasts by author John Smith Show Author:
 Podcast: John Smith Show Author Podcast Author: John Smith Show Author Language: EN
-Show does not exist.
+Show Date: 2025-04-25 Author: John Smith Show Author
+Video: Show Test Video
 Podcast removed successfully.
-Show does not exist.
+Show removed successfully.
 Video removed successfully.
 Podcast created successfully.
 Podcast created successfully.

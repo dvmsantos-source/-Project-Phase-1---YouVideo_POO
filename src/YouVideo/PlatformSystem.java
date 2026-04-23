@@ -94,8 +94,6 @@ public interface PlatformSystem {
 
     boolean hasShowTitle(String title);
 
-    boolean isInShow(String videoID);
-
     void addShow(String showAuthor, String videoID, String date);
 
     Show getShow(String title);
