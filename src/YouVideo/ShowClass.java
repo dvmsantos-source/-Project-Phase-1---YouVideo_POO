@@ -15,14 +15,17 @@ class ShowClass implements Show {
         this.title = title;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }
 
+    @Override
     public String getDate() {
         return date;
     }
 
+    @Override
     public String getAuthor() {
         return author;
     }

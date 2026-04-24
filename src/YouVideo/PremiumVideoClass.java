@@ -4,7 +4,7 @@ import dataStructures.*;
 
 import java.util.Locale;
 
-class PremiumVideoClass extends BasicVideoClass{
+class PremiumVideoClass extends BasicVideoClass implements PremiumVideo{
     private Array<Subtitle> subtitle;
 
 
@@ -15,12 +15,15 @@ class PremiumVideoClass extends BasicVideoClass{
         addSubtitle( subtitleUrl, subtitleLang);
 
     }
-
+    @Override
     public void addSubtitle(String subtitleUrl,Locale subtitleLang){
         subtitle.insertLast(new Subtitle(subtitleLang,subtitleUrl));
 
     }
+    @Override
+    public boolean isPremium() { return true;}
 
+    @Override
     public Iterator<Subtitle> subtitleIterator() {
     return subtitle.iterator();
 }

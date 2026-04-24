@@ -3,8 +3,8 @@ package YouVideo;
 import dataStructures.Array;
 import dataStructures.ArrayClass;
 
-public class AuthorClass implements Author {
-    String author;
+ class AuthorClass implements Author {
+   private String author;
 
     public AuthorClass (String author){
         this.author = author;

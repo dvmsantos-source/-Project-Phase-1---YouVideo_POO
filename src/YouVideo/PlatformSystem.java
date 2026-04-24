@@ -43,7 +43,7 @@ public interface PlatformSystem {
      * @param id
      * @return TRUE if it is premium or FALSE if it is basic.
      */
-    boolean IsPremiumVideo(String id);
+   boolean isPremiumVideo(String id);
 
     /**
      *
@@ -80,6 +80,7 @@ public interface PlatformSystem {
 
     void addEpisode(String title, String id, int duration, String url, String date);
 
+
     Podcast getPodcast(String title);
 
     boolean hasEpisode(String id);
@@ -103,4 +104,7 @@ public interface PlatformSystem {
     void removeShow(String showTitle);
 
     void removeVideo(String id);
+
+
+    boolean hasPublishableVideo(String id);
 }

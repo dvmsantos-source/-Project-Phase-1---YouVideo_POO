@@ -43,14 +43,20 @@ public class PlatformSystemClass implements PlatformSystem {
     }
 
     @Override
-    public boolean IsPremiumVideo(String id) {
-        return getVideo(id) instanceof PremiumVideoClass;
+    public boolean isPremiumVideo(String id) {
+        return getVideo(id) instanceof PremiumVideo;
+    }
+
+    @Override
+    public boolean hasPublishableVideo(String id) {
+        return hasPublishable(id) && !isEpisode(id);
     }
 
     public boolean isEpisode(String id) {
         return getVideo(id) instanceof Episode;
     }
 
+    @Override
     public Video getVideo(String id) {
         int idx = videos.searchIndexOf(new BasicVideoClass(id));
         return videos.get(idx);
@@ -62,6 +68,7 @@ public class PlatformSystemClass implements PlatformSystem {
         premiumVideo.addSubtitle(subtitleUrl, subtitleLang);
     }
 
+    @Override
     public Iterator<Subtitle> subtitleIterator(String id) {
         PremiumVideoClass premiumVideo = (PremiumVideoClass) getVideo(id);
         return premiumVideo.subtitleIterator();
@@ -98,16 +105,16 @@ public class PlatformSystemClass implements PlatformSystem {
         }
     }
 
+    private PodcastAll getPodcastAll(String title) {
+        int idx = podcasts.searchIndexOf(new PodcastClass(title));
+        return (PodcastAll) podcasts.get(idx);
+    }
     @Override
     public void addEpisode(String title, String id, int duration, String url, String date) {
         videos.insertLast(new EpisodeClass(id, duration, url, date));
         getPodcastAll(title).addEpisode(id, duration, url, date);
     }
 
-    private PodcastAll getPodcastAll(String title) {
-        int idx = podcasts.searchIndexOf(new PodcastClass(title));
-        return (PodcastAll) podcasts.get(idx);
-    }
 
     @Override
     public Podcast getPodcast(String title) {
@@ -128,22 +135,20 @@ public class PlatformSystemClass implements PlatformSystem {
 
     @Override
     public void removePodcast(String podcastTitle) {
-        Iterator<Video> it = videos.iterator();
-        while (it.hasNext()) {
-            Video video = it.next();
-            if (video instanceof Episode && isFromPodcast(video.getId(), podcastTitle)) {
-                int idx = videos.searchIndexOf(it.next());
-                videos.removeAt(idx);
+        Podcast podcast = getPodcast(podcastTitle);
+        int i = 0;
+        while (i < videos.size()) {
+            Video video = videos.get(i);
+            if (video instanceof Episode && podcast.hasEpisode(video.getId())) {
+                videos.removeAt(i);
+            } else {
+                i++;
             }
         }
         int idx = podcasts.searchIndexOf(new PodcastClass(podcastTitle));
         podcasts.removeAt(idx);
     }
 
-    private boolean isFromPodcast(String episodeID, String podcastTitle) {
-        Podcast podcast = getPodcast(podcastTitle);
-        return podcast.hasEpisode(episodeID);
-    }
 
     @Override
     public Iterator<Podcast> authorPodcast(String author) {
@@ -157,7 +162,7 @@ public class PlatformSystemClass implements PlatformSystem {
         }
         return authorPodcast.iterator();
     }
-
+    @Override
     public Iterator<Episode> episodeIterator(String title) {
         Podcast podcast = getPodcast(title);
         return podcast.episodeIterator();
@@ -169,7 +174,7 @@ public class PlatformSystemClass implements PlatformSystem {
         PublishableVideo video = (PublishableVideo) getVideo(videoID);
         return shows.searchForward(new ShowClass(video.getTitle()));
     }
-
+    @Override
     public boolean hasShowTitle(String title) {
         return shows.searchForward(new ShowClass(title));
     }
@@ -185,7 +190,7 @@ public class PlatformSystemClass implements PlatformSystem {
             shows.insertLast(new ShowClass(showAuthor, date, video.getTitle()));
         }
     }
-
+    @Override
     public Show getShow(String title) {
         int idx = shows.searchIndexOf(new ShowClass(title));
         return shows.get(idx);

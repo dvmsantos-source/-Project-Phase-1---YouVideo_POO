@@ -8,4 +8,6 @@ public interface PublishableVideo extends Video{
     String getPublisher();
 
     Locale getLang();
+
+    boolean isPremium();
 }

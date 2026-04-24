@@ -109,10 +109,13 @@ public class Main {
             "Video: %s\n";
     private static final String MSG_SHOW_REMOVED = "Show removed successfully.";
 
-    public static final String MSG_VIDEO_REMOVED = "Video removed successfully.";
+    private static final String MSG_VIDEO_REMOVED = "Video removed successfully.";
 
-    public static final String MSG_ERROR_VIDEO_IS_EPISODE = "Cannot remove: video is an episode of a podcast.";
-    public static final String MSG_ERROR_VIDEO_IN_SHOW = "Cannot remove: video is used in a show.";
+    private static final String MSG_ERROR_VIDEO_IS_EPISODE = "Cannot remove: video is an" +
+            " episode of a podcast.";
+    private static final String MSG_ERROR_VIDEO_IN_SHOW = "Cannot remove: video is used in a show.";
+
+    private static final String MSG_SUBTITLE_LINE = "- %s (%s)%n";
 
 
 
@@ -177,7 +180,8 @@ public class Main {
     }
 
     private static Locale convert(String lang){
-        return new Locale(lang);
+            return Locale.of(lang);
+
     }
 
     private static boolean validLanguage(Locale lang) {
@@ -247,7 +251,7 @@ public class Main {
             System.out.println(MSG_INVALID_LANGUAGE_SUBTITLE);
         } else if (!platformSystem.hasPublishable(id)) {
             System.out.println(MSG_VIDEO_NOT_EXIST);
-        } else if (!platformSystem.IsPremiumVideo(id)) {
+        } else if (!platformSystem.isPremiumVideo(id)) {
             System.out.println(MSG_REQUIRES_PREMIUM_VIDEO);
         } else {
             platformSystem.addSubtitle(id, subtitleUrl, convert(subtitleLang));
@@ -261,7 +265,7 @@ public class Main {
             System.out.printf(MSG_PUBLISHABLE_VIDEO_NOT_EXIST, id);
         } else {
             PublishableVideo video = (PublishableVideo) platformSystem.getVideo(id);
-            if (platformSystem.IsPremiumVideo(video.getId())) {
+            if (video.isPremium()) {
                 System.out.printf(MSG_GET_PREMIUM_VIDEO,
                         video.getId(), video.getDuration(), video.getTitle());
             } else {
@@ -276,7 +280,7 @@ public class Main {
     private static void subtitles(Scanner in, PlatformSystem platformSystem) {
         String id = in.nextLine().trim();
         if (platformSystem.hasPublishable(id)) {
-            if (!platformSystem.IsPremiumVideo(id)) {
+            if (!platformSystem.isPremiumVideo(id)) {
                 System.out.println(MSG_VIDEO_NOT_PREMIUM);
             } else {
                 PublishableVideo video = (PublishableVideo) platformSystem.getVideo(id);
@@ -284,7 +288,8 @@ public class Main {
                 Iterator<Subtitle> it = platformSystem.subtitleIterator(id);
                 while (it.hasNext()) {
                     Subtitle subtitle = it.next();
-                    System.out.printf("- %s (%s)\n", subtitle.URL(),subtitle.lang().getDisplayLanguage().toUpperCase());
+                    System.out.printf(MSG_SUBTITLE_LINE, subtitle.URL(),
+                            subtitle.lang().getDisplayLanguage().toUpperCase());
                 }
             }
         } else {
@@ -396,12 +401,10 @@ public class Main {
         String showAuthor = in.nextLine().trim();
         String videoID = in.next().trim();
         String date = in.nextLine().trim();
-        if (!platformSystem.hasPublishable(videoID)) {
-            System.out.println(MSG_VIDEO_FOR_SHOW_NOT_EXIST);
-        } else if (platformSystem.isEpisode(videoID)) {
+        if (!platformSystem.hasPublishableVideo(videoID)) {
             System.out.println(MSG_VIDEO_FOR_SHOW_NOT_EXIST);
         } else if (platformSystem.hasShow(videoID)) {
-                System.out.println(MSG_SHOW_ALREADY_EXIST);
+            System.out.println(MSG_SHOW_ALREADY_EXIST);
         } else {
             platformSystem.addShow(showAuthor, videoID, date);
             System.out.println(MSG_SHOW_CREATED);

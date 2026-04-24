@@ -50,6 +50,7 @@ class PodcastClass implements PodcastAll {
         return author;
     }
 
+    @Override
     public String getLastEpDate() {
         Episode ep = episodes.get(episodes.size() - 1);
         return ep.getDate();
@@ -71,14 +72,17 @@ class PodcastClass implements PodcastAll {
         return episodes.searchForward(new EpisodeClass(episodeID));
     }
 
+    @Override
     public boolean isEmpty() {
         return episodes.size() == 0;
     }
 
+    @Override
     public void addEpisode(String ID, int duration, String URL, String date ) {
         this.episodes.insertAt(new EpisodeClass(ID, duration, URL, date),0);
     }
 
+    @Override
     public Iterator<Episode> episodeIterator() {
         return episodes.iterator();
     }

@@ -19,14 +19,20 @@ class BasicVideoClass extends VideoClass implements PublishableVideo{
           super(id);
       }
 
+      @Override
       public String getTitle() {
           return title;
       }
 
+      @Override
       public Locale getLang() {
           return lang;
       }
 
+      @Override
+      public boolean isPremium() { return false; }
+
+      @Override
       public String getPublisher() {
           return publisher;
       }

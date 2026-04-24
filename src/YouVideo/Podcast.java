@@ -20,4 +20,6 @@ public interface Podcast {
     boolean isValidEpisodeDate(String date);
 
     boolean hasEpisode(String ID);
+
+    boolean equals(Object other);
 }
