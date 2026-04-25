@@ -26,11 +26,10 @@ class PremiumVideoClass extends BasicVideoClass implements PremiumVideo {
      * @param subtitleLang the language of the initial subtitle.
      */
     public PremiumVideoClass(String ID, int duration, String URL, String publisher,
-                             String title, Locale lang, String subtitleUrl, Locale subtitleLang){
+                             String title, Locale lang, String subtitleUrl, Locale subtitleLang) {
         super(ID, duration, URL, publisher, title, lang);
         this.subtitles = new ArrayClass<>();
         addSubtitle( subtitleUrl, subtitleLang);
-
     }
 
 
@@ -41,7 +40,7 @@ class PremiumVideoClass extends BasicVideoClass implements PremiumVideo {
      * @param subtitleLang the language of the subtitle.
      */
     @Override
-    public void addSubtitle(String subtitleUrl,Locale subtitleLang){
+    public void addSubtitle(String subtitleUrl,Locale subtitleLang) {
         subtitles.insertLast(new Subtitle(subtitleLang,subtitleUrl));
 
     }

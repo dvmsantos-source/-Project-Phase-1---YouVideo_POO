@@ -27,7 +27,6 @@ abstract class VideoClass implements VideoAll {
      */
     public VideoClass(String id) {
         this.id = id;
-
     }
 
 

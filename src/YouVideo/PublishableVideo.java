@@ -8,7 +8,7 @@ import java.util.Locale;
  * and a primary language. Publishable videos can be independently published
  * and referenced by shows.
  */
-public interface PublishableVideo extends Video{
+public interface PublishableVideo extends Video {
     /**
      * Returns the title of the video.
      * @return the video title.

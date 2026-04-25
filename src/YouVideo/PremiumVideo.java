@@ -3,10 +3,10 @@ package YouVideo;
 
 import dataStructures.Iterator;
 
-public interface PremiumVideo extends PublishableVideo {
+interface PremiumVideo extends PublishableVideo {
     /**
      * Adds a subtitle to this premium video.
-     * @param subtitleUrl the URL of the subtitle file.
+     * @param subtitleUrl  the URL of the subtitle file.
      * @param subtitleLang the language of the subtitle.
      */
     void addSubtitle(String subtitleUrl, java.util.Locale subtitleLang);
@@ -16,8 +16,7 @@ public interface PremiumVideo extends PublishableVideo {
      * @return a subtitle iterator.
      */
     Iterator<Subtitle> subtitleIterator();
-
-
 }
+
 
 

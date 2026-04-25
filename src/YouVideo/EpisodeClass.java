@@ -28,6 +28,7 @@ class EpisodeClass extends VideoClass implements Episode {
          super(ID);
      }
 
+
      @Override
      public String getDate() {
          return date;

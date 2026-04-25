@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.Scanner;
 
 /**
- * Authors Djeison Santos (75651) and Victor Rocha (75645)
+ * @Author Djeison Santos (75651) and Victor Rocha (75645)
  */
 
 public class Main {
@@ -68,7 +68,8 @@ public class Main {
             "exit - terminates the execution of the program";
 
     // Constants defining messages for the user
-    private static final String MSG_EXIT = "Bye!";
+    private static final String MSG_EXIT =
+            "Bye!";
     private static final String MSG_DEFAULT =
             "Unknown command. Type help to see available commands.";
     private static final String MSG_INVALID_VALUE =
@@ -310,7 +311,7 @@ public class Main {
             System.out.println(MSG_INVALID_LANGUAGE);
         } else if (!isValidLanguage(convert(subtitleLang))) {
             System.out.println(MSG_INVALID_LANGUAGE_SUBTITLE);
-        } else if  (duration <= 0) {
+        } else if (duration <= 0) {
             System.out.println(MSG_INVALID_VALUE);
         }  else if (platformSystem.hasPublishable(id)) {
             System.out.println(MSG_VIDEO_ALREADY_EXIST);
@@ -332,6 +333,7 @@ public class Main {
         String id = in.next().trim();
         String subtitleUrl = in.nextLine().trim();
         String subtitleLang = in.nextLine().trim().toUpperCase();
+
         if (!isValidLanguage(convert(subtitleLang))) {
             System.out.println(MSG_INVALID_LANGUAGE_SUBTITLE);
         } else if (!platformSystem.hasPublishable(id)) {
@@ -353,6 +355,7 @@ public class Main {
      */
     private static void getVideo(Scanner in, PlatformSystem platformSystem) {
         String id = in.nextLine().trim();
+
         if (!platformSystem.hasPublishable(id) || platformSystem.isEpisode(id)) {
             System.out.printf(MSG_PUBLISHABLE_VIDEO_NOT_EXIST, id);
         } else {
@@ -378,6 +381,7 @@ public class Main {
      */
     private static void subtitles(Scanner in, PlatformSystem platformSystem) {
         String id = in.nextLine().trim();
+
         if (platformSystem.hasPublishable(id)) {
             if (!platformSystem.isPremiumVideo(id)) {
                 System.out.println(MSG_VIDEO_NOT_PREMIUM);
@@ -433,6 +437,7 @@ public class Main {
         String URL = in.next().trim();
         in.nextLine();
         String date = in.nextLine();
+
         if (duration <= 0) {
             System.out.println(MSG_INVALID_VALUE);
         } else if (!platformSystem.hasPodcast(title)) {
@@ -456,6 +461,7 @@ public class Main {
      */
     private static void getPodcast(Scanner in, PlatformSystem platformSystem) {
         String title = in.nextLine().trim();
+
         if (platformSystem.hasPodcast(title)) {
             Podcast podcast = platformSystem.getPodcast(title);
             if (podcast.isEmpty()) {
@@ -482,6 +488,7 @@ public class Main {
      */
     private static void episodes(Scanner in, PlatformSystem platformSystem) {
         String podcastTitle = in.nextLine().trim();
+
         if (platformSystem.hasPodcast(podcastTitle)) {
             Podcast podcast = platformSystem.getPodcast(podcastTitle);
             if (!podcast.isEmpty()) {
@@ -509,7 +516,8 @@ public class Main {
      */
     private static void authorPodcasts(Scanner in, PlatformSystem platformSystem) {
         String authorName = in.nextLine().trim();
-            Iterator<Podcast> it = platformSystem.authorPodcast(authorName);
+
+        Iterator<Podcast> it = platformSystem.authorPodcast(authorName);
         if (!it.hasNext()){
             System.out.println(MSG_PODCAST_NOT_FOUND);
         }
@@ -531,6 +539,7 @@ public class Main {
      */
     private static void removePodcast(Scanner in, PlatformSystem platformSystem) {
         String title = in.nextLine().trim();
+
         if (!platformSystem.hasPodcast(title)){
             System.out.println(MSG_PODCAST_NOT_EXIST);
         }
@@ -552,6 +561,7 @@ public class Main {
         String showAuthor = in.nextLine().trim();
         String videoID = in.next().trim();
         String date = in.nextLine().trim();
+
         if (!platformSystem.hasPublishableVideo(videoID)) {
             System.out.println(MSG_VIDEO_FOR_SHOW_NOT_EXIST);
         } else if (platformSystem.hasShow(videoID)) {
@@ -570,6 +580,7 @@ public class Main {
      */
     private static void getShow(Scanner in, PlatformSystem platformSystem) {
         String title = in.nextLine().trim();
+
         if (!platformSystem.hasShowTitle(title)) {
             System.out.println(MSG_SHOW_NOT_EXIST);
         } else {
@@ -587,6 +598,7 @@ public class Main {
      */
     private static void removeShow(Scanner in, PlatformSystem platformSystem) {
         String showTitle = in.nextLine().trim();
+
         if (!platformSystem.hasShowTitle(showTitle)) {
             System.out.println(MSG_SHOW_NOT_EXIST);
         } else {
@@ -604,6 +616,7 @@ public class Main {
      */
     private static void removeVideo(Scanner in, PlatformSystem platformSystem) {
         String videoID = in.nextLine().trim();
+
         if (!platformSystem.hasPublishable(videoID)) {
             System.out.println(MSG_VIDEO_NOT_EXIST);
         }

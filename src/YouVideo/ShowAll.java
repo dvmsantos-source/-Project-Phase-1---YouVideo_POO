@@ -4,7 +4,7 @@ package YouVideo;
  * Extends the Show interface with mutating operations used internally.
  * This interface is not exposed publicly, only PlatformSystemClass uses it.
  */
-public interface ShowAll extends Show {
+interface ShowAll extends Show {
     /**
      * Verifies if this Show is equal to another object.
      * Two authors are considered equal if they share the same title.

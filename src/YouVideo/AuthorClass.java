@@ -3,7 +3,7 @@ package YouVideo;
 /**
  * Implementation of an author.
  */
- class AuthorClass implements AuthorAll {
+ class AuthorClass implements Author {
 
    private String author; // The name of this author
 
