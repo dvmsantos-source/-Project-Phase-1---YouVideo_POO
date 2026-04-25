@@ -74,13 +74,13 @@ public class PlatformSystemClass implements PlatformSystem {
 
     @Override
     public void addSubtitle(String id, String subtitleUrl, Locale subtitleLang) {
-        PremiumVideoClass premiumVideo = (PremiumVideoClass) getVideo(id);
+        PremiumVideo premiumVideo = (PremiumVideo) getVideo(id);
         premiumVideo.addSubtitle(subtitleUrl, subtitleLang);
     }
 
     @Override
     public Iterator<Subtitle> subtitleIterator(String id) {
-        PremiumVideoClass premiumVideo = (PremiumVideoClass) getVideo(id);
+        PremiumVideo premiumVideo = (PremiumVideo) getVideo(id);
         return premiumVideo.subtitleIterator();
     }
 
@@ -175,13 +175,17 @@ public class PlatformSystemClass implements PlatformSystem {
     @Override
     public Iterator<Podcast> authorPodcast(String author) {
         Iterator<Podcast> it = podcasts.iterator();
-        Array <Podcast> authorPodcast = new ArrayClass<>();
+        // Creates a temporary array to store only the filtered podcasts
+        Array<Podcast> authorPodcast = new ArrayClass<>();
         while (it.hasNext()) {
             Podcast podcast = it.next();
-            if (podcast.getAuthor().equalsIgnoreCase(author)){
+            // Compares the current podcast's author with the requested author (case-insensitive)
+            if (podcast.getAuthor().equalsIgnoreCase(author)) {
+                // If it's a match, adds the podcast to the temporary array
                 authorPodcast.insertLast(podcast);
             }
         }
+        // Returns the iterator of the new array containing only the filtered results
         return authorPodcast.iterator();
     }
 
@@ -191,7 +195,10 @@ public class PlatformSystemClass implements PlatformSystem {
         int i = 0;
         while (i < videos.size()) {
             Video video = videos.get(i);
+            // Checks if the current video is an episode AND if it belongs to the target podcast
             if (video instanceof Episode && podcast.hasEpisode(video.getId())) {
+                // Removes the episode. Since removeAt shifts the subsequent elements to the left,
+                // we DO NOT increment 'i'. The next element to be checked is now at the current index 'i'.
                 videos.removeAt(i);
             } else {
                 i++;

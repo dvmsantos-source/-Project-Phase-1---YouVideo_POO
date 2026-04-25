@@ -205,7 +205,6 @@ public class Main {
      */
     private static void executeDefault(Scanner in) {
         System.out.println(MSG_DEFAULT);
-        in.nextLine();
     }
 
     /**

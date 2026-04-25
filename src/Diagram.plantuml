@@ -1,0 +1,218 @@
+@startuml
+
+
+top to bottom direction
+skinparam linetype ortho
+
+interface Author << interface >> {
+  + getAuthor(): String
+}
+interface AuthorAll << interface >> {
+  + equals(Object): boolean
+}
+class AuthorClass {
+  + AuthorClass(String): 
+  - author: String
+  + equals(Object): boolean
+  + getAuthor(): String
+}
+class BasicVideoClass {
+  + BasicVideoClass(String): 
+  + BasicVideoClass(String, int, String, String, String, Locale): 
+  - publisher: String
+  - title: String
+  - lang: Locale
+  + getLang(): Locale
+  + getPublisher(): String
+  + isPremium(): boolean
+  + getTitle(): String
+}
+interface Episode << interface >> {
+  + getDate(): String
+}
+class EpisodeClass {
+  + EpisodeClass(String, int, String, String): 
+  + EpisodeClass(String): 
+  - date: String
+  + getDate(): String
+}
+interface PlatformSystem << interface >> {
+  + hasPublishable(String): boolean
+  + isPremiumVideo(String): boolean
+  + authorPodcast(String): Iterator<Podcast>
+  + removePodcast(String): void
+  + removeVideo(String): void
+  + addEpisode(String, String, int, String, String): void
+  + addPremiumPublishable(String, int, String, String, String, Locale, String, Locale): void
+  + addSubtitle(String, String, Locale): void
+  + episodeIterator(String): Iterator<Episode>
+  + removeShow(String): void
+  + hasShow(String): boolean
+  + hasPublishableVideo(String): boolean
+  + subtitleIterator(String): Iterator<Subtitle>
+  + addPodcast(String, String, Locale): void
+  + hasPodcast(String): boolean
+  + getVideo(String): Video
+  + hasEpisode(String): boolean
+  + hasShowTitle(String): boolean
+  + isEpisode(String): boolean
+  + addShow(String, String, String): void
+  + addPublishable(String, int, String, String, String, Locale): void
+  + getPodcast(String): Podcast
+  + isValidEpisodeDate(String, String): boolean
+  + getShow(String): Show
+}
+class PlatformSystemClass {
+  + PlatformSystemClass(): 
+  - authors: Array<Author>
+  - podcasts: Array<Podcast>
+  - videos: Array<Video>
+  - shows: Array<Show>
+  + getPodcast(String): Podcast
+  - getPodcastAll(String): PodcastAll
+  + addPublishable(String, int, String, String, String, Locale): void
+  + addEpisode(String, String, int, String, String): void
+  + episodeIterator(String): Iterator<Episode>
+  + getShow(String): Show
+  + hasShowTitle(String): boolean
+  + removeShow(String): void
+  + addShow(String, String, String): void
+  + subtitleIterator(String): Iterator<Subtitle>
+  - getAuthor(String): Author
+  + removeVideo(String): void
+  + isValidEpisodeDate(String, String): boolean
+  - hasAuthor(String): boolean
+  + hasPodcast(String): boolean
+  + isEpisode(String): boolean
+  + addPremiumPublishable(String, int, String, String, String, Locale, String, Locale): void
+  + isPremiumVideo(String): boolean
+  + addSubtitle(String, String, Locale): void
+  + removePodcast(String): void
+  + hasShow(String): boolean
+  + authorPodcast(String): Iterator<Podcast>
+  + hasPublishable(String): boolean
+  + hasPublishableVideo(String): boolean
+  + hasEpisode(String): boolean
+  + getVideo(String): Video
+  + addPodcast(String, String, Locale): void
+}
+interface Podcast << interface >> {
+  + hasEpisode(String): boolean
+  + getAuthor(): String
+  + getTitle(): String
+  + episodeIterator(): Iterator<Episode>
+  + isValidEpisodeDate(String): boolean
+  + getLang(): Locale
+  + getLastEpDate(): String
+  + isEmpty(): boolean
+}
+interface PodcastAll << interface >> {
+  + addEpisode(String, int, String, String): void
+  + equals(Object): boolean
+}
+class PodcastClass {
+  + PodcastClass(String): 
+  + PodcastClass(String, String, Locale): 
+  - episodes: Array<Episode>
+  - title: String
+  - author: String
+  - lang: Locale
+  + getAuthor(): String
+  + hasEpisode(String): boolean
+  + episodeIterator(): Iterator<Episode>
+  + addEpisode(String, int, String, String): void
+  + getTitle(): String
+  + equals(Object): boolean
+  + getLang(): Locale
+  + getLastEpDate(): String
+  + isEmpty(): boolean
+  + isValidEpisodeDate(String): boolean
+}
+interface PremiumVideo << interface >> {
+  + addSubtitle(String, Locale): void
+  + subtitleIterator(): Iterator<Subtitle>
+}
+class PremiumVideoClass {
+  + PremiumVideoClass(String, int, String, String, String, Locale, String, Locale): 
+  - subtitles: Array<Subtitle>
+  + addSubtitle(String, Locale): void
+  + isPremium(): boolean
+  + subtitleIterator(): Iterator<Subtitle>
+}
+interface PublishableVideo << interface >> {
+  + getLang(): Locale
+  + getTitle(): String
+  + getPublisher(): String
+  + isPremium(): boolean
+}
+interface Show << interface >> {
+  + getTitle(): String
+  + getDate(): String
+  + getAuthor(): String
+}
+interface ShowAll << interface >> {
+  + equals(Object): boolean
+}
+class ShowClass {
+  + ShowClass(String, String, String): 
+  + ShowClass(String): 
+  - author: String
+  - date: String
+  - title: String
+  + getDate(): String
+  + getTitle(): String
+  + getAuthor(): String
+  + equals(Object): boolean
+}
+entity Subtitle << record >> {
+  + Subtitle(Locale, String): 
+  - lang: Locale
+  - URL: String
+  + lang(): Locale
+  + URL(): String
+}
+interface Video << interface >> {
+  + getId(): String
+  + getUrl(): String
+  + getDuration(): int
+}
+interface VideoAll << interface >> {
+  + equals(Object): boolean
+}
+class VideoClass {
+  + VideoClass(String, int, String): 
+  + VideoClass(String): 
+  - id: String
+  - duration: int
+  - URL: String
+  + equals(Object): boolean
+  + getUrl(): String
+  + getDuration(): int
+  + getId(): String
+}
+PlatformSystemClass o--> "0..*" Video : - videos
+PlatformSystemClass o--> "0..*" Podcast : - podcasts
+PlatformSystemClass o--> "0..*" Author : - authors
+PlatformSystemClass o--> "0..*" Show : - shows
+PodcastClass o--> "0..*" Episode : - episodes
+PremiumVideoClass o--> "0..*" Subtitle : - subtitle
+
+AuthorAll            -[#008200,plain]-^  Author              
+AuthorClass          -[#008200,dashed]-^  AuthorAll           
+BasicVideoClass      -[#008200,dashed]-^  PublishableVideo    
+BasicVideoClass      -[#000082,plain]-^  VideoClass          
+Episode              -[#008200,plain]-^  Video               
+EpisodeClass         -[#008200,dashed]-^  Episode             
+EpisodeClass         -[#000082,plain]-^  VideoClass          
+PlatformSystemClass  -[#008200,dashed]-^  PlatformSystem      
+PodcastAll           -[#008200,plain]-^  Podcast             
+PodcastClass         -[#008200,dashed]-^  PodcastAll          
+PremiumVideo         -[#008200,plain]-^  PublishableVideo    
+PremiumVideoClass    -[#000082,plain]-^  BasicVideoClass     
+PremiumVideoClass    -[#008200,dashed]-^  PremiumVideo        
+PublishableVideo     -[#008200,plain]-^  Video               
+ShowAll              -[#008200,plain]-^  Show                
+ShowClass            -[#008200,dashed]-^  ShowAll             
+VideoAll             -[#008200,plain]-^  Video               
+VideoClass           -[#008200,dashed]-^  VideoAll            
+@enduml
