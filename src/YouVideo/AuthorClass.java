@@ -1,15 +1,20 @@
 package YouVideo;
 
-import dataStructures.Array;
-import dataStructures.ArrayClass;
+/**
+ * Implementation of an author.
+ */
+ class AuthorClass implements AuthorAll {
 
- class AuthorClass implements Author {
-   private String author;
+   private String author; // The name of this author
 
+    /**
+     * Creates an author with the given name.
+     * @param author the name of the author.
+     */
     public AuthorClass (String author){
         this.author = author;
-
     }
+
 
     @Override
     public String getAuthor() {
@@ -17,7 +22,7 @@ import dataStructures.ArrayClass;
     }
 
     @Override
-    public boolean equals(Object other){
+    public boolean equals(Object other) {
         if (this == other)
             return true;
         if (other == null)

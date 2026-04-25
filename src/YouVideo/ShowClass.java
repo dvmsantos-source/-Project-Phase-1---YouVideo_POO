@@ -1,19 +1,34 @@
 package YouVideo;
 
-class ShowClass implements Show {
-    private String author;
-    private String date;
-    private String title;
+/**
+ * Implementation of a show.
+ * A show is identified by its title (equal to the broadcasted video's title).
+ */
+class ShowClass implements ShowAll {
+    private String author; // The name of the author who created this show.
+    private String date; // The transmission date of this show in YYYY-MM-DD format.
+    private String title; // The title of this show, matching the title of the broadcasted video.
 
+    /**
+     * Creates a fully initialised show.
+     * @param author the name of the show's author.
+     * @param date the transmission date in YYYY-MM-DD format.
+     * @param title the title of the show (equal to the video's title).
+     */
     public ShowClass(String author, String date, String title) {
         this.author = author;
         this.date = date;
         this.title = title;
     }
 
+    /**
+     * Creates a show with only a title.
+     * @param title the title of the show.
+     */
     public ShowClass(String title) {
         this.title = title;
     }
+
 
     @Override
     public String getTitle() {

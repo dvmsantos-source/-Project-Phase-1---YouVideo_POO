@@ -1,30 +1,45 @@
 package YouVideo;
 
-import dataStructures.Array;
-import dataStructures.ArrayClass;
-import dataStructures.Iterator;
+import dataStructures.*;
 
 import java.util.Locale;
 
+/**
+ * Implementation of the YouVideo platform system.
+ * Maintains four internal collections: all videos (publishable and episodes),
+ * all podcasts, all known authors, and all shows.
+ */
 public class PlatformSystemClass implements PlatformSystem {
 
+    // All videos registered in the system, including publishable videos and episodes.
     private Array<Video> videos;
+    // All podcasts registered in the system, in insertion order.
     private Array<Podcast> podcasts;
+    // All authors known to the system (from podcasts and shows), in insertion order.
     private Array<Author> authors;
+    // All shows registered in the system, in insertion order.
     private Array<Show> shows;
 
+    /**
+     * Creates an empty platform with no content.
+     */
     public PlatformSystemClass() {
         videos = new ArrayClass<>();
         podcasts = new ArrayClass<>();
         authors = new ArrayClass<>();
         shows = new ArrayClass<>();
-
     }
 
-    //------------------------------------------VIDEO------------------------------------------
+
+    // ----------------------------- VIDEO -----------------------------
     @Override
     public boolean hasPublishable(String id) {
         return videos.searchForward(new BasicVideoClass(id));
+    }
+
+    @Override
+    public boolean hasPublishableVideo(String id) {
+        return hasPublishable(id) && !isEpisode(id);
     }
 
     @Override
@@ -45,11 +60,6 @@ public class PlatformSystemClass implements PlatformSystem {
     @Override
     public boolean isPremiumVideo(String id) {
         return getVideo(id) instanceof PremiumVideo;
-    }
-
-    @Override
-    public boolean hasPublishableVideo(String id) {
-        return hasPublishable(id) && !isEpisode(id);
     }
 
     public boolean isEpisode(String id) {
@@ -79,23 +89,39 @@ public class PlatformSystemClass implements PlatformSystem {
         int idx = videos.searchIndexOf(getVideo(id));
         videos.removeAt(idx);
     }
-    //------------------------------------------PODCAST------------------------------------------
+
+
+    // ----------------------------- PODCAST -----------------------------
     @Override
     public boolean hasPodcast(String title) {
         return podcasts.searchForward(new PodcastClass(title));
     }
-    private boolean hasAuthor(String author){
+
+    /**
+     * Verifies if an author with the given name is already known to the system.
+     * @param author the author name to search for.
+     * @return true if the author exists, false otherwise.
+     */
+    private boolean hasAuthor(String author) {
         return authors.searchForward(new AuthorClass(author));
     }
 
-    private Author getAuthor (String author ){
+    /**
+     * Returns the Author object for the given name.
+     * @param author the name of the author.
+     * @return the matching Author object.
+     * @pre hasAuthor(author)
+     */
+    private Author getAuthor (String author) {
         int idx = authors.searchIndexOf(new AuthorClass(author));
         return authors.get(idx);
     }
 
-
     @Override
     public void addPodcast(String title, String author, Locale lang) {
+        /* If the author creating a new Podcast already is in the system,
+         * we use the first name entered into the system (au.getAuthor()).
+         */
         if (hasAuthor(author)) {
             Author au = getAuthor(author);
             podcasts.insertLast(new PodcastClass(title, au.getAuthor(), lang));
@@ -105,16 +131,23 @@ public class PlatformSystemClass implements PlatformSystem {
         }
     }
 
-    private PodcastAll getPodcastAll(String title) {
-        int idx = podcasts.searchIndexOf(new PodcastClass(title));
-        return (PodcastAll) podcasts.get(idx);
-    }
     @Override
     public void addEpisode(String title, String id, int duration, String url, String date) {
         videos.insertLast(new EpisodeClass(id, duration, url, date));
         getPodcastAll(title).addEpisode(id, duration, url, date);
     }
 
+    /**
+     * Returns the internal PodcastAll reference for the podcast with the given title.
+     * This gives access to mutating operations not exposed through the Podcast interface.
+     * @param title the title of the podcast.
+     * @return the PodcastAll object for the podcast.
+     * @pre hasPodcast(title)
+     */
+    private PodcastAll getPodcastAll(String title) {
+        int idx = podcasts.searchIndexOf(new PodcastClass(title));
+        return (PodcastAll) podcasts.get(idx);
+    }
 
     @Override
     public Podcast getPodcast(String title) {
@@ -134,6 +167,25 @@ public class PlatformSystemClass implements PlatformSystem {
     }
 
     @Override
+    public Iterator<Episode> episodeIterator(String title) {
+        Podcast podcast = getPodcast(title);
+        return podcast.episodeIterator();
+    }
+
+    @Override
+    public Iterator<Podcast> authorPodcast(String author) {
+        Iterator<Podcast> it = podcasts.iterator();
+        Array <Podcast> authorPodcast = new ArrayClass<>();
+        while (it.hasNext()) {
+            Podcast podcast = it.next();
+            if (podcast.getAuthor().equalsIgnoreCase(author)){
+                authorPodcast.insertLast(podcast);
+            }
+        }
+        return authorPodcast.iterator();
+    }
+
+    @Override
     public void removePodcast(String podcastTitle) {
         Podcast podcast = getPodcast(podcastTitle);
         int i = 0;
@@ -149,31 +201,13 @@ public class PlatformSystemClass implements PlatformSystem {
         podcasts.removeAt(idx);
     }
 
-
-    @Override
-    public Iterator<Podcast> authorPodcast(String author) {
-        Iterator<Podcast> it = podcasts.iterator();
-        Array <Podcast> authorPodcast = new ArrayClass<>();
-        while (it.hasNext()) {
-            Podcast podcast = it.next();
-            if (podcast.getAuthor().equalsIgnoreCase(author)){
-                authorPodcast.insertLast(podcast);
-            }
-        }
-        return authorPodcast.iterator();
-    }
-    @Override
-    public Iterator<Episode> episodeIterator(String title) {
-        Podcast podcast = getPodcast(title);
-        return podcast.episodeIterator();
-    }
-
-    //------------------------------------------SHOW------------------------------------------
+    // ----------------------------- SHOW -----------------------------
     @Override
     public boolean hasShow(String videoID) {
         PublishableVideo video = (PublishableVideo) getVideo(videoID);
         return shows.searchForward(new ShowClass(video.getTitle()));
     }
+
     @Override
     public boolean hasShowTitle(String title) {
         return shows.searchForward(new ShowClass(title));
@@ -190,6 +224,7 @@ public class PlatformSystemClass implements PlatformSystem {
             shows.insertLast(new ShowClass(showAuthor, date, video.getTitle()));
         }
     }
+
     @Override
     public Show getShow(String title) {
         int idx = shows.searchIndexOf(new ShowClass(title));

@@ -4,13 +4,23 @@ import dataStructures.*;
 
 import java.util.Locale;
 
+/**
+ * Implementation of a podcast.
+ * Episodes are stored in an array and inserted at position 0, so the
+ * most recently added episode is always at index 0 (reverse chronological order).
+ */
 class PodcastClass implements PodcastAll {
-    private Array<Episode> episodes;
-    private String title;
-    private String author;
-    private Locale lang;
+    private Array<Episode> episodes; // The ordered collection of episodes, newest first.
+    private String title; // The unique title of this podcast.
+    private String author; // The name of the author of this podcast.
+    private Locale lang; // The primary language of this podcast.
 
-
+    /**
+     * Creates a fully initialised podcast with no episodes.
+     * @param title the unique title of the podcast.
+     * @param author the name of the podcast's author.
+     * @param lang the primary language of the podcast.
+     */
     public PodcastClass(String title, String author, Locale lang ) {
         this.title = title;
         this.author = author;
@@ -18,6 +28,10 @@ class PodcastClass implements PodcastAll {
         episodes = new ArrayClass<>();
     }
 
+    /**
+     * Creates a podcast with only a title, used for lookup purposes.
+     * @param title the title of the podcast.
+     */
     public PodcastClass(String title) {
         this.title = title;
     }
