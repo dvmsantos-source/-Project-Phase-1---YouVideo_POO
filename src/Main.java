@@ -6,6 +6,10 @@ import java.util.Locale;
 
 import java.util.Scanner;
 
+/**
+ * Authors Djeison Santos (75651) and Victor Rocha (75645)
+ */
+
 public class Main {
 
     // Constants defining the commands
