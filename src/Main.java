@@ -1,7 +1,9 @@
 import YouVideo.*;
 
+import Exceptions.*;
 import dataStructures.Iterator;
 
+import java.util.InputMismatchException;
 import java.util.Locale;
 
 import java.util.Scanner;
@@ -12,60 +14,6 @@ import java.util.Scanner;
 
 public class Main {
 
-    // Constants defining the commands
-    private static final String EXIT = "EXIT";
-    private static final String HELP = "HELP";
-    private static final String CREATEPUBLISHABLE = "CREATEPUBLISHABLE";
-    private static final String CREATEPREMIUM = "CREATEPREMIUM";
-    private static final String ADDSUBTITLE = "ADDSUBTITLE";
-    private static final String GETVIDEO = "GETVIDEO";
-    private static final String SUBTITLES = "SUBTITLES";
-    private static final String CREATEPODCAST = "CREATEPODCAST";
-    private static final String ADDEPISODE = "ADDEPISODE";
-    private static final String GETPODCAST = "GETPODCAST";
-    private static final String EPISODES = "EPISODES";
-    private static final String AUTHORPODCASTS = "AUTHORPODCASTS";
-    private static final String REMOVEPODCAST = "REMOVEPODCAST";
-    private static final String CREATESHOW = "CREATESHOW";
-    private static final String GETSHOW = "GETSHOW";
-    private static final String REMOVESHOW = "REMOVESHOW";
-    private static final String REMOVEVIDEO = "REMOVEVIDEO";
-
-    //Constants for the help command
-    private static final String CMD_CREATE_PUBLISHABLE =
-            "createpublishable - creates a new publishable video";
-    private static final String CMD_CREATE_PREMIUM =
-            "createpremium - creates a new publishable Premium video";
-    private static final String CMD_ADD_SUBTITLE =
-            "addsubtitle - adds subtitle to Premium video";
-    private static final String CMD_GET_VIDEO =
-            "getvideo - presents publishable video data from its id";
-    private static final String CMD_SUBTITLES =
-            "subtitles - Lists Premium video subtitles";
-    private static final String CMD_CREATE_PODCAST =
-            "createpodcast - creates a new podcast with no episodes";
-    private static final String CMD_ADD_EPISODE =
-            "addepisode - adds an episode to a podcast";
-    private static final String CMD_GET_PODCAST =
-            "getpodcast - presents podcast data from its title";
-    private static final String CMD_EPISODES =
-            "episodes - List podcast episodes";
-    private static final String CMD_AUTHOR_PODCASTS =
-            "authorpodcasts - List all podcasts of an author";
-    private static final String CMD_REMOVE_PODCAST =
-            "removepodcast - removes a podcast";
-    private static final String CMD_CREATE_SHOW =
-            "createshow - creates show using an existing publishable video";
-    private static final String CMD_GET_SHOW =
-            "getshow - presents show data from its title";
-    private static final String CMD_REMOVE_SHOW =
-            "removeshow - removes a show";
-    private static final String CMD_REMOVE_VIDEO =
-            "removevideo - removes a publishable video";
-    private static final String CMD_HELP =
-            "help - shows the available commands";
-    private static final String CMD_EXIT =
-            "exit - terminates the execution of the program";
 
     // Constants defining messages for the user
     private static final String MSG_EXIT =
@@ -166,9 +114,29 @@ public class Main {
         Locale.setDefault(Locale.of("EN","GB" ));
         Scanner in = new Scanner(System.in);
         PlatformSystem platformSystem = new PlatformSystemClass();
-        executeCommand(in, platformSystem);
+        processCommands(platformSystem, in);
         in.close();
     }
+
+    private static Command getCommand(Scanner in) {
+        try {
+            String comm = in.next().toUpperCase();
+            return Command.valueOf(comm);
+        } catch (IllegalArgumentException e) {
+            return Command.UNKNOWN;
+        }
+    }
+
+    private static void processCommands( PlatformSystem platformSystem, Scanner in) {
+        Command cmd;
+        do {
+            cmd = getCommand(in);
+            executeCommand(in, cmd, platformSystem);
+        } while (!cmd.equals(Command.EXIT));
+    }
+
+
+
 
     /**
      * Reads and dispatches commands from standard input until the user types exit.
@@ -177,31 +145,28 @@ public class Main {
      * @param in the scanner reading from standard input.
      * @param platformSystem the platform system to interact with.
      */
-    private static void executeCommand(Scanner in, PlatformSystem platformSystem) {
-        String cmd;
-        do {
-            cmd = in.next().trim().toUpperCase();
-            switch (cmd) {
-                case CREATEPUBLISHABLE -> createPublishable(in, platformSystem);
-                case CREATEPREMIUM -> createPremium(in, platformSystem);
-                case ADDSUBTITLE -> addSubtitle(in, platformSystem);
-                case GETVIDEO -> getVideo(in, platformSystem);
-                case SUBTITLES -> subtitles(in, platformSystem);
-                case CREATEPODCAST -> createPodcast(in, platformSystem);
-                case ADDEPISODE -> addEpisode(in, platformSystem);
-                case GETPODCAST -> getPodcast(in, platformSystem);
-                case EPISODES -> episodes(in, platformSystem);
-                case AUTHORPODCASTS -> authorPodcasts(in, platformSystem);
-                case REMOVEPODCAST -> removePodcast(in,platformSystem);
-                case CREATESHOW -> createShow(in, platformSystem);
-                case GETSHOW -> getShow(in, platformSystem);
-                case REMOVESHOW -> removeShow(in, platformSystem);
-                case REMOVEVIDEO -> removeVideo(in, platformSystem);
-                case HELP -> help();
-                case EXIT -> System.out.println(MSG_EXIT);
-                default -> executeDefault(in);
-            }
-        } while (!cmd.equals(EXIT));
+    private static void executeCommand(Scanner in, Command cmd ,PlatformSystem platformSystem) {
+        switch (cmd) {
+            case CREATEPUBLISHABLE -> createPublishable(in, platformSystem);
+            case CREATEPREMIUM -> createPremium(in, platformSystem);
+            case ADDSUBTITLE -> addSubtitle(in, platformSystem);
+            case GETVIDEO -> getVideo(in, platformSystem);
+            case SUBTITLES -> subtitles(in, platformSystem);
+            case CREATEPODCAST -> createPodcast(in, platformSystem);
+            case ADDEPISODE -> addEpisode(in, platformSystem);
+            case GETPODCAST -> getPodcast(in, platformSystem);
+            case EPISODES -> episodes(in, platformSystem);
+            case AUTHORPODCASTS -> authorPodcasts(in, platformSystem);
+            case REMOVEPODCAST -> removePodcast(in, platformSystem);
+            case CREATESHOW -> createShow(in, platformSystem);
+            case GETSHOW -> getShow(in, platformSystem);
+            case REMOVESHOW -> removeShow(in, platformSystem);
+            case REMOVEVIDEO -> removeVideo(in, platformSystem);
+            case HELP -> help();
+            case EXIT -> System.out.println(MSG_EXIT);
+            default -> in.nextLine();
+
+        }
     }
 
     /**
@@ -216,23 +181,7 @@ public class Main {
      * Prints the list of all available commands to standard output.
      */
     private static void help() {
-        System.out.println(CMD_CREATE_PUBLISHABLE);
-        System.out.println(CMD_CREATE_PREMIUM);
-        System.out.println(CMD_ADD_SUBTITLE);
-        System.out.println(CMD_GET_VIDEO);
-        System.out.println(CMD_SUBTITLES);
-        System.out.println(CMD_CREATE_PODCAST);
-        System.out.println(CMD_ADD_EPISODE);
-        System.out.println(CMD_GET_PODCAST);
-        System.out.println(CMD_EPISODES);
-        System.out.println(CMD_AUTHOR_PODCASTS);
-        System.out.println(CMD_REMOVE_PODCAST);
-        System.out.println(CMD_CREATE_SHOW);
-        System.out.println(CMD_GET_SHOW);
-        System.out.println(CMD_REMOVE_SHOW);
-        System.out.println(CMD_REMOVE_VIDEO);
-        System.out.println(CMD_HELP);
-        System.out.println(CMD_EXIT);
+       Command.executeHelp();
     }
 
     /**
@@ -249,7 +198,8 @@ public class Main {
      * @param lang the Locale to validate.
      * @return true if the language is in the ISO 639-1 list, false otherwise.
      */
-    private static boolean isValidLanguage(Locale lang) {
+    private static boolean isValidLanguage(Locale lang)
+            throws InvalidLanguageException  {
         String[] isoLanguages = Locale.getISOLanguages();
         for (int i = 0; i < isoLanguages.length; i++) {
             Locale isoLanguage = Locale.of(isoLanguages[i]);
@@ -257,7 +207,22 @@ public class Main {
                 return true;
             }
         }
-        return false;
+        throw new InvalidLanguageException() ;
+    } /**
+     * Verifies if the given Locale corresponds to a valid ISO 639-1 language.
+     * @param lang the Locale to validate.
+     * @return true if the language is in the ISO 639-1 list, false otherwise.
+     */
+    private static boolean isValidSubtitle(Locale lang)
+            throws InvalidSubtitleLanguageException  {
+        String[] isoLanguages = Locale.getISOLanguages();
+        for (int i = 0; i < isoLanguages.length; i++) {
+            Locale isoLanguage = Locale.of(isoLanguages[i]);
+            if (isoLanguage.equals(lang)) {
+                return true;
+            }
+        }
+        throw new InvalidSubtitleLanguageException() ;
     }
 
     /**
@@ -268,25 +233,27 @@ public class Main {
      * @param platformSystem the platform system to interact with.
      */
     private static void createPublishable(Scanner in, PlatformSystem platformSystem) {
-        String id = in.next();
-        int duration = in.nextInt();
-        String URL = in.next().trim();
-        in.nextLine();
-        String publisher = in.nextLine();
-        String title = in.nextLine().trim();
-        String lang = in.next().toUpperCase();
-
-        if (!isValidLanguage(convert(lang))) {
-            System.out.println(MSG_INVALID_LANGUAGE);
-        } else if (duration <= 0) {
-            System.out.println(MSG_INVALID_VALUE);
-        } else if (platformSystem.hasPublishable(id)) {
-            System.out.println(MSG_VIDEO_ALREADY_EXIST);
-        } else {
+        try {
+            String id = in.next();
+            int duration = in.nextInt();
+            String URL = in.next().trim();
+            in.nextLine();
+            String publisher = in.nextLine();
+            String title = in.nextLine().trim();
+            String lang = in.next().toUpperCase();
+            isValidLanguage(convert(lang));
             platformSystem.addPublishable(id, duration, URL, publisher, title, convert(lang));
-            System.out.printf(MSG_VIDEO_CREATED, id);
+        } catch (InvalidLanguageException e) {
+            System.out.println(MSG_INVALID_LANGUAGE);
+        } catch (InputMismatchException e) {
+            System.out.println(MSG_INVALID_VALUE);
+        } catch (PublishableNotExistException e) {
+            System.out.println(MSG_VIDEO_ALREADY_EXIST);
+
+
         }
     }
+
 
     /**
      * Executes the createpremium command.
@@ -297,29 +264,31 @@ public class Main {
      * @param platformSystem the platform system to interact with.
      */
     private static void createPremium(Scanner in, PlatformSystem platformSystem) {
-        String id = in.next().trim();
-        int duration = in.nextInt();
-        String URL = in.next().trim();
-        in.nextLine();
-        String publisher = in.nextLine();
-        String title = in.nextLine().trim();
-        String lang = in.nextLine().trim().toUpperCase();
-        String subtitleUrl = in.nextLine();
-        String subtitleLang = in.nextLine().toUpperCase();
-
-        if (!isValidLanguage(convert(lang))) {
-            System.out.println(MSG_INVALID_LANGUAGE);
-        } else if (!isValidLanguage(convert(subtitleLang))) {
-            System.out.println(MSG_INVALID_LANGUAGE_SUBTITLE);
-        } else if (duration <= 0) {
-            System.out.println(MSG_INVALID_VALUE);
-        }  else if (platformSystem.hasPublishable(id)) {
-            System.out.println(MSG_VIDEO_ALREADY_EXIST);
-        } else {
+        try {
+            String id = in.next().trim();
+            int duration = in.nextInt();
+            String URL = in.next().trim();
+            in.nextLine();
+            String publisher = in.nextLine();
+            String title = in.nextLine().trim();
+            String lang = in.nextLine().trim().toUpperCase();
+            String subtitleUrl = in.nextLine();
+            String subtitleLang = in.nextLine().toUpperCase();
+            isValidLanguage(convert(lang));
+            isValidSubtitle(convert(subtitleLang));
             platformSystem.addPremiumPublishable(id, duration, URL, publisher, title,
                     convert(lang), subtitleUrl, convert(subtitleLang));
             System.out.printf(MSG_VIDEO_PREMIUM_CREATED, id);
+        } catch (InvalidLanguageException e){
+            System.out.println(MSG_INVALID_LANGUAGE);
+        } catch (InvalidSubtitleLanguageException e){
+            System.out.println(MSG_INVALID_LANGUAGE_SUBTITLE);
+        } catch (InputMismatchException e){
+            System.out.println(MSG_INVALID_VALUE);
+        } catch (PublishableNotExistException e){
+            System.out.println(MSG_VIDEO_ALREADY_EXIST);
         }
+
     }
 
     /**
