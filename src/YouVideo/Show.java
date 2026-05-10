@@ -1,5 +1,8 @@
 package YouVideo;
 
+import java.util.Iterator;
+import java.util.Locale;
+
 /**
  * Represents a scheduled show in the platform.
  * A show broadcasts an existing publishable video on a given date,
@@ -24,4 +27,10 @@ public interface Show {
      * @return the author's name.
      */
     String getAuthor();
+
+    Iterator<String> tagsShowIterator();
+    boolean hasTagShow(String tag);
+    Locale getLanguage();
+    int getDuration();
+    boolean isTagsEmpty();
 }

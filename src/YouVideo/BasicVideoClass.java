@@ -29,14 +29,6 @@ class BasicVideoClass extends VideoClass implements PublishableVideo {
           this.publisher = publisher;
       }
 
-    /**
-     * Creates a basic video with only an identifier.
-     * @param id the unique identifier of the video.
-     */
-      public BasicVideoClass(String id) {
-          super(id);
-      }
-
 
       @Override
       public String getTitle() {

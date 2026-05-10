@@ -11,8 +11,13 @@ authorpodcasts - List all podcasts of an author
 removepodcast - removes a podcast
 createshow - creates show using an existing publishable video
 getshow - presents show data from its title
+authorshows - List all shows of an author
 removeshow - removes a show
 removevideo - removes a publishable video
+authorsproductivity - List authors by their productivity
+addtag - adds a tag to a show or podcast
+removetag - removes a tag from a show or podcast
+tagged - List content tagged with a given tag
 help - shows the available commands
 exit - terminates the execution of the program
 Unknown command. Type help to see available commands.

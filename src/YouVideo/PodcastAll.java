@@ -1,5 +1,7 @@
 package YouVideo;
 
+import java.util.Iterator;
+
 /**
  * Extends the Podcast interface with mutating operations used internally.
  * Provides the ability to add episodes and enforce equality by title.
@@ -14,14 +16,12 @@ interface PodcastAll extends Podcast {
      */
     boolean equals(Object other);
 
-    /**
-     * Adds a new episode to this podcast.
-     * Episodes are stored in reverse chronological order (most recent first).
-     * @param ID the unique identifier of the episode.
-     * @param duration the duration of the episode in minutes.
-     * @param URL the URL where the episode file is stored.
-     * @param date the release date of the episode in YYYY-MM-DD format.
-     * @pre isValidEpisodeDate(date)
-     */
-    void addEpisode(String ID, int duration, String URL, String date);
+
+    void addTagPodcast(String tag);
+
+
+
+    boolean removeTagPodcast(String tag);
+
+    void addEpisode(Episode episode);
 }

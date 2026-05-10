@@ -20,13 +20,6 @@ class EpisodeClass extends VideoClass implements Episode {
          this.date = date;
      }
 
-    /**
-     * Creates an episode with only an identifier.
-     * @param ID the unique identifier of the episode.
-     */
-     public EpisodeClass(String ID){
-         super(ID);
-     }
 
 
      @Override

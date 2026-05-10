@@ -1,4 +1,4 @@
-reatepublishable - creates a new publishable video
+createpublishable - creates a new publishable video
 createpremium - creates a new publishable Premium video
 addsubtitle - adds subtitle to Premium video
 getvideo - presents publishable video data from its id

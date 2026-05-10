@@ -34,25 +34,29 @@ import java.util.*;
     public void addPodcast(Podcast podcast) {
         podcasts.addLast(podcast);
     }
-
+    @Override
     public void removePodcast(Podcast podcast) {
-        podcasts.remove(podcast);
+         podcasts.remove(podcast);
     }
-
+    @Override
     public boolean isPodcastsEmpty() {
         return podcasts.isEmpty();
     }
-
+    @Override
     public Iterator<Podcast> podcastIterator() {
         return podcasts.iterator();
     }
-
+    @Override
+    public Iterator<Show> showIterator() {
+        return shows.iterator();
+    }
+    @Override
     public void addShow(Show show) {
         shows.add(show);
     }
-
+    @Override
     public void removeShow(Show show) {
-        podcasts.remove(show);
+         shows.remove(show);
     }
 
     @Override

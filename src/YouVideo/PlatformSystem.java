@@ -61,7 +61,7 @@ public interface PlatformSystem {
      * @pre hasPublishable(id) && IsPremiumVideo(id)
      */
     void addSubtitle(String id, String subtitleUrl, Locale subtitleLang)
-            throws PublishableAlreadyExistsException, IsNotPremiumVideoException;
+            throws PublishableAlreadyExistsException, NotAPremiumVideoException;
 
     /**
      * Returns an iterator over the subtitles of a premium video, in insertion order.
@@ -70,7 +70,7 @@ public interface PlatformSystem {
      * @pre hasPublishable(id) && IsPremiumVideo(id)
      */
     Iterator<Subtitle> subtitleIterator(String id) throws
-            PublishableNotExistsException, IsEpisodeException, IsNotPremiumVideoException;
+            PublishableNotExistsException, IsEpisodeException, NotAPremiumVideoException;
 
     /**
      * Removes a publishable video from the system.
@@ -102,7 +102,7 @@ public interface PlatformSystem {
      */
     void addEpisode(String title, String id, int duration, String url, String date)
             throws PodcastNotExistsException,
-            EpisodeAlreadyExistsException, IsNotValidEpisodeDateException;
+            EpisodeAlreadyExistsException, InvalidEpisodeDateException;
 
     /**
      * Returns the podcast with the given title.
@@ -126,7 +126,7 @@ public interface PlatformSystem {
      * @param author the name of the author to look up.
      * @return an iterator over the author's podcasts.
      */
-    Iterator<Podcast> authorPodcast(String author) throws NotFoundPodcastException;
+    Iterator<Podcast> authorPodcast(String author) throws PodcastNotFoundException;
 
     /**
      * Removes a podcast and all its episodes from the system.
@@ -161,4 +161,10 @@ public interface PlatformSystem {
      * @pre hasShowTitle(showTitle)
      */
     void removeShow(String showTitle) throws ShowNotExistsException;
+
+    void addTag(String title, String tag)throws TitleAlreadyTaggedException, TitleDoesNotExistException;
+
+    Iterator<Show> authorShows(String author)throws NoShowsFoundForTheAuthorException;
+
+    void removeTag(String title, String tag) throws TitleDoesNotExistException,TitleIsNotTaggedException;
 }

@@ -1,10 +1,16 @@
 package YouVideo;
 
+import java.util.Iterator;
+import java.util.Locale;
+
 /**
  * Extends the Show interface with mutating operations used internally.
  * This interface is not exposed publicly, only PlatformSystemClass uses it.
  */
 interface ShowAll extends Show {
+    void addTagShow(String tag);
+
+    boolean removeTagShow(String tag);
     /**
      * Verifies if this Show is equal to another object.
      * Two authors are considered equal if they share the same title.

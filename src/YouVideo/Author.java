@@ -16,6 +16,7 @@ interface Author {
     boolean isPodcastsEmpty();
 
     Iterator<Podcast> podcastIterator();
+    Iterator<Show> showIterator();
 
     /**
      * Verifies if this Author is equal to another object.

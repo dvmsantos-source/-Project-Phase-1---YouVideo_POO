@@ -1,9 +1,6 @@
 package YouVideo;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Implementation of a podcast.
@@ -11,7 +8,8 @@ import java.util.Locale;
  * most recently added episode is always at index 0 (reverse chronological order).
  */
 class PodcastClass implements PodcastAll {
-    private List<Episode> episodes; // The ordered collection of episodes, newest first.
+    private List<Episode> episodes; // The ordered collection of episodes, newest first//
+    private SortedSet<String> tags;
     private String title; // The unique title of this podcast.
     private String author; // The name of the author of this podcast.
     private Locale lang; // The primary language of this podcast.
@@ -27,29 +25,37 @@ class PodcastClass implements PodcastAll {
         this.author = author;
         this.lang = lang;
         episodes = new LinkedList<>();
+        tags = new TreeSet<>();
     }
 
-    /**
-     * Creates a podcast with only a title, used for lookup purposes.
-     * @param title the title of the podcast.
-     */
-    public PodcastClass(String title) {
-        this.title = title;
+
+    // ----------------------------- TAGS -----------------------------
+    @Override
+    public boolean hasTagPodcast(String tag){
+        return tags.contains(tag);
+    }
+    @Override
+    public void addTagPodcast(String tag){
+        tags.add(tag);
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (other== null)
-            return false;
-        if (this == other)
-            return true;
-        if (title == null)
-            return false;
-        if (!(other instanceof Podcast))
-            return false;
-        return this.title.equalsIgnoreCase(((Podcast)other).getTitle());
+    public boolean isTagsEmpty(){
+        return tags.isEmpty();
     }
 
+    @Override
+    public boolean removeTagPodcast(String tag){
+        return tags.remove(tag);
+    }
+
+    @Override
+    public Iterator<String> tagsPodcastIterator() {
+        return tags.iterator();
+    }
+
+
+    // ----------------------------- EPISODE -----------------------------
     @Override
     public Locale getLang() {
         return lang;
@@ -93,12 +99,26 @@ class PodcastClass implements PodcastAll {
     }
 
     @Override
-    public void addEpisode(String ID, int duration, String URL, String date ) {
-        episodes.addFirst(new EpisodeClass(ID, duration, URL, date));
+    public void addEpisode(Episode episode) {
+        episodes.addFirst(episode);
     }
 
     @Override
     public Iterator<Episode> episodeIterator() {
         return episodes.iterator();
+    }
+
+
+    @Override
+    public boolean equals(Object other) {
+        if (other== null)
+            return false;
+        if (this == other)
+            return true;
+        if (title == null)
+            return false;
+        if (!(other instanceof Podcast))
+            return false;
+        return this.title.equalsIgnoreCase(((Podcast)other).getTitle());
     }
 }
