@@ -1,7 +1,7 @@
 
 package YouVideo;
 
-import dataStructures.Iterator;
+import java.util.Iterator;
 
 interface PremiumVideo extends PublishableVideo {
     /**

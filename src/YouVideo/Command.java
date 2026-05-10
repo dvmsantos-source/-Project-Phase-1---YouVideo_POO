@@ -27,17 +27,17 @@ public enum Command {
     UNKNOWN("");
 
 
-
     private String msgHelp;
 
-    Command(String s){
+    Command(String s) {
         msgHelp = s;
     }
 
-    public String getMsg(){
+    public String getMsg() {
         return msgHelp;
     }
-    public static void executeHelp(){
+
+    public static void executeHelp() {
         Command[] help = Command.values();
         for (int i = 0; i < help.length; i++){
             System.out.println(help[i].getMsg());

@@ -1,7 +1,9 @@
 package YouVideo;
 
-import dataStructures.*;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -12,7 +14,7 @@ import java.util.Locale;
  */
 class PremiumVideoClass extends BasicVideoClass implements PremiumVideo {
     // The ordered collection of subtitles associated with this video.
-    private Array<Subtitle> subtitles;
+    private List<Subtitle> subtitles;
 
     /**
      * Creates a fully initialised premium video with an initial subtitle.
@@ -28,8 +30,8 @@ class PremiumVideoClass extends BasicVideoClass implements PremiumVideo {
     public PremiumVideoClass(String ID, int duration, String URL, String publisher,
                              String title, Locale lang, String subtitleUrl, Locale subtitleLang) {
         super(ID, duration, URL, publisher, title, lang);
-        this.subtitles = new ArrayClass<>();
-        addSubtitle( subtitleUrl, subtitleLang);
+        this.subtitles = new LinkedList<>();
+        addSubtitle(subtitleUrl, subtitleLang);
     }
 
 
@@ -41,7 +43,7 @@ class PremiumVideoClass extends BasicVideoClass implements PremiumVideo {
      */
     @Override
     public void addSubtitle(String subtitleUrl,Locale subtitleLang) {
-        subtitles.insertLast(new Subtitle(subtitleLang,subtitleUrl));
+        subtitles.addLast(new Subtitle(subtitleLang,subtitleUrl));
 
     }
 

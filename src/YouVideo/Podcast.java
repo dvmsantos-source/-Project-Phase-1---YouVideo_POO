@@ -1,8 +1,9 @@
 package YouVideo;
 
-import dataStructures.Iterator;
 
+import java.util.Iterator;
 import java.util.Locale;
+
 
 /**
  * Represents a podcast in the platform.
@@ -59,9 +60,9 @@ public interface Podcast {
 
     /**
      * Verifies if this podcast contains an episode with the given identifier.
-     * @param ID the episode identifier to search for.
+     * @param episode the episode to search for.
      * @return true if the episode exists in this podcast, false otherwise.
      */
-    boolean hasEpisode(String ID);
+    boolean hasEpisode(Video episode);
 
 }

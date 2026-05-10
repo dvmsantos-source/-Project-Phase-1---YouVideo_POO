@@ -1,5 +1,7 @@
 package YouVideo;
 
+import java.util.Iterator;
+
 /**
  * Represents an author in the platform.
  * Authors are associated with podcasts and shows.
@@ -10,6 +12,10 @@ interface Author {
      * @return the author's name.
      */
     String getAuthor();
+
+    boolean isPodcastsEmpty();
+
+    Iterator<Podcast> podcastIterator();
 
     /**
      * Verifies if this Author is equal to another object.

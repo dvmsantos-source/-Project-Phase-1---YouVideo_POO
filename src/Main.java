@@ -1,11 +1,9 @@
 import YouVideo.*;
 
 import Exceptions.*;
-import dataStructures.Iterator;
-
+import java.util.Iterator;
 import java.util.InputMismatchException;
 import java.util.Locale;
-
 import java.util.Scanner;
 
 /**
@@ -13,8 +11,6 @@ import java.util.Scanner;
  */
 
 public class Main {
-
-
     // Constants defining messages for the user
     private static final String MSG_EXIT =
             "Bye!";
@@ -77,6 +73,8 @@ public class Main {
             "No episodes available for this podcast.";
     private static final String MSG_AUTHOR_PODCASTS =
             "Podcasts by author %s:\n";
+    private static final String MSG_EMPTY_AUTHOR_PODCASTS =
+            "No podcasts found for this author.";
     private static final String MSG_PODCAST =
             "Podcast: %s Author: %s Language: %s\n";
     private static final String MSG_PODCAST_NOT_FOUND =
@@ -135,9 +133,6 @@ public class Main {
         } while (!cmd.equals(Command.EXIT));
     }
 
-
-
-
     /**
      * Reads and dispatches commands from standard input until the user types exit.
      * Each token on the input is uppercased and matched against the known commands.
@@ -165,7 +160,6 @@ public class Main {
             case HELP -> help();
             case EXIT -> System.out.println(MSG_EXIT);
             default -> in.nextLine();
-
         }
     }
 
@@ -191,7 +185,7 @@ public class Main {
      * @return true if the language is in the ISO 639-1 list, false otherwise.
      */
     private static boolean isValidLanguage(Locale lang)
-            throws InvalidLanguageException  {
+            throws InvalidLanguageException {
         String[] isoLanguages = Locale.getISOLanguages();
         for (int i = 0; i < isoLanguages.length; i++) {
             Locale isoLanguage = Locale.of(isoLanguages[i]);
@@ -199,14 +193,15 @@ public class Main {
                 return true;
             }
         }
-        throw new InvalidLanguageException() ;
-    } /**
+        throw new InvalidLanguageException();
+    }
+    /**
      * Verifies if the given Locale corresponds to a valid ISO 639-1 language.
      * @param lang the Locale to validate.
      * @return true if the language is in the ISO 639-1 list, false otherwise.
      */
     private static boolean isValidSubtitle(Locale lang)
-            throws InvalidSubtitleLanguageException  {
+            throws InvalidSubtitleLanguageException {
         String[] isoLanguages = Locale.getISOLanguages();
         for (int i = 0; i < isoLanguages.length; i++) {
             Locale isoLanguage = Locale.of(isoLanguages[i]);
@@ -214,7 +209,7 @@ public class Main {
                 return true;
             }
         }
-        throw new InvalidSubtitleLanguageException() ;
+        throw new InvalidSubtitleLanguageException();
     }
 
     /**
@@ -235,14 +230,14 @@ public class Main {
             String lang = in.next().toUpperCase();
             isValidLanguage(convert(lang));
             platformSystem.addPublishable(id, duration, URL, publisher, title, convert(lang));
+            System.out.printf(MSG_VIDEO_CREATED, id);
         } catch (InvalidLanguageException e) {
             System.out.println(MSG_INVALID_LANGUAGE);
         } catch (InputMismatchException e) {
             System.out.println(MSG_INVALID_VALUE);
-        } catch (PublishableNotExistException e) {
+            in.nextLine();
+        } catch (PublishableAlreadyExistsException e) {
             System.out.println(MSG_VIDEO_ALREADY_EXIST);
-
-
         }
     }
 
@@ -271,13 +266,13 @@ public class Main {
             platformSystem.addPremiumPublishable(id, duration, URL, publisher, title,
                     convert(lang), subtitleUrl, convert(subtitleLang));
             System.out.printf(MSG_VIDEO_PREMIUM_CREATED, id);
-        } catch (InvalidLanguageException e){
+        } catch (InvalidLanguageException e) {
             System.out.println(MSG_INVALID_LANGUAGE);
-        } catch (InvalidSubtitleLanguageException e){
+        } catch (InvalidSubtitleLanguageException e) { //verificar se precisa de duas classes
             System.out.println(MSG_INVALID_LANGUAGE_SUBTITLE);
-        } catch (InputMismatchException e){
+        } catch (InputMismatchException e) {
             System.out.println(MSG_INVALID_VALUE);
-        } catch (PublishableNotExistException e){
+        } catch (PublishableAlreadyExistsException e) {
             System.out.println(MSG_VIDEO_ALREADY_EXIST);
         }
 
@@ -298,11 +293,11 @@ public class Main {
             isValidLanguage(convert(subtitleLang));
             platformSystem.addSubtitle(id, subtitleUrl, convert(subtitleLang));
             System.out.println(MSG_SUBTITLE_ADDED);
-        } catch(InvalidLanguageException e){
+        } catch(InvalidLanguageException e) {
             System.out.println(MSG_INVALID_LANGUAGE_SUBTITLE);
-        } catch(PublishableNotExistException e){
+        } catch(PublishableAlreadyExistsException e) {
             System.out.println(MSG_VIDEO_NOT_EXIST);
-        } catch (IsNotPremiumVideoException e){
+        } catch (IsNotPremiumVideoException e) {
             System.out.println(MSG_REQUIRES_PREMIUM_VIDEO);
         }
 
@@ -317,10 +312,7 @@ public class Main {
      */
     private static void getVideo(Scanner in, PlatformSystem platformSystem) {
         String id = in.nextLine().trim();
-
-        if (!platformSystem.hasPublishable(id) || platformSystem.isEpisode(id)) {
-            System.out.printf(MSG_PUBLISHABLE_VIDEO_NOT_EXIST, id);
-        } else {
+        try {
             PublishableVideo video = (PublishableVideo) platformSystem.getVideo(id);
             if (video.isPremium()) {
                 System.out.printf(MSG_GET_PREMIUM_VIDEO,
@@ -331,6 +323,10 @@ public class Main {
             }
             System.out.printf(MSG_GET_VIDEO, video.getUrl(), video.getPublisher(),
                     video.getLang().getDisplayLanguage().toUpperCase());
+        } catch (PublishableNotExistsException e) {
+            System.out.printf(MSG_PUBLISHABLE_VIDEO_NOT_EXIST, id);
+        } catch (IsEpisodeException e) {
+            System.out.printf(MSG_PUBLISHABLE_VIDEO_NOT_EXIST, id);
         }
     }
 
@@ -352,6 +348,10 @@ public class Main {
                 System.out.printf(MSG_SUBTITLE_LINE, subtitle.URL(),
                         subtitle.lang().getDisplayLanguage().toUpperCase());
             }
+        } catch (PublishableNotExistsException e) {
+            System.out.println(MSG_VIDEO_NOT_PREMIUM);
+        } catch (IsEpisodeException e) {
+            System.out.println(MSG_VIDEO_NOT_PREMIUM);
         } catch (IsNotPremiumVideoException e){
             System.out.println(MSG_VIDEO_NOT_PREMIUM);
         }
@@ -372,9 +372,9 @@ public class Main {
             isValidLanguage(convert(lang));
             platformSystem.addPodcast(title, author, convert(lang));
             System.out.println(MSG_PODCAST_CREATED);
-        } catch(InvalidLanguageException e){
+        } catch (InvalidLanguageException e) {
             System.out.println(MSG_INVALID_LANGUAGE);
-        } catch (PodcastAlreadyExistException e){
+        } catch (PodcastAlreadyExistsException e) {
             System.out.println(MSG_PODCAST_ALREADY_EXIST);
         }
     }
@@ -387,7 +387,6 @@ public class Main {
      * @param platformSystem the platform system to interact with.
      */
     private static void addEpisode(Scanner in, PlatformSystem platformSystem) {
-
         try {
             String title = in.nextLine().trim();
             String id = in.next().trim();
@@ -397,13 +396,13 @@ public class Main {
             String date = in.nextLine();
             platformSystem.addEpisode(title, id, duration, URL, date);
             System.out.println(MSG_EPISODE_ADDED);
-        } catch (InputMismatchException e){
+        } catch (InputMismatchException e) {
             System.out.println(MSG_INVALID_VALUE);
-        } catch (PodcastNotExistException e){
+        } catch (PodcastNotExistsException e) {
             System.out.println(MSG_PODCAST_NOT_EXIST);
-        } catch(EpisodeAlreadyExistException e){
+        } catch(EpisodeAlreadyExistsException e) {
             System.out.println(MSG_EPISODE_ALREADY_EXIST);
-        } catch (IsNotValidEpisodeDateException e){
+        } catch (IsNotValidEpisodeDateException e) {
             System.out.println(MSG_DATA_EPISODE_INVALID);
         }
     }
@@ -417,12 +416,11 @@ public class Main {
      */
     private static void getPodcast(Scanner in, PlatformSystem platformSystem) {
         String title = in.nextLine().trim();
-
-        if (platformSystem.hasPodcast(title)) {
+        try {
             Podcast podcast = platformSystem.getPodcast(title);
             if (podcast.isEmpty()) {
                 System.out.printf(MSG_GET_PODCAST,
-                         podcast.getTitle(), podcast.getAuthor(),
+                        podcast.getTitle(), podcast.getAuthor(),
                         podcast.getLang().getLanguage().toUpperCase());
             } else {
                 System.out.printf(MSG_GET_PODCAST,
@@ -430,7 +428,7 @@ public class Main {
                         podcast.getLang().getLanguage().toUpperCase());
                 System.out.printf(MSG_LAST_EPISODE_DATE, podcast.getLastEpDate());
             }
-        } else {
+        } catch (PodcastNotExistsException e) {
             System.out.println(MSG_PODCAST_NOT_EXIST);
         }
     }
@@ -444,10 +442,11 @@ public class Main {
      */
     private static void episodes(Scanner in, PlatformSystem platformSystem) {
         String podcastTitle = in.nextLine().trim();
-
-        if (platformSystem.hasPodcast(podcastTitle)) {
+        try {
             Podcast podcast = platformSystem.getPodcast(podcastTitle);
             if (!podcast.isEmpty()) {
+                System.out.println(MSG_EMPTY_PODCAST);
+            } else {
                 System.out.printf(MSG_PODCAST_EPISODES, podcastTitle);
                 Iterator<Episode> it = platformSystem.episodeIterator(podcastTitle);
                 while (it.hasNext()) {
@@ -455,10 +454,8 @@ public class Main {
                     System.out.printf(MSG_EPISODES, ep.getId(), ep.getDuration(),
                             ep.getDate(), ep.getUrl());
                 }
-            } else {
-                System.out.println(MSG_EMPTY_PODCAST);
             }
-        } else {
+        } catch (PodcastNotExistsException e) {
             System.out.println(MSG_PODCAST_NOT_EXIST);
         }
     }
@@ -474,16 +471,18 @@ public class Main {
         try {
             String authorName = in.nextLine().trim();
             Iterator<Podcast> it = platformSystem.authorPodcast(authorName);
-            System.out.printf(MSG_AUTHOR_PODCASTS, authorName);
-            while (it.hasNext()){
-                Podcast pd = it.next();
-                System.out.printf(MSG_PODCAST, pd.getTitle(), pd.getAuthor(),
-                        pd.getLang().getLanguage().toUpperCase());
-
-                 }
+            if (!it.hasNext()) {
+                System.out.println(MSG_EMPTY_AUTHOR_PODCASTS);
+            } else {
+                System.out.printf(MSG_AUTHOR_PODCASTS, authorName);
+                while (it.hasNext()) {
+                    Podcast pd = it.next();
+                    System.out.printf(MSG_PODCAST, pd.getTitle(), pd.getAuthor(),
+                            pd.getLang().getLanguage().toUpperCase());
+                }
+            }
         } catch(NotFoundPodcastException e){
             System.out.println(MSG_PODCAST_NOT_FOUND);
-
         }
     }
 
@@ -498,7 +497,7 @@ public class Main {
             String title = in.nextLine().trim();
             platformSystem.removePodcast(title);
             System.out.println(MSG_PODCAST_REMOVED);
-        } catch (PodcastNotExistException e){
+        } catch (PodcastNotExistsException e){
             System.out.println(MSG_PODCAST_NOT_EXIST);
         }
     }
@@ -518,9 +517,9 @@ public class Main {
             String date = in.nextLine().trim();
             platformSystem.addShow(showAuthor, videoID, date);
             System.out.println(MSG_SHOW_CREATED);
-        } catch(PublishableNotExistException e){
+        } catch(PublishableNotExistsException e){
             System.out.println(MSG_VIDEO_FOR_SHOW_NOT_EXIST);
-        } catch(ShowAlreadyExistException e){
+        } catch(ShowAlreadyExistsException e){
             System.out.println(MSG_SHOW_ALREADY_EXIST);
         }
     }
@@ -537,7 +536,7 @@ public class Main {
             Show show = platformSystem.getShow(title);
             System.out.printf(MSG_GET_SHOW, show.getDate(), show.getAuthor(),
                     show.getTitle());
-        } catch (ShowNotExistException e){
+        } catch (ShowNotExistsException e) {
             System.out.println(MSG_SHOW_NOT_EXIST);
         }
     }
@@ -553,10 +552,9 @@ public class Main {
             String showTitle = in.nextLine().trim();
             platformSystem.removeShow(showTitle);
             System.out.println(MSG_SHOW_REMOVED);
-        } catch(ShowNotExistException e){
+        } catch(ShowNotExistsException e){
             System.out.println(MSG_SHOW_NOT_EXIST);
         }
-
     }
 
     /**
@@ -571,11 +569,11 @@ public class Main {
             String videoID = in.nextLine().trim();
             platformSystem.removeVideo(videoID);
             System.out.println(MSG_VIDEO_REMOVED);
-        } catch (PublishableNotExistException e){
+        } catch (PublishableNotExistsException e){
             System.out.println(MSG_VIDEO_NOT_EXIST);
         } catch (IsEpisodeException e){
             System.out.println(MSG_ERROR_VIDEO_IS_EPISODE);
-        } catch (IsShowException e){
+        } catch (VideoUsedInShowException e){
             System.out.println(MSG_ERROR_VIDEO_IN_SHOW);
         }
     }

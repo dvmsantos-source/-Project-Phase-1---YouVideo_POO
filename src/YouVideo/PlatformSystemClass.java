@@ -1,8 +1,13 @@
 package YouVideo;
 
-import dataStructures.*;
+import Exceptions.*;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
+
+import java.util.Map;
+
 
 /**
  * Implementation of the YouVideo platform system.
@@ -10,237 +15,224 @@ import java.util.Locale;
  * all podcasts, all known authors, and all shows.
  */
 public class PlatformSystemClass implements PlatformSystem {
+    private static final int MAX_VIDEOS = 2000;
+    private static final int MAX_PODS_SHOWS_AUTHORS = 500;
 
     // All videos registered in the system, including publishable videos and episodes.
-    private Array<Video> videos;
+    private Map<String, Video> videos;
     // All podcasts registered in the system, in insertion order.
-    private Array<Podcast> podcasts;
+    private Map<String, Podcast> podcasts;
     // All authors known to the system (from podcasts and shows), in insertion order.
-    private Array<Author> authors;
+    private Map<String, Author> authors;
     // All shows registered in the system, in insertion order.
-    private Array<Show> shows;
+    private Map<String, Show> shows;
 
     /**
      * Creates an empty platform with no content.
      */
     public PlatformSystemClass() {
-        videos = new ArrayClass<>();
-        podcasts = new ArrayClass<>();
-        authors = new ArrayClass<>();
-        shows = new ArrayClass<>();
+        videos = new HashMap<>(MAX_VIDEOS);
+        podcasts = new HashMap<>(MAX_PODS_SHOWS_AUTHORS);
+        authors = new HashMap<>(MAX_PODS_SHOWS_AUTHORS);
+        shows = new HashMap<>(MAX_PODS_SHOWS_AUTHORS);
     }
 
 
     // ----------------------------- VIDEO -----------------------------
     @Override
-    public boolean hasPublishable(String id) {
-        return videos.searchForward(new BasicVideoClass(id));
-    }
-
-    @Override
-    public boolean hasPublishableVideo(String id) {
-        return hasPublishable(id) && !isEpisode(id);
-    }
-
-    @Override
     public void addPublishable(String id, int duration, String url, String publisher,
-                               String title, Locale lang) {
-        videos.insertLast(new BasicVideoClass(id, duration, url, publisher,
-                title, lang));
+                               String title, Locale lang)
+            throws PublishableAlreadyExistsException {
+        if (videos.containsKey(id))
+            throw new PublishableAlreadyExistsException();
+        videos.put(id, new BasicVideoClass(id, duration, url, publisher, title, lang));
     }
 
     @Override
     public void addPremiumPublishable(String id, int duration, String url,
                                       String publisher, String title, Locale lang,
-                                      String subtitleUrl, Locale subtitleLang) {
-        videos.insertLast(new PremiumVideoClass(id, duration, url,
+                                      String subtitleUrl, Locale subtitleLang)
+            throws PublishableAlreadyExistsException {
+        if (videos.containsKey(id))
+            throw new PublishableAlreadyExistsException();
+        videos.put(id, new PremiumVideoClass(id, duration, url,
                 publisher, title, lang, subtitleUrl, subtitleLang));
     }
 
     @Override
-    public boolean isPremiumVideo(String id) {
-        return getVideo(id) instanceof PremiumVideo;
-    }
-
-    public boolean isEpisode(String id) {
-        return getVideo(id) instanceof Episode;
-    }
-
-    @Override
-    public Video getVideo(String id) {
-        int idx = videos.searchIndexOf(new BasicVideoClass(id));
-        return videos.get(idx);
+    public Video getVideo(String id)
+            throws PublishableNotExistsException, IsEpisodeException {
+        Video video = videos.get(id);
+        if (video == null)
+            throw new PublishableNotExistsException();
+        if (video instanceof Episode)
+            throw new IsEpisodeException();
+        return video;
     }
 
     @Override
-    public void addSubtitle(String id, String subtitleUrl, Locale subtitleLang) {
-        PremiumVideo premiumVideo = (PremiumVideo) getVideo(id);
-        premiumVideo.addSubtitle(subtitleUrl, subtitleLang);
+    public void addSubtitle(String id, String subtitleUrl, Locale subtitleLang)
+            throws PublishableNotExistsException, IsNotPremiumVideoException {
+        Video video = videos.get(id);
+        if (video == null)
+            throw new PublishableNotExistsException();
+        if (!(video instanceof PremiumVideo))
+            throw new IsNotPremiumVideoException();
+        ((PremiumVideo) video).addSubtitle(subtitleUrl, subtitleLang);
     }
 
     @Override
-    public Iterator<Subtitle> subtitleIterator(String id) {
-        PremiumVideo premiumVideo = (PremiumVideo) getVideo(id);
-        return premiumVideo.subtitleIterator();
+    public Iterator<Subtitle> subtitleIterator(String id) throws
+            PublishableNotExistsException, IsEpisodeException, IsNotPremiumVideoException {
+        Video video = videos.get(id);
+        if (video == null)
+            throw new PublishableNotExistsException();
+        else if (video instanceof Episode)
+            throw new IsEpisodeException();
+        else if (!(video instanceof PremiumVideo))
+            throw new IsNotPremiumVideoException();
+        return ((PremiumVideo) video).subtitleIterator();
     }
 
     @Override
-    public void removeVideo(String id) {
-        int idx = videos.searchIndexOf(getVideo(id));
-        videos.removeAt(idx);
+    public void removeVideo(String id) throws PublishableNotExistsException,
+            IsEpisodeException, VideoUsedInShowException {
+        Video video = videos.get(id);
+        if (video == null)
+            throw new PublishableNotExistsException();
+        if (video instanceof Episode)
+            throw new IsEpisodeException();
+        if (shows.containsKey(((PublishableVideo)video).getTitle()))
+            throw new VideoUsedInShowException();
+        videos.remove(id);
     }
 
 
     // ----------------------------- PODCAST -----------------------------
-    @Override
-    public boolean hasPodcast(String title) {
-        return podcasts.searchForward(new PodcastClass(title));
-    }
-
     /**
      * Verifies if an author with the given name is already known to the system.
      * @param author the author name to search for.
      * @return true if the author exists, false otherwise.
      */
     private boolean hasAuthor(String author) {
-        return authors.searchForward(new AuthorClass(author));
-    }
-
-    /**
-     * Returns the Author object for the given name.
-     * @param author the name of the author.
-     * @return the matching Author object.
-     * @pre hasAuthor(author)
-     */
-    private Author getAuthor (String author) {
-        int idx = authors.searchIndexOf(new AuthorClass(author));
-        return authors.get(idx);
+        return authors.containsKey(author);
     }
 
     @Override
-    public void addPodcast(String title, String author, Locale lang) {
-        /* If the author creating a new Podcast already is in the system,
-         * we use the first name entered into the system (au.getAuthor()).
-         */
-        if (hasAuthor(author)) {
-            Author au = getAuthor(author);
-            podcasts.insertLast(new PodcastClass(title, au.getAuthor(), lang));
+    public void addPodcast(String title, String author, Locale lang)
+            throws PodcastAlreadyExistsException {
+        if (podcasts.containsKey(title))
+            throw new PodcastAlreadyExistsException();
+        // If the author creating a new Podcast already is in the system,
+        //we use the first name entered into the system (au.getAuthor()).
+        if (authors.containsKey(author)) {
+            podcasts.put(title, new PodcastClass(title, authors.get(author).getAuthor(), lang));
         } else {
-            authors.insertLast(new AuthorClass(author));
-            podcasts.insertLast(new PodcastClass(title, author, lang));
+            authors.put(author, new AuthorClass(author));
+            podcasts.put(title, new PodcastClass(title, author, lang));
         }
     }
 
     @Override
-    public void addEpisode(String title, String id, int duration, String url, String date) {
-        videos.insertLast(new EpisodeClass(id, duration, url, date));
-        getPodcastAll(title).addEpisode(id, duration, url, date);
-    }
-
-    /**
-     * Returns the internal PodcastAll reference for the podcast with the given title.
-     * This gives access to mutating operations not exposed through the Podcast interface.
-     * @param title the title of the podcast.
-     * @return the PodcastAll object for the podcast.
-     * @pre hasPodcast(title)
-     */
-    private PodcastAll getPodcastAll(String title) {
-        int idx = podcasts.searchIndexOf(new PodcastClass(title));
-        return (PodcastAll) podcasts.get(idx);
-    }
-
-    @Override
-    public Podcast getPodcast(String title) {
-        int idx = podcasts.searchIndexOf(new PodcastClass(title));
-        return podcasts.get(idx);
+    public void addEpisode(String title, String id, int duration, String url, String date)
+            throws PodcastNotExistsException,
+            EpisodeAlreadyExistsException, IsNotValidEpisodeDateException {
+        if (!podcasts.containsKey(title))
+            throw new PodcastNotExistsException();
+        if (videos.containsKey(id))
+            throw new EpisodeAlreadyExistsException();
+        if (!isValidEpisodeDate(title, date))
+            throw new IsNotValidEpisodeDateException();
+        videos.put(title, new EpisodeClass(id, duration, url, date));
+        PodcastAll podcast = (PodcastAll) podcasts.get(title);
+        podcast.addEpisode(id, duration, url, date);
+        Author author = authors.get(podcast.getAuthor());
+        ((AuthorAll) author).addPodcast(podcast);
     }
 
     @Override
-    public boolean hasEpisode(String id) {
-        return videos.searchForward(new EpisodeClass(id));
+    public Podcast getPodcast(String title) throws PodcastNotExistsException {
+        if (!podcasts.containsKey(title))
+            throw new PodcastNotExistsException();
+        return podcasts.get(title);
     }
 
-    @Override
-    public boolean isValidEpisodeDate(String title, String date) {
-        Podcast podcast = getPodcast(title);
+    private boolean isValidEpisodeDate(String title, String date) {
+        Podcast podcast = podcasts.get(title);
         return podcast.isValidEpisodeDate(date);
     }
 
     @Override
-    public Iterator<Episode> episodeIterator(String title) {
-        Podcast podcast = getPodcast(title);
-        return podcast.episodeIterator();
+    public Iterator<Episode> episodeIterator(String title) throws PodcastNotExistsException {
+        if (!podcasts.containsKey(title))
+            throw new PodcastNotExistsException();
+        return podcasts.get(title).episodeIterator();
     }
 
     @Override
-    public Iterator<Podcast> authorPodcast(String author) {
-        Iterator<Podcast> it = podcasts.iterator();
-        // Creates a temporary array to store only the filtered podcasts
-        Array<Podcast> authorPodcast = new ArrayClass<>();
-        while (it.hasNext()) {
-            Podcast podcast = it.next();
-            // Compares the current podcast's author with the requested author (case-insensitive)
-            if (podcast.getAuthor().equalsIgnoreCase(author)) {
-                // If it's a match, adds the podcast to the temporary array
-                authorPodcast.insertLast(podcast);
-            }
-        }
-        // Returns the iterator of the new array containing only the filtered results
-        return authorPodcast.iterator();
+    public Iterator<Podcast> authorPodcast(String author) throws NotFoundPodcastException {
+        Author au = authors.get(author);
+        if (au.isPodcastsEmpty())
+            throw new NotFoundPodcastException();
+        return au.podcastIterator();
     }
 
     @Override
-    public void removePodcast(String podcastTitle) {
+    public void removePodcast(String podcastTitle) throws PodcastNotExistsException {
+        if (!podcasts.containsKey(podcastTitle))
+            throw new PodcastNotExistsException();
         Podcast podcast = getPodcast(podcastTitle);
-        int i = 0;
-        while (i < videos.size()) {
-            Video video = videos.get(i);
+        for (Video video : videos.values()) {
             // Checks if the current video is an episode AND if it belongs to the target podcast
-            if (video instanceof Episode && podcast.hasEpisode(video.getId())) {
+            if (video instanceof Episode && podcast.hasEpisode(video)) {
                 // Removes the episode. Since removeAt shifts the subsequent elements to the left,
-                // we DO NOT increment 'i'. The next element to be checked is now at the current index 'i'.
-                videos.removeAt(i);
-            } else {
-                i++;
+                // we DO NOT increment 'i'. The next element to be checked is now at the current
+                // index 'i'.
+                videos.remove(video.getId());
             }
         }
-        int idx = podcasts.searchIndexOf(new PodcastClass(podcastTitle));
-        podcasts.removeAt(idx);
+        Author author = authors.get(podcast.getAuthor());
+        ((AuthorAll) author).removePodcast(podcast);
+        podcasts.remove(podcastTitle);
     }
 
     // ----------------------------- SHOW -----------------------------
     @Override
-    public boolean hasShow(String videoID) {
-        PublishableVideo video = (PublishableVideo) getVideo(videoID);
-        return shows.searchForward(new ShowClass(video.getTitle()));
-    }
-
-    @Override
-    public boolean hasShowTitle(String title) {
-        return shows.searchForward(new ShowClass(title));
-    }
-
-    @Override
-    public void addShow(String showAuthor, String videoID, String date) {
-        PublishableVideo video = (PublishableVideo) getVideo(videoID);
+    public void addShow(String showAuthor, String videoID, String date)
+            throws PublishableNotExistsException, ShowAlreadyExistsException {
+        if (!videos.containsKey(videoID))
+            throw new PublishableNotExistsException();
+        PublishableVideo video = (PublishableVideo) videos.get(videoID);
+        if (shows.containsKey(video.getTitle()))
+            throw new ShowAlreadyExistsException();
         if (hasAuthor(showAuthor)) {
-            Author au = getAuthor(showAuthor);
-            shows.insertLast(new ShowClass(au.getAuthor(), date, video.getTitle()));
+            Author au = authors.get(showAuthor);
+            Show show = new ShowClass(au.getAuthor(), date, video.getTitle());
+            shows.put(video.getTitle(), show);
+            ((AuthorAll) au).addShow(show);
         } else {
-            authors.insertLast(new AuthorClass(showAuthor));
-            shows.insertLast(new ShowClass(showAuthor, date, video.getTitle()));
+            AuthorAll author = new AuthorClass(showAuthor);
+            authors.put(showAuthor, author);
+            Show show2 = new ShowClass(showAuthor, date, video.getTitle());
+            shows.put(video.getTitle(), show2);
+            author.addShow(show2);
         }
     }
 
     @Override
-    public Show getShow(String title) {
-        int idx = shows.searchIndexOf(new ShowClass(title));
-        return shows.get(idx);
+    public Show getShow(String title) throws ShowNotExistsException {
+        if (!shows.containsKey(title))
+            throw new ShowNotExistsException();
+        return shows.get(title);
     }
 
     @Override
-    public void removeShow(String showTitle) {
-        int idx = shows.searchIndexOf(new ShowClass(showTitle));
-        shows.removeAt(idx);
+    public void removeShow(String showTitle) throws ShowNotExistsException {
+        if (!shows.containsKey(showTitle))
+            throw new ShowNotExistsException();
+        Show show = shows.get(showTitle);
+        Author author = authors.get(show.getAuthor());
+        ((AuthorAll) author).removeShow(show);
+        shows.remove(showTitle);
     }
 }

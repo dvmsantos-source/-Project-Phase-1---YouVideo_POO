@@ -1,7 +1,8 @@
 package YouVideo;
 
-import dataStructures.*;
-
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Locale;
  * most recently added episode is always at index 0 (reverse chronological order).
  */
 class PodcastClass implements PodcastAll {
-    private Array<Episode> episodes; // The ordered collection of episodes, newest first.
+    private List<Episode> episodes; // The ordered collection of episodes, newest first.
     private String title; // The unique title of this podcast.
     private String author; // The name of the author of this podcast.
     private Locale lang; // The primary language of this podcast.
@@ -25,7 +26,7 @@ class PodcastClass implements PodcastAll {
         this.title = title;
         this.author = author;
         this.lang = lang;
-        episodes = new ArrayClass<>();
+        episodes = new LinkedList<>();
     }
 
     /**
@@ -66,13 +67,13 @@ class PodcastClass implements PodcastAll {
 
     @Override
     public String getLastEpDate() {
-        Episode ep = episodes.get(episodes.size() - 1);
+        Episode ep = episodes.getLast();
         return ep.getDate();
     }
 
     @Override
     public boolean isValidEpisodeDate(String date) {
-        if (episodes.size() == 0){
+        if (episodes.isEmpty()) {
             return true;
         }
         else {
@@ -82,18 +83,18 @@ class PodcastClass implements PodcastAll {
     }
 
     @Override
-    public boolean hasEpisode(String episodeID) {
-        return episodes.searchForward(new EpisodeClass(episodeID));
+    public boolean hasEpisode(Video episode) {
+        return episodes.contains(episode);
     }
 
     @Override
     public boolean isEmpty() {
-        return episodes.size() == 0;
+        return episodes.isEmpty();
     }
 
     @Override
     public void addEpisode(String ID, int duration, String URL, String date ) {
-        this.episodes.insertAt(new EpisodeClass(ID, duration, URL, date),0);
+        episodes.addFirst(new EpisodeClass(ID, duration, URL, date));
     }
 
     @Override
