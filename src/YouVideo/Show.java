@@ -28,9 +28,8 @@ public interface Show {
      */
     String getAuthor();
 
-    Iterator<String> tagsShowIterator();
-    boolean hasTagShow(String tag);
+
     Locale getLanguage();
     int getDuration();
-    boolean isTagsEmpty();
+
 }

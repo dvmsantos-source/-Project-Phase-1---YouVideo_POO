@@ -21,13 +21,6 @@ abstract class VideoClass implements VideoAll {
         this.URL = URL;
     }
 
-    /**
-     * Creates a video with only an identifier.
-     * @param id the unique identifier of the video.
-     */
-    public VideoClass(String id) {
-        this.id = id;
-    }
 
 
     @Override

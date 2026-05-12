@@ -201,6 +201,8 @@ public class Main {
 
 
 
+
+
     /**
      * Prints the list of all available commands to standard output.
      */
@@ -235,6 +237,11 @@ public class Main {
         throw new InvalidLanguageException();
     }
 
+    private static int durationValue(Scanner in) throws InvaldValueException{
+        int duration = in.nextInt();
+        if (duration <= 0) throw new InvaldValueException();
+        return duration;
+    }
     /**
      * Verifies if the given Locale corresponds to a valid ISO 639-1 language.
      *
@@ -263,7 +270,7 @@ public class Main {
     private static void createPublishable(Scanner in, PlatformSystem platformSystem) {
         try {
             String id = in.next();
-            int duration = in.nextInt();
+            int duration = durationValue(in);
             String URL = in.next().trim();
             in.nextLine();
             String publisher = in.nextLine();
@@ -274,8 +281,11 @@ public class Main {
             System.out.printf(MSG_VIDEO_CREATED, id);
         } catch (InvalidLanguageException e) {
             System.out.println(MSG_INVALID_LANGUAGE);
-        } catch (InputMismatchException e) {
+        } catch (InvaldValueException e) {
             System.out.println(MSG_INVALID_VALUE);
+            in.nextLine();
+            in.nextLine();
+            in.nextLine();
             in.nextLine();
         } catch (PublishableAlreadyExistsException e) {
             System.out.println(MSG_VIDEO_ALREADY_EXIST);
@@ -295,7 +305,7 @@ public class Main {
     private static void createPremium(Scanner in, PlatformSystem platformSystem) {
         try {
             String id = in.next().trim();
-            int duration = in.nextInt();
+            int duration = durationValue(in);
             String URL = in.next().trim();
             in.nextLine();
             String publisher = in.nextLine();
@@ -312,8 +322,14 @@ public class Main {
             System.out.println(MSG_INVALID_LANGUAGE);
         } catch (InvalidSubtitleLanguageException e) { //verificar se precisa de duas classes
             System.out.println(MSG_INVALID_LANGUAGE_SUBTITLE);
-        } catch (InputMismatchException e) {
+        } catch (InvaldValueException e) {
             System.out.println(MSG_INVALID_VALUE);
+            in.nextLine();
+            in.nextLine();
+            in.nextLine();
+            in.nextLine();
+            in.nextLine();
+            in.nextLine();
         } catch (PublishableAlreadyExistsException e) {
             System.out.println(MSG_VIDEO_ALREADY_EXIST);
         }
@@ -453,20 +469,23 @@ public class Main {
         try {
             String title = in.nextLine().trim();
             String id = in.next().trim();
-            int duration = in.nextInt();
+            int duration = durationValue(in);
             String URL = in.next().trim();
             in.nextLine();
             String date = in.nextLine();
             platformSystem.addEpisode(title, id, duration, URL, date);
             System.out.println(MSG_EPISODE_ADDED);
-        } catch (InputMismatchException e) {
+        } catch (InvaldValueException e) {
             System.out.println(MSG_INVALID_VALUE);
+            in.nextLine();
+            in.nextLine();
         } catch (PodcastNotExistsException e) {
             System.out.println(MSG_PODCAST_NOT_EXIST);
         } catch (EpisodeAlreadyExistsException e) {
             System.out.println(MSG_EPISODE_ALREADY_EXIST);
         } catch (InvalidEpisodeDateException e) {
             System.out.println(MSG_DATA_EPISODE_INVALID);
+
         }
     }
 
@@ -483,7 +502,7 @@ public class Main {
         try {
             Podcast podcast = platformSystem.getPodcast(title);
 
-            if (podcast.isEmpty() || podcast.isTagsEmpty()) {
+            if (podcast.isEmpty() || ((Tag)podcast).isTagsEmpty()) {
                 System.out.printf(MSG_GET_PODCAST,
                         podcast.getTitle(), podcast.getAuthor(),
                         podcast.getLang().getLanguage().toUpperCase());
@@ -492,7 +511,7 @@ public class Main {
                         podcast.getTitle(), podcast.getAuthor(),
                         podcast.getLang().getLanguage().toUpperCase());
                 System.out.printf(MSG_LAST_EPISODE_DATE, podcast.getLastEpDate());
-                Iterator <String> it = podcast.tagsPodcastIterator();
+                Iterator <String> it = ((Tag)podcast).tagsIterator();
                 System.out.println(MSG_TAGS);
                 while (it.hasNext()){
                     System.out.printf(MSG_TAG,it.next());
@@ -516,7 +535,7 @@ public class Main {
         String podcastTitle = in.nextLine().trim();
         try {
             Podcast podcast = platformSystem.getPodcast(podcastTitle);
-            if (!podcast.isEmpty()) {
+            if (podcast.isEmpty()) {
                 System.out.println(MSG_EMPTY_PODCAST);
             } else {
                 System.out.printf(MSG_PODCAST_EPISODES, podcastTitle);
@@ -607,13 +626,13 @@ public class Main {
         try {
             String title = in.nextLine().trim();
             Show show = platformSystem.getShow(title);
-            if (show.isTagsEmpty()) {
+            if (((Tag)show).isTagsEmpty()) {
                 System.out.printf(MSG_GET_SHOW, show.getDate(), show.getAuthor(),
                         show.getTitle());
             }
             else {
                 System.out.printf(MSG_GET_SHOW, show.getDate(), show.getAuthor(), show.getTitle());
-                Iterator<String> it = show.tagsShowIterator();
+                Iterator<String> it = ((Tag)show).tagsIterator();
                 System.out.println(MSG_TAGS);
                 while (it.hasNext()){
                     System.out.printf(MSG_TAG,it.next());

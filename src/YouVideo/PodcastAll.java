@@ -17,11 +17,6 @@ interface PodcastAll extends Podcast {
     boolean equals(Object other);
 
 
-    void addTagPodcast(String tag);
-
-
-
-    boolean removeTagPodcast(String tag);
 
     void addEpisode(Episode episode);
 }

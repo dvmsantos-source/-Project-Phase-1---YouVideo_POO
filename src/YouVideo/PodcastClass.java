@@ -7,7 +7,7 @@ import java.util.*;
  * Episodes are stored in an array and inserted at position 0, so the
  * most recently added episode is always at index 0 (reverse chronological order).
  */
-class PodcastClass implements PodcastAll {
+class PodcastClass implements PodcastAll ,Tag{
     private List<Episode> episodes; // The ordered collection of episodes, newest first//
     private SortedSet<String> tags;
     private String title; // The unique title of this podcast.
@@ -31,11 +31,11 @@ class PodcastClass implements PodcastAll {
 
     // ----------------------------- TAGS -----------------------------
     @Override
-    public boolean hasTagPodcast(String tag){
+    public boolean hasTag(String tag){
         return tags.contains(tag);
     }
     @Override
-    public void addTagPodcast(String tag){
+    public void addTag(String tag){
         tags.add(tag);
     }
 
@@ -45,12 +45,12 @@ class PodcastClass implements PodcastAll {
     }
 
     @Override
-    public boolean removeTagPodcast(String tag){
+    public boolean removeTag(String tag){
         return tags.remove(tag);
     }
 
     @Override
-    public Iterator<String> tagsPodcastIterator() {
+    public Iterator<String> tagsIterator() {
         return tags.iterator();
     }
 
@@ -88,10 +88,6 @@ class PodcastClass implements PodcastAll {
         }
     }
 
-    @Override
-    public boolean hasEpisode(Video episode) {
-        return episodes.contains(episode);
-    }
 
     @Override
     public boolean isEmpty() {

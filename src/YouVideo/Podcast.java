@@ -58,14 +58,7 @@ public interface Podcast {
      */
     boolean isValidEpisodeDate(String date);
 
-    /**
-     * Verifies if this podcast contains an episode with the given identifier.
-     * @param episode the episode to search for.
-     * @return true if the episode exists in this podcast, false otherwise.
-     */
-    boolean hasEpisode(Video episode);
-    Iterator<String> tagsPodcastIterator();
-    boolean hasTagPodcast(String tag);
 
-    boolean isTagsEmpty();
+
+
 }

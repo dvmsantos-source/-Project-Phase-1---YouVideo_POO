@@ -44,14 +44,14 @@ GETVIDEO Pre003
 GETVIDEO Pre004
 ADDSUBTITLE Pre001 https://subtitles.webmasters.com/fullstack/uk.vtt
 UK
-addsubtitle Pre001 https://subtitles.webmasters.com/fullstack/no.vtt
+addsubtitle PRE001 https://subtitles.webmasters.com/fullstack/no.vtt
 NO
 addsubtitle Pre001 https://subtitles.webmasters.com/fullstack/cs.vtt
 CS
 SUBTITLES Pre001
 ADDSUBTITLE Pre002 https://subtitles.datasciencehub.com/python/no.vtt
 NO
-addsubtitle Pre002 https://subtitles.datasciencehub.com/python/cs.vtt
+addsubtitle PRE002 https://subtitles.datasciencehub.com/python/cs.vtt
 CS
 addsubtitle Pre002 https://subtitles.datasciencehub.com/python/uk-2.vtt
 UK
@@ -69,9 +69,9 @@ CREATESHOW Mary Johnson
 Pre001 2025-04-16
 CREATESHOW Mary Johnson
 Pre001 2025-04-16
-CREATESHOW John Smith
+CREATESHOW Robert Brown
 Pub002 2025-04-17
-CREATESHOW John Smith
+CREATESHOW Lisa Davis
 Pre002 2025-04-18
 CREATESHOW David Wilson
 Pre003 2025-04-19
@@ -79,18 +79,9 @@ CREATESHOW Sarah Miller
 Pre004 2025-04-20
 CREATESHOW Duplicate Author
 Pub001 2025-04-21
-ADDTAG Java Programming Fundamentals
-testando tag
-GETSHOW Java Programming Fundamentals
-REMOVETAG Java Programming Fundamentals
-testando tag
 GETSHOW Java Programming Fundamentals
 GETSHOW Full Stack Web Development
-ADDTAG Full Stack Web Development
-testando tag de novo
 GETSHOW Python Advanced Concepts
-
-
 GETSHOW Data Science with Python
 GETSHOW AI and Machine Learning Foundations
 GETSHOW Learn Czech Language
@@ -112,10 +103,6 @@ GETSHOW Full Stack Web Development
 GETSHOW Data Science with Python
 GETSHOW AI and Machine Learning Foundations
 GETSHOW Learn Czech Language
-
-authorShows John Smith
-authorShows Mary Johnson
-
 SUBTITLES Pre001
 SUBTITLES Pre002
 SUBTITLES Pre003
@@ -156,7 +143,5 @@ GETSHOW Learn Czech Language
 SUBTITLES Pre003
 SUBTITLES Pre004
 HELP
-
-
 UNKNOWNcommand
 EXIT

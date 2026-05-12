@@ -9,7 +9,7 @@ import java.util.TreeSet;
  * Implementation of a show.
  * A show is identified by its title (equal to the broadcasted video's title).
  */
-class ShowClass implements ShowAll, Comparable<Show> {
+class ShowClass implements ShowAll, Comparable<Show> ,Tag{
     private String author; // The name of the author who created this show.
     private String date; // The transmission date of this show in YYYY-MM-DD format.
     private final String title; // The title of this show, matching the title of the broadcasted video.
@@ -36,21 +36,21 @@ class ShowClass implements ShowAll, Comparable<Show> {
 
 
     @Override
-    public boolean hasTagShow(String tag){
+    public boolean hasTag(String tag){
         return tags.contains(tag);
     }
     @Override
-    public void addTagShow(String tag) {
+    public void addTag(String tag) {
         tags.add(tag);
     }
 
     @Override
-    public boolean removeTagShow(String tag) {
+    public boolean removeTag(String tag) {
           return tags.remove(tag);
     }
 
     @Override
-    public Iterator<String> tagsShowIterator() {
+    public Iterator<String> tagsIterator() {
         return tags.iterator();
     }
 
