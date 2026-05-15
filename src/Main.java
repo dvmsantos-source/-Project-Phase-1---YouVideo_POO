@@ -1,8 +1,9 @@
+import Exceptions.*;
 import YouVideo.*;
 
-import Exceptions.*;
-
-import java.util.*;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Scanner;
 
 /**
  * @Author Djeison Santos (75651) and Victor Rocha (75645)
@@ -90,7 +91,7 @@ public class Main {
                     "Video: %s\n";
     private static final String MSG_TAG = "%s\n";
 
-    private static final String MSG_TITLE_NOT_EXIST = "Title does not exist";
+    private static final String MSG_TITLE_NOT_EXIST = "Title does not exist.";
     private static final String MSG_TITLE_ALREADY_TAGGED = "Title is already tagged with %s.\n";
     private static final String MSG_SHOW_REMOVED =
             "Show removed successfully.";
@@ -116,7 +117,7 @@ public class Main {
 
     // --- AUTHORS PRODUCTIVITY COMMAND CONSTANTS ---
     private static final String MSG_AUTHORS_PRODUCTIVITY_HEADER =
-            "Authors productivity:\n";
+            "Authors productivity:";
     private static final String MSG_AUTHOR_PRODUCTIVITY_LINE =
             "%s with %d contributions.\n";
     private static final String MSG_NO_PRODUCTIVE_AUTHORS =
@@ -133,8 +134,19 @@ public class Main {
             "No content tagged with %s.\n";
     private static final String MSG_INVALID_TAGGED_PARAMS =
             "Invalid tagged parameters.";
+    //_
+
+    // --- ORDER CONSTANTS ---
+    private static final String ORDER_ASCENDING = "Ascending";
+    private static final String ORDER_DESCENDING = "Descending";
+    private static final String SHOW = "SHOW";
+    private static final String PODCAST = "PODCAST";
+    private static final String ALL = "ALL";
+    private static final String ASC = "ASC";
+    private static final String DES = "DES";
+
     /**
-     * Initialises the platform and starts the command read-eval loop.
+     * Initializes the platform and starts the command read-eval loop.
      * Sets the default locale to British English so that language display
      * names are generated consistently across all environments.
      *
@@ -192,15 +204,14 @@ public class Main {
             case REMOVEVIDEO -> removeVideo(in, platformSystem);
             case ADDTAG -> addTag(in, platformSystem);
             case AUTHORSHOWS -> authorShows(in, platformSystem);
-            case REMOVETAG -> removeTag(in,platformSystem);
+            case REMOVETAG -> removeTag(in, platformSystem);
+            case AUTHORSPRODUCTIVITY -> authorsProductivity(platformSystem);
+            case TAGGED -> tagged(in, platformSystem);
             case HELP -> help();
             case EXIT -> System.out.println(MSG_EXIT);
             default -> System.out.println(MSG_DEFAULT);
         }
     }
-
-
-
 
 
     /**
@@ -225,38 +236,32 @@ public class Main {
      *
      * @param lang the Locale to validate.
      */
-    private static void isValidLanguage(Locale lang)
-            throws InvalidLanguageException {
+    private static boolean isLanguageValid(Locale lang) {
         String[] isoLanguages = Locale.getISOLanguages();
         for (String language : isoLanguages) {
             Locale isoLanguage = Locale.of(language);
             if (isoLanguage.equals(lang)) {
-                return;
+                return false;
             }
         }
-        throw new InvalidLanguageException();
+        return true;
     }
 
-    private static int durationValue(Scanner in) throws InvaldValueException{
+    private static void isValidLanguage(Locale lang)
+            throws InvalidLanguageException {
+        if (isLanguageValid(lang)) throw new InvalidLanguageException();
+    }
+
+    private static void isValidSubtitle(Locale subtitle)
+            throws InvalidSubtitleLanguageException {
+        if (isLanguageValid(subtitle)) throw new InvalidSubtitleLanguageException();
+    }
+
+    private static int durationValue(Scanner in)
+            throws InvaldValueException {
         int duration = in.nextInt();
         if (duration <= 0) throw new InvaldValueException();
         return duration;
-    }
-    /**
-     * Verifies if the given Locale corresponds to a valid ISO 639-1 language.
-     *
-     * @param lang the Locale to validate.
-     */
-    private static void isValidSubtitle(Locale lang)
-            throws InvalidSubtitleLanguageException {
-        String[] isoLanguages = Locale.getISOLanguages();
-        for (String language : isoLanguages) {
-            Locale isoLanguage = Locale.of(language);
-            if (isoLanguage.equals(lang)) {
-                return;
-            }
-        }
-        throw new InvalidSubtitleLanguageException();
     }
 
     /**
@@ -292,7 +297,6 @@ public class Main {
         }
     }
 
-
     /**
      * Executes the createpremium command.
      * Reads the video id, duration, URL, publisher, title, primary language,
@@ -324,16 +328,19 @@ public class Main {
             System.out.println(MSG_INVALID_LANGUAGE_SUBTITLE);
         } catch (InvaldValueException e) {
             System.out.println(MSG_INVALID_VALUE);
-            in.nextLine();
-            in.nextLine();
-            in.nextLine();
-            in.nextLine();
-            in.nextLine();
-            in.nextLine();
+         iNnextLine(in);
+
         } catch (PublishableAlreadyExistsException e) {
             System.out.println(MSG_VIDEO_ALREADY_EXIST);
         }
-
+    }
+    private static void iNnextLine(Scanner in){
+        in.nextLine();
+        in.nextLine();
+        in.nextLine();
+        in.nextLine();
+        in.nextLine();
+        in.nextLine();
     }
 
     /**
@@ -359,7 +366,6 @@ public class Main {
         } catch (NotAPremiumVideoException e) {
             System.out.println(MSG_REQUIRES_PREMIUM_VIDEO);
         }
-
     }
 
     /**
@@ -387,6 +393,7 @@ public class Main {
             System.out.printf(MSG_PUBLISHABLE_VIDEO_NOT_EXIST, id);
         }
     }
+
     /**
      * Executes the removevideo command.
      * Reads a video id and removes the publishable video from the system.
@@ -502,21 +509,20 @@ public class Main {
         try {
             Podcast podcast = platformSystem.getPodcast(title);
 
-            if (podcast.isEmpty() || ((Tag)podcast).isTagsEmpty()) {
-                System.out.printf(MSG_GET_PODCAST,
-                        podcast.getTitle(), podcast.getAuthor(),
-                        podcast.getLang().getLanguage().toUpperCase());
-            } else {
-                System.out.printf(MSG_GET_PODCAST,
-                        podcast.getTitle(), podcast.getAuthor(),
-                        podcast.getLang().getLanguage().toUpperCase());
-                System.out.printf(MSG_LAST_EPISODE_DATE, podcast.getLastEpDate());
-                Iterator <String> it = ((Tag)podcast).tagsIterator();
-                System.out.println(MSG_TAGS);
-                while (it.hasNext()){
-                    System.out.printf(MSG_TAG,it.next());
-                }
+            System.out.printf(MSG_GET_PODCAST,
+                    podcast.getTitle(), podcast.getAuthor(),
+                    podcast.getLang().getLanguage().toUpperCase());
 
+            if (!podcast.isEmpty()) {
+                System.out.printf(MSG_LAST_EPISODE_DATE, podcast.getLastEpDate());
+            }
+
+            if (!podcast.isTagsEmpty()) {
+                System.out.println(MSG_TAGS);
+                Iterator<String> it = podcast.tagsIterator();
+                while (it.hasNext()) {
+                    System.out.printf(MSG_TAG, it.next());
+                }
             }
         } catch (PodcastNotExistsException e) {
             System.out.println(MSG_PODCAST_NOT_EXIST);
@@ -566,9 +572,9 @@ public class Main {
             System.out.printf(MSG_AUTHOR_PODCASTS, authorName);
             while (it.hasNext()) {
                 Podcast pd = it.next();
-                    System.out.printf(MSG_PODCAST, pd.getTitle(), pd.getAuthor(),
-                            pd.getLang().getLanguage().toUpperCase());
-                }
+                System.out.printf(MSG_PODCAST, pd.getTitle(), pd.getAuthor(),
+                        pd.getLang().getLanguage().toUpperCase());
+            }
 
         } catch (PodcastNotFoundException e) {
             System.out.println(MSG_PODCAST_NOT_FOUND);
@@ -626,16 +632,15 @@ public class Main {
         try {
             String title = in.nextLine().trim();
             Show show = platformSystem.getShow(title);
-            if (((Tag)show).isTagsEmpty()) {
+            if (show.isTagsEmpty()) {
                 System.out.printf(MSG_GET_SHOW, show.getDate(), show.getAuthor(),
                         show.getTitle());
-            }
-            else {
+            } else {
                 System.out.printf(MSG_GET_SHOW, show.getDate(), show.getAuthor(), show.getTitle());
-                Iterator<String> it = ((Tag)show).tagsIterator();
+                Iterator<String> it = show.tagsIterator();
                 System.out.println(MSG_TAGS);
-                while (it.hasNext()){
-                    System.out.printf(MSG_TAG,it.next());
+                while (it.hasNext()) {
+                    System.out.printf(MSG_TAG, it.next());
                 }
             }
 
@@ -663,10 +668,11 @@ public class Main {
     }
 
     private static void authorShows(Scanner in, PlatformSystem platformSystem) {
-        try {
             String author = in.nextLine().trim();
             Iterator<Show> it = platformSystem.authorShows(author);
-
+            if (!it.hasNext()) {
+                System.out.println(MSG_NO_SHOWS_FOUND);
+            } else {
             System.out.printf(MSG_AUTHOR_SHOWS_HEADER, author);
 
             while (it.hasNext()) {
@@ -677,23 +683,16 @@ public class Main {
                         sw.getDuration(),
                         sw.getLanguage().getLanguage().toUpperCase());
             }
-
-        } catch (NoShowsFoundForTheAuthorException e) {
-            System.out.println(MSG_NO_SHOWS_FOUND);
         }
     }
-
 
 
     private static void addTag(Scanner in, PlatformSystem platformSystem) {
         String title = in.nextLine().trim();
         String tag = in.nextLine().trim();
         try {
-
             platformSystem.addTag(title, tag);
-
             System.out.println(MSG_TAG_ADDED);
-
         } catch (TitleDoesNotExistException e) {
             System.out.println(MSG_TITLE_NOT_EXIST);
         } catch (TitleAlreadyTaggedException e) {
@@ -702,14 +701,12 @@ public class Main {
     }
 
 
-
     private static void removeTag(Scanner in, PlatformSystem platformSystem) {
         String title = in.nextLine().trim();
         String tag = in.nextLine().trim();
         try {
             platformSystem.removeTag(title, tag);
             System.out.println(MSG_TAG_REMOVED);
-
         } catch (TitleDoesNotExistException e) {
             System.out.println(MSG_TITLE_NOT_EXIST);
         } catch (TitleIsNotTaggedException e) {
@@ -717,5 +714,152 @@ public class Main {
         }
     }
 
-}
 
+    private static void authorsProductivity(PlatformSystem platformSystem) {
+        Iterator<Author> it = platformSystem.authorsProductivity();
+        if (!it.hasNext()) {
+            System.out.println(MSG_NO_PRODUCTIVE_AUTHORS);
+        } else {
+            System.out.println(MSG_AUTHORS_PRODUCTIVITY_HEADER);
+            while (it.hasNext()) {
+                Author au = it.next();
+                System.out.printf(MSG_AUTHOR_PRODUCTIVITY_LINE, au.getAuthor(),
+                        au.getProductivity());
+            }
+        }
+    }
+
+    private static void tagged(Scanner in, PlatformSystem platformSystem) {
+        String tag = in.next().trim();
+        String type = in.next().toUpperCase();
+
+        switch (type) {
+            case ALL -> processTaggedAll(in, platformSystem, tag);
+            case PODCAST -> processTaggedPodcast(in, platformSystem, tag);
+            case SHOW -> processTaggedShow(in, platformSystem, tag);
+            default ->{
+                in.next();
+                System.out.println(MSG_INVALID_TAGGED_PARAMS);
+            }
+        }
+    }
+
+    private static void processTaggedAll(Scanner in, PlatformSystem platformSystem, String tag) {
+        String order = in.next().toUpperCase();
+        switch (order) {
+            case ASC -> printTaggedAllAscending(platformSystem, tag);
+            case DES -> printTaggedAllDescending(platformSystem, tag);
+            default -> System.out.println(MSG_INVALID_TAGGED_PARAMS);
+        }
+    }
+
+    private static void processTaggedPodcast(Scanner in, PlatformSystem platformSystem, String tag) {
+        String order = in.next().toUpperCase();
+        switch (order) {
+            case ASC -> printTaggedPodcastsAscending(platformSystem, tag);
+            case DES -> printTaggedPodcastsDescending(platformSystem, tag);
+            default -> System.out.println(MSG_INVALID_TAGGED_PARAMS);
+        }
+    }
+
+    private static void processTaggedShow(Scanner in, PlatformSystem platformSystem, String tag) {
+        String order = in.next().toUpperCase();
+        switch (order) {
+            case ASC -> printTaggedShowsAscending(platformSystem, tag);
+            case DES -> printTaggedShowsDescending(platformSystem, tag);
+            default -> System.out.println(MSG_INVALID_TAGGED_PARAMS);
+        }
+    }
+
+    // --- PRINT METHODS (ALL) ---
+
+    private static void printTaggedAllAscending(PlatformSystem platformSystem, String tag) {
+        Iterator<TaggedContent> it = platformSystem.listAscAll(tag);
+        if (!it.hasNext()) {
+            System.out.printf(MSG_NO_CONTENT_TAGGED, tag);
+        } else {
+            System.out.printf(MSG_TAGGED_HEADER, tag, ORDER_ASCENDING);
+            while (it.hasNext()) {
+                TaggedContent tc = it.next();
+                if (tc instanceof Podcast) {
+                    System.out.printf(MSG_TAGGED_PODCAST, tc.getTitle(), tc.getAuthor());
+                } else {
+                    System.out.printf(MSG_TAGGED_SHOW, tc.getTitle(), tc.getAuthor());
+                }
+            }
+        }
+    }
+
+    private static void printTaggedAllDescending(PlatformSystem platformSystem, String tag) {
+        Iterator<TaggedContent> it = platformSystem.listDesAll(tag);
+        if (!it.hasNext()) {
+            System.out.printf(MSG_NO_CONTENT_TAGGED, tag);
+        } else {
+            System.out.printf(MSG_TAGGED_HEADER, tag, ORDER_DESCENDING);
+            while (it.hasNext()) {
+                TaggedContent tc = it.next();
+                if (tc instanceof Podcast) {
+                    System.out.printf(MSG_TAGGED_PODCAST, tc.getTitle(), tc.getAuthor());
+                } else {
+                    System.out.printf(MSG_TAGGED_SHOW, tc.getTitle(), tc.getAuthor());
+                }
+            }
+        }
+    }
+
+    // --- PRINT METHODS (PODCASTS) ---
+
+    private static void printTaggedPodcastsAscending(PlatformSystem platformSystem, String tag) {
+        Iterator<Podcast> it = platformSystem.listAscPodcast(tag);
+        if (!it.hasNext()) {
+            System.out.printf(MSG_NO_CONTENT_TAGGED, tag);
+        } else {
+            System.out.printf(MSG_TAGGED_HEADER, tag, ORDER_ASCENDING);
+            while (it.hasNext()) {
+                TaggedContent tc = it.next();
+                System.out.printf(MSG_TAGGED_PODCAST, tc.getTitle(), tc.getAuthor());
+            }
+        }
+    }
+
+    private static void printTaggedPodcastsDescending(PlatformSystem platformSystem, String tag) {
+        Iterator<Podcast> it = platformSystem.listDesPodcast(tag);
+        if (!it.hasNext()) {
+            System.out.printf(MSG_NO_CONTENT_TAGGED, tag);
+        } else {
+            System.out.printf(MSG_TAGGED_HEADER, tag, ORDER_DESCENDING);
+            while (it.hasNext()) {
+                TaggedContent tc = it.next();
+                System.out.printf(MSG_TAGGED_PODCAST, tc.getTitle(), tc.getAuthor());
+            }
+        }
+    }
+
+    // --- PRINT METHODS (SHOWS) ---
+
+    private static void printTaggedShowsAscending(PlatformSystem platformSystem, String tag) {
+        Iterator<Show> it = platformSystem.listAscShow(tag);
+        if (!it.hasNext()) {
+            System.out.printf(MSG_NO_CONTENT_TAGGED, tag);
+        } else {
+            System.out.printf(MSG_TAGGED_HEADER, tag, ORDER_ASCENDING);
+            while (it.hasNext()) {
+                TaggedContent tc = it.next();
+                System.out.printf(MSG_TAGGED_SHOW, tc.getTitle(), tc.getAuthor());
+            }
+        }
+    }
+
+    private static void printTaggedShowsDescending(PlatformSystem platformSystem, String tag) {
+        Iterator<Show> it = platformSystem.listDesShow(tag);
+        if (!it.hasNext()) {
+            System.out.printf(MSG_NO_CONTENT_TAGGED, tag);
+        } else {
+            System.out.printf(MSG_TAGGED_HEADER, tag, ORDER_DESCENDING);
+            while (it.hasNext()) {
+                TaggedContent tc = it.next();
+                System.out.printf(MSG_TAGGED_SHOW, tc.getTitle(), tc.getAuthor());
+            }
+        }
+    }
+}

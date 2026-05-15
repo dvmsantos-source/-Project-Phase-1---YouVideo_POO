@@ -7,12 +7,11 @@ import java.util.*;
  * Episodes are stored in an array and inserted at position 0, so the
  * most recently added episode is always at index 0 (reverse chronological order).
  */
-class PodcastClass implements PodcastAll ,Tag{
-    private List<Episode> episodes; // The ordered collection of episodes, newest first//
-    private SortedSet<String> tags;
+class PodcastClass extends TaggedContentClass implements PodcastAll,Comparable<Podcast> {
     private String title; // The unique title of this podcast.
     private String author; // The name of the author of this podcast.
     private Locale lang; // The primary language of this podcast.
+    private List<Episode> episodes; // The ordered collection of episodes, newest first//
 
     /**
      * Creates a fully initialised podcast with no episodes.
@@ -25,34 +24,10 @@ class PodcastClass implements PodcastAll ,Tag{
         this.author = author;
         this.lang = lang;
         episodes = new LinkedList<>();
-        tags = new TreeSet<>();
+
     }
 
 
-    // ----------------------------- TAGS -----------------------------
-    @Override
-    public boolean hasTag(String tag){
-        return tags.contains(tag);
-    }
-    @Override
-    public void addTag(String tag){
-        tags.add(tag);
-    }
-
-    @Override
-    public boolean isTagsEmpty(){
-        return tags.isEmpty();
-    }
-
-    @Override
-    public boolean removeTag(String tag){
-        return tags.remove(tag);
-    }
-
-    @Override
-    public Iterator<String> tagsIterator() {
-        return tags.iterator();
-    }
 
 
     // ----------------------------- EPISODE -----------------------------
@@ -71,11 +46,24 @@ class PodcastClass implements PodcastAll ,Tag{
         return author;
     }
 
-    @Override
+    //  retorna a menor data
     public String getLastEpDate() {
-        Episode ep = episodes.getLast();
-        return ep.getDate();
+         if (episodes.isEmpty()) {
+            return "";
+        }
+
+        String menorData = episodes.get(0).getDate();
+
+        for (int i = 1; i < episodes.size(); i++) {
+            String dataAtual = episodes.get(i).getDate();
+            if (dataAtual.compareTo(menorData) > 0) {
+                menorData = dataAtual;
+            }
+        }
+
+        return menorData;
     }
+
 
     @Override
     public boolean isValidEpisodeDate(String date) {
@@ -105,16 +93,9 @@ class PodcastClass implements PodcastAll ,Tag{
     }
 
 
+    // serve para ordenar os podcast por em ordem alfabetica dos titulos
     @Override
-    public boolean equals(Object other) {
-        if (other== null)
-            return false;
-        if (this == other)
-            return true;
-        if (title == null)
-            return false;
-        if (!(other instanceof Podcast))
-            return false;
-        return this.title.equalsIgnoreCase(((Podcast)other).getTitle());
+    public int compareTo(Podcast o) {
+        return this.title.compareTo(o.getTitle());
     }
 }

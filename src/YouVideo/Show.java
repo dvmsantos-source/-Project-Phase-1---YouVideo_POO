@@ -9,7 +9,7 @@ import java.util.Locale;
  * and is identified by the title of the video being shown.
  * Removing a show does not affect the underlying video.
  */
-public interface Show {
+public interface Show extends TaggedContent{
     /**
      * Returns the title of this show, which matches the title of its video.
      * @return the show title.

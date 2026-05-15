@@ -2,6 +2,7 @@ package YouVideo;
 
 import Exceptions.*;
 
+import java.awt.font.ShapeGraphicAttribute;
 import java.util.Iterator;
 
 import java.util.Locale;
@@ -164,7 +165,21 @@ public interface PlatformSystem {
 
     void addTag(String title, String tag)throws TitleAlreadyTaggedException, TitleDoesNotExistException;
 
-    Iterator<Show> authorShows(String author)throws NoShowsFoundForTheAuthorException;
+    Iterator<Show> authorShows(String author);
 
     void removeTag(String title, String tag) throws TitleDoesNotExistException,TitleIsNotTaggedException;
+
+    Iterator<Author> authorsProductivity();
+
+    Iterator<TaggedContent> listAscAll(String tag) ;
+
+    Iterator<TaggedContent> listDesAll(String tag) ;
+
+    Iterator<Show> listAscShow(String tag) ;
+
+    Iterator<Podcast> listAscPodcast(String tag) ;
+
+    Iterator<Podcast> listDesPodcast(String tag);
+
+    Iterator<Show> listDesShow(String tag);
 }

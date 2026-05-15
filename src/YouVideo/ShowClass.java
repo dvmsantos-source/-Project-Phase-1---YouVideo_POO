@@ -1,19 +1,15 @@
 package YouVideo;
 
-import java.util.Iterator;
 import java.util.Locale;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 /**
  * Implementation of a show.
  * A show is identified by its title (equal to the broadcasted video's title).
  */
-class ShowClass implements ShowAll, Comparable<Show> ,Tag{
+class ShowClass extends TaggedContentClass implements ShowAll, Comparable<Show> {
     private String author; // The name of the author who created this show.
     private String date; // The transmission date of this show in YYYY-MM-DD format.
     private final String title; // The title of this show, matching the title of the broadcasted video.
-    private SortedSet<String> tags;
 
     private final Video video;
     /**
@@ -24,35 +20,16 @@ class ShowClass implements ShowAll, Comparable<Show> ,Tag{
      * @param title  the title of the show (equal to the video's title).
      */
     public ShowClass(String author, String date, String title, Video video) {
+        super();
         this.author = author;
         this.date = date;
         this.title = title;
-        tags = new TreeSet<>();
         this.video = video;
     }
 
 
     // ----------------------------- TAGS -----------------------------
 
-
-    @Override
-    public boolean hasTag(String tag){
-        return tags.contains(tag);
-    }
-    @Override
-    public void addTag(String tag) {
-        tags.add(tag);
-    }
-
-    @Override
-    public boolean removeTag(String tag) {
-          return tags.remove(tag);
-    }
-
-    @Override
-    public Iterator<String> tagsIterator() {
-        return tags.iterator();
-    }
 
     @Override
     public int compareTo(Show other) {
@@ -71,10 +48,6 @@ class ShowClass implements ShowAll, Comparable<Show> ,Tag{
     public int getDuration(){
         return video.getDuration();
     }
-    @Override
-    public boolean isTagsEmpty(){
-        return tags.isEmpty();
-    }
 
     @Override
     public String getTitle() {
@@ -91,16 +64,4 @@ class ShowClass implements ShowAll, Comparable<Show> ,Tag{
         return author;
     }
 
-    @Override
-    public boolean equals(Object other) {
-        if (other == null)
-            return false;
-        if (this == other)
-            return true;
-        if (title == null)
-            return false;
-        if (!(other instanceof Show))
-            return false;
-        return this.title.equalsIgnoreCase(((Show) other).getTitle());
-    }
 }

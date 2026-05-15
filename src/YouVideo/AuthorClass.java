@@ -23,7 +23,10 @@ import java.util.*;
         shows = new TreeSet<>(); // IMPLEMENTAR COMPARATOR
     }
 
-
+    @Override
+    public int getProductivity() {
+        return podcasts.size() + shows.size();
+    }
 
     @Override
     public String getAuthor() {
@@ -34,42 +37,43 @@ import java.util.*;
     public void addPodcast(Podcast podcast) {
         podcasts.addLast(podcast);
     }
+
     @Override
     public void removePodcast(Podcast podcast) {
          podcasts.remove(podcast);
     }
+
     @Override
     public boolean isPodcastsEmpty() {
         return podcasts.isEmpty();
     }
+
+    @Override
+    public boolean isShowsEmpty() {
+        return shows.isEmpty();
+    }
+
     @Override
     public Iterator<Podcast> podcastIterator() {
         return podcasts.iterator();
     }
+
     @Override
     public Iterator<Show> showIterator() {
         return shows.iterator();
     }
+
     @Override
     public void addShow(Show show) {
         shows.add(show);
     }
+
     @Override
     public void removeShow(Show show) {
          shows.remove(show);
     }
 
-    @Override
-    public boolean equals(Object other) {
-        if (this == other)
-            return true;
-        if (other == null)
-            return false;
-        if (!(other instanceof Author))
-            return false;
-        if (author == null)
-            return false;
-        return this.author.equalsIgnoreCase(((Author)other).getAuthor());
-    }
+
+
 }
 

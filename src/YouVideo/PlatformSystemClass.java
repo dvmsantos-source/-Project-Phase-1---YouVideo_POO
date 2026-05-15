@@ -24,10 +24,11 @@ public class PlatformSystemClass implements PlatformSystem {
     // All shows registered in the system, in insertion order.
     private Map<String, Show> shows;
 
+    private Map<String,SortedSet<TaggedContent> >taggedContents;
     // Map linking a Tag to a list of Podcasts that have it.
-    private Map<String, List<Podcast>> podcastsByTag;
+    private Map<String, SortedSet<Podcast>> podcastsByTag;
     // Map linking a Tag to a list of Shows that have it.
-    private Map<String, List<Show>> showsByTag;
+    private Map<String, SortedSet<Show>> showsByTag;
 
     /**
      * Creates an empty platform with no content.
@@ -39,6 +40,7 @@ public class PlatformSystemClass implements PlatformSystem {
         shows         = new HashMap<>(MAX_PODS_SHOWS_AUTHORS);
         podcastsByTag = new HashMap<>(MAX_PODS_SHOWS_AUTHORS);
         showsByTag    = new HashMap<>(MAX_PODS_SHOWS_AUTHORS);
+        taggedContents = new HashMap<>(MAX_PODS_SHOWS_AUTHORS);
     }
 
     /**
@@ -231,6 +233,7 @@ public class PlatformSystemClass implements PlatformSystem {
 
     // ----------------------------- SHOW -----------------------------
 
+    // se possivel separar esse codigo em metodos auxiliares
     @Override
     public void addShow(String showAuthor, String videoID, String date)
             throws PublishableNotExistsException, ShowAlreadyExistsException {
@@ -283,18 +286,19 @@ public class PlatformSystemClass implements PlatformSystem {
     }
 
     @Override
-    public Iterator<Show> authorShows(String author)
-            throws NoShowsFoundForTheAuthorException {
+    public Iterator<Show> authorShows(String author) {
         String authorKey = normalizeKey(author);
-
         Author au = authors.get(authorKey);
-        if (au == null )
-            throw new NoShowsFoundForTheAuthorException();
+        if (au == null || au.isShowsEmpty()){
+            return Collections.emptyIterator();
+        }
         return au.showIterator();
     }
 
 
     // ----------------------------- TAGS -----------------------------
+
+    // se possivel minimizar esse metodo em metodos auxiliares
 
     @Override
     public void addTag(String title, String tag)
@@ -302,60 +306,174 @@ public class PlatformSystemClass implements PlatformSystem {
         String titleKey = normalizeKey(title);
         String tagKey   = normalizeKey(tag);
 
-        Podcast pd = podcasts.get(titleKey);
-        Show    sw = shows.get(titleKey);
+        Podcast podcast = podcasts.get(titleKey);
+        Show  show = shows.get(titleKey);
 
-        if (pd == null && sw == null)
+        if (podcast == null && show == null)
             throw new TitleDoesNotExistException();
 
-        if ((sw != null && ((Tag) sw).hasTag(tag)) || (pd != null && ((Tag) pd).hasTag(tag)))
-            throw new TitleAlreadyTaggedException();
-
-        if (pd != null) {
-            ((Tag) pd).addTag(tag);
-            List<Podcast> pdList = podcastsByTag.get(tagKey);
-            if (pdList == null) {
-                pdList = new LinkedList<>();
-                podcastsByTag.put(tagKey, pdList);
-            }
-            pdList.add(pd);
+        //pega a list de objetos associados a tag , caso a tag não existir agente cria uma com a list(SorteSet) ordenada pelas tags
+        SortedSet<TaggedContent> contents = taggedContents.get(tagKey);
+        if (contents == null){
+            contents = new TreeSet<>(new ComparatorByTags());
+            taggedContents.put(tagKey,contents);//bola a tag como chave associado a lista no criada
         }
 
-        if (sw != null) {
-            ((Tag) sw).addTag(tag);
-            List<Show> swList = showsByTag.get(tagKey);
-            if (swList == null) {
-                swList = new LinkedList<>();
-                showsByTag.put(tagKey, swList);
+        if (podcast != null) {
+             podcast.addTag(tag);
+
+            SortedSet<Podcast> podcastList = podcastsByTag.get(tagKey);
+            if (podcastList == null) {
+                podcastList = new TreeSet<>(new ComparatorPodcastByTitles());//cria uma lista de podcast dessa tag ordenada por titulo
+                podcastsByTag.put(tagKey, podcastList);
             }
-            swList.add(sw);
+            podcastList.add(podcast);
+            //adiciona o podcast a list da tag associada , que sera uma lista geral de tudo podcast e shows
+            contents.add(podcast);
+
         }
+
+        if (show != null) {
+            show.addTag(tag);
+            SortedSet<Show> showList = showsByTag.get(tagKey);
+            if (showList== null) {
+                showList = new TreeSet<>(new ComparatorShowByTitles());//cria uma lista de shows dessa tag ordena por titulo
+                showsByTag.put(tagKey, showList);
+            }
+            showList.add(show);
+
+            contents.add(show);
+        }
+
     }
 
+    // se possivel minimizar esse metodo em metodos auxiliares e cria variaveis locais para os gets
     @Override
     public void removeTag(String title, String tag)
             throws TitleDoesNotExistException, TitleIsNotTaggedException {
         String titleKey = normalizeKey(title);
         String tagKey   = normalizeKey(tag);
 
-        Podcast pd = podcasts.get(titleKey);
-        Show    sw = shows.get(titleKey);
+        Podcast podcast = podcasts.get(titleKey);
+        Show show = shows.get(titleKey);
 
-        if (pd == null && sw == null)
+        if (podcast == null && show == null)
             throw new TitleDoesNotExistException();
 
         boolean wasRemoved = false;
-
-        if (pd != null && ((Tag) pd).removeTag(tag)) {
-            podcastsByTag.get(tagKey).remove(pd);
+// verifica se é null ou se ja foi removida o metodo remove retorna boolean (True se for removida, False se não)
+        if( (podcast != null) && (podcast.removeTag(tag))) {
+            if (taggedContents.containsKey(tagKey)){
+                taggedContents.get(tagKey).remove(podcast);
+            }
+            podcastsByTag.get(tagKey).remove(podcast);
             wasRemoved = true;
         }
-        if (sw != null && ((Tag) sw).removeTag(tag)) {
-            showsByTag.get(tagKey).remove(sw);
+// verifica se é null ou se ja foi removida o metodo remove retorna boolean (True se for removida, False se não)
+        if ((show != null) && ( show.removeTag(tag))) {
+            if (taggedContents.containsKey(tagKey)){//caso a tag ja existe no sistema onde tem todas as tags ele remove esse show da tag
+                taggedContents.get(tagKey).remove(show);
+            }
+            //remove da coleção de shows com tags
+            showsByTag.get(tagKey).remove(show);
             wasRemoved = true;
         }
 
+        // caso no fim se o não foi possivel remover é porque não existe
         if (!wasRemoved)
             throw new TitleIsNotTaggedException();
+    }
+
+    @Override
+    public Iterator<Author> authorsProductivity() {
+        Set<Author> authorsProductivity = new TreeSet<>(new ComparatorByProductivity());
+        for (Author author : authors.values()){
+            if (author.getProductivity() > 0){
+                authorsProductivity.add(author);
+            }
+        }
+        return authorsProductivity.iterator();
+    }
+
+    @Override
+    public Iterator<TaggedContent> listAscAll(String tag){
+        String tagKey = normalizeKey(tag);
+       SortedSet<TaggedContent> contents = taggedContents.get(tagKey);
+       if (contents == null){
+           return Collections.emptyIterator();
+       }
+       return contents.iterator();
+    }
+
+    @Override
+    public Iterator<TaggedContent> listDesAll(String tag){
+        String tagKey = normalizeKey(tag);
+
+        // ele vai ordenar esse SortedSet pelo descendente
+        SortedSet<TaggedContent> taggedContentDes = new TreeSet<>(new ComparatorByTagsDesc());
+
+        SortedSet<TaggedContent> Contents = taggedContents.get(tagKey); // pega a coleção geral de objetos dessa taga
+
+        if (Contents == null){
+            return Collections.emptyIterator();
+        }
+
+        //adiciona abjetos por orden descendente
+        Iterator<TaggedContent> it = Contents.iterator();
+        while (it.hasNext()){
+            TaggedContent objet = it.next();
+            taggedContentDes.add(objet);
+        }
+        return taggedContentDes.iterator();
+
+    }
+
+    @Override
+    public Iterator<Podcast> listAscPodcast(String tag) {
+        String tagKey = normalizeKey(tag);
+        SortedSet<Podcast> podcastList = podcastsByTag.get(tagKey);
+        if (podcastList == null ){
+            return Collections.emptyIterator();
+        }
+       return podcastList.iterator();
+    }
+
+    @Override
+    public Iterator<Show> listAscShow(String tag) {
+        String tagKey = normalizeKey(tag);
+        SortedSet<Show> showList = showsByTag.get(tagKey);
+        if ( showList == null ){
+            return Collections.emptyIterator();
+        }
+        return showList.iterator();
+    }
+
+    @Override
+    public Iterator<Podcast> listDesPodcast(String tag) {
+        String tagKey = normalizeKey(tag);
+        List<Podcast> podcastListDes = new LinkedList<>();
+        SortedSet <Podcast> podcastList = podcastsByTag.get(tagKey);
+        if (podcastList == null){
+            return Collections.emptyIterator();
+        }
+        for (Podcast podcast : podcastList){
+            podcastListDes.addFirst(podcast);
+        }
+        return podcastListDes.iterator();
+
+    }
+
+    @Override
+    public Iterator<Show> listDesShow(String tag) {
+        String tagKey = normalizeKey(tag);
+        List<Show> showListDes = new LinkedList<>();
+        SortedSet<Show> showList = showsByTag.get(tagKey); // é um SortedSet porque tem que ordenar por ordem alfabetica
+        if (showList == null){
+            return Collections.emptyIterator(); // retorna um iterador vazio caso for nulo
+        }
+        for (Show show : showList){
+            showListDes.addFirst(show); // fica adicionando sempre na primeira possisão
+        }
+        return showListDes.iterator();
     }
 }

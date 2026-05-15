@@ -1,10 +1,7 @@
 package YouVideo;
 
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Implementation of a premium publishable video.
@@ -30,7 +27,7 @@ class PremiumVideoClass extends BasicVideoClass implements PremiumVideo {
     public PremiumVideoClass(String ID, int duration, String URL, String publisher,
                              String title, Locale lang, String subtitleUrl, Locale subtitleLang) {
         super(ID, duration, URL, publisher, title, lang);
-        this.subtitles = new LinkedList<>();
+        this.subtitles = new ArrayList<>();
         addSubtitle(subtitleUrl, subtitleLang);
     }
 

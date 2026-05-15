@@ -11,7 +11,7 @@ import java.util.Locale;
  * It manages a collection of episodes that are organised in reverse
  * chronological order (most recent first).
  */
-public interface Podcast {
+public interface Podcast extends TaggedContent{
     /**
      * Returns the primary language of this podcast.
      * @return the podcast language as a Locale.
